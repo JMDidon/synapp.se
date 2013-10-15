@@ -1,2 +1,2 @@
 # Synappse
-Description coming soon.
+Internal documentation
