@@ -11,9 +11,10 @@ client.authenticate (error, client) -> console.log error if (error)
 # ------------------------------
 Queue = 
   _: []
-  add: (fn) -> Queue._.push fn
-  execute: -> 
-    do action for action in Queue._
+  skip: false
+  add: (fn) -> if Queue.skip then Queue._.push fn else do fn
+  execute: -> do action for action in Queue._
+  disable: -> Queue.skip = true
   
 
 
@@ -54,12 +55,11 @@ client.readFile Tasks.file, (error, data) ->
   else
     Tasks.set JSON.parse data
   do Queue.execute
+  do Queue.disable
   
   
   
 # Actions
-Queue.add -> Tasks.delete 'I0E3'
-Queue.add -> Tasks.delete 'A3C6'
 Queue.add -> Tasks.add 'I0E3', 'This is a test'
 Queue.add -> Tasks.add 'A3C6', 'This is a test 2'
 Queue.add -> Tasks.add 'NC94', 'This is a test 3'

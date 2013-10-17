@@ -13,8 +13,13 @@ client.authenticate(function(error, client) {
 
 Queue = {
   _: [],
+  skip: false,
   add: function(fn) {
-    return Queue._.push(fn);
+    if (Queue.skip) {
+      return Queue._.push(fn);
+    } else {
+      return fn();
+    }
   },
   execute: function() {
     var action, _i, _len, _ref, _results;
@@ -25,6 +30,9 @@ Queue = {
       _results.push(action());
     }
     return _results;
+  },
+  disable: function() {
+    return Queue.skip = true;
   }
 };
 
@@ -77,15 +85,8 @@ client.readFile(Tasks.file, function(error, data) {
   } else {
     Tasks.set(JSON.parse(data));
   }
-  return Queue.execute();
-});
-
-Queue.add(function() {
-  return Tasks["delete"]('I0E3');
-});
-
-Queue.add(function() {
-  return Tasks["delete"]('A3C6');
+  Queue.execute();
+  return Queue.disable();
 });
 
 Queue.add(function() {
