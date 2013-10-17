@@ -9,13 +9,11 @@ client.authenticate (error, client) -> console.log error if (error)
 # ------------------------------
 # Queue
 # ------------------------------
-Queue = 
-  _: []
-  skip: false
-  add: (fn) -> if Queue.skip then Queue._.push fn else do fn
-  execute: -> do action for action in Queue._
-  disable: -> Queue.skip = true
-queue = Queue.add
+Queue = (fn) -> if Queue.skip then Queue._.push fn else do fn
+Queue._ = []
+Queue.skip = false
+Queue.execute = -> do action for action in Queue._
+Queue.disable = -> Queue.skip = true
   
 
 
@@ -61,11 +59,11 @@ client.readFile Tasks.file, (error, data) ->
   
   
 # Actions
-queue -> Tasks.add 'I0E3', 'This is a test'
-queue -> Tasks.add 'A3C6', 'This is a test 2'
-queue -> Tasks.add 'NC94', 'This is a test 3'
-queue -> Tasks.add 'TU43', 'This is a test 4'
-queue -> Tasks.delete 'NC94'
-queue -> Tasks.add 'LI91', 'This is a test 3'
-queue -> Tasks.delete 'A3C6'
-queue -> console.log do Tasks.get
+Queue -> Tasks.add 'I0E3', 'This is a test'
+Queue -> Tasks.add 'A3C6', 'This is a test 2'
+Queue -> Tasks.add 'NC94', 'This is a test 3'
+Queue -> Tasks.add 'TU43', 'This is a test 4'
+Queue -> Tasks.delete 'NC94'
+Queue -> Tasks.add 'LI91', 'This is a test 3'
+Queue -> Tasks.delete 'A3C6'
+Queue -> console.log do Tasks.get
