@@ -65,5 +65,6 @@ Queue -> Tasks.add 'NC94', 'This is a test 3'
 Queue -> Tasks.add 'TU43', 'This is a test 4'
 Queue -> Tasks.delete 'NC94'
 Queue -> Tasks.add 'LI91', 'This is a test 3'
+Queue -> Tasks.edit 'I0E3', 'Dat ass'
 Queue -> Tasks.delete 'A3C6'
 Queue -> console.log do Tasks.get

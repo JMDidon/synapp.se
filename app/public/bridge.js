@@ -121,6 +121,10 @@ Queue(function() {
 });
 
 Queue(function() {
+  return Tasks.edit('I0E3', 'Dat ass');
+});
+
+Queue(function() {
   return Tasks["delete"]('A3C6');
 });
 
