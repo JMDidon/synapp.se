@@ -28,37 +28,45 @@ Tasks =
   
   set: (tasks) -> Tasks._ = tasks
   get: -> Tasks._ 
-  save: -> client.writeFile Tasks.file, JSON.stringify Tasks._
   
-  # add task
+  load: (callback) -> 
+    client.readFile Tasks.file, (error, data) ->
+      if error and error.status is Dropbox.ApiError.NOT_FOUND
+        do Tasks.save callback # create file if doesn't exist
+      else 
+        Tasks.set JSON.parse data
+        do callback
+        
+  save: (callback) -> 
+    client.writeFile Tasks.file, JSON.stringify Tasks._, (error, stat) ->
+      console.log error if error
+      do callback
+  
   add: (id, value) ->
     Tasks._.push id:id, value:value
     do Tasks.save
     
-  # edit task
   edit: (id, value) ->
     task.value = value for task in Tasks._ when task.id is id
     do Tasks.save
     
-  # delete task
   delete: (id) -> 
     Tasks._ = ( task for task in Tasks._ when task.id isnt id )
     do Tasks.save
     
     
 
-## Get tasks
-client.readFile Tasks.file, (error, data) ->
-  if error and error.status is Dropbox.ApiError.NOT_FOUND
-    do Tasks.save # create file if doesn't exist
-  else
-    Tasks.set JSON.parse data
-  do Queue.execute
+## Get tasks (should be repeated once every minute)
+Tasks.load ->
   do Queue.disable
+  do Queue.execute
+  # call conflict manager and inject common data in local data
   
   
   
-# Actions
+# ------------------------------
+# Tests
+# ------------------------------
 Queue -> Tasks.add 'I0E3', 'This is a test'
 Queue -> Tasks.add 'A3C6', 'This is a test 2'
 Queue -> Tasks.add 'NC94', 'This is a test 3'

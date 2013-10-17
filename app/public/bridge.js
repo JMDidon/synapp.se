@@ -47,8 +47,23 @@ Tasks = {
   get: function() {
     return Tasks._;
   },
-  save: function() {
-    return client.writeFile(Tasks.file, JSON.stringify(Tasks._));
+  load: function(callback) {
+    return client.readFile(Tasks.file, function(error, data) {
+      if (error && error.status === Dropbox.ApiError.NOT_FOUND) {
+        return Tasks.save(callback)();
+      } else {
+        Tasks.set(JSON.parse(data));
+        return callback();
+      }
+    });
+  },
+  save: function(callback) {
+    return client.writeFile(Tasks.file, JSON.stringify(Tasks._, function(error, stat) {
+      if (error) {
+        console.log(error);
+      }
+      return callback();
+    }));
   },
   add: function(id, value) {
     Tasks._.push({
@@ -86,14 +101,9 @@ Tasks = {
   }
 };
 
-client.readFile(Tasks.file, function(error, data) {
-  if (error && error.status === Dropbox.ApiError.NOT_FOUND) {
-    Tasks.save();
-  } else {
-    Tasks.set(JSON.parse(data));
-  }
-  Queue.execute();
-  return Queue.disable();
+Tasks.load(function() {
+  Queue.disable();
+  return Queue.execute();
 });
 
 Queue(function() {
