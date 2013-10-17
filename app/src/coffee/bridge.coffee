@@ -15,6 +15,7 @@ Queue =
   add: (fn) -> if Queue.skip then Queue._.push fn else do fn
   execute: -> do action for action in Queue._
   disable: -> Queue.skip = true
+queue = Queue.add
   
 
 
@@ -43,7 +44,7 @@ Tasks =
     
   # delete task
   delete: (id) -> 
-    Tasks._.splice i, 1 for task, i in Tasks._ when task.id is id
+    Tasks._ = ( task for task in Tasks._ when task.id isnt id )
     do Tasks.save
     
     
@@ -60,8 +61,11 @@ client.readFile Tasks.file, (error, data) ->
   
   
 # Actions
-Queue.add -> Tasks.add 'I0E3', 'This is a test'
-Queue.add -> Tasks.add 'A3C6', 'This is a test 2'
-Queue.add -> Tasks.add 'NC94', 'This is a test 3'
-Queue.add -> Tasks.delete 'NC94'
-Queue.add -> console.log do Tasks.get
+queue -> Tasks.add 'I0E3', 'This is a test'
+queue -> Tasks.add 'A3C6', 'This is a test 2'
+queue -> Tasks.add 'NC94', 'This is a test 3'
+queue -> Tasks.add 'TU43', 'This is a test 4'
+queue -> Tasks.delete 'NC94'
+queue -> Tasks.add 'LI91', 'This is a test 3'
+queue -> Tasks.delete 'A3C6'
+queue -> console.log do Tasks.get
