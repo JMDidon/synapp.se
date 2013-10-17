@@ -1,29 +1,67 @@
+# ------------------------------
+# Dropbox authentification
+# ------------------------------
 client = new Dropbox.Client key:'1n83me2ms50l6az'
 client.authenticate (error, client) -> console.log error if (error)
 
-window.Bridge = 
-  saveTasks: (tasks) -> client.writeFile 'tasks.json', JSON.stringify tasks
-  getTasks: (callback) ->
-    tasks = []
-    client.readFile 'tasks.json', (error, data) ->
-      if error and error.status is Dropbox.ApiError.NOT_FOUND
-        client.writeFile 'tasks.json', JSON.stringify tasks
-      else tasks = JSON.parse data
-      callback tasks
-  addTask: (id, value) ->
-    @getTasks (tasks) ->
-      tasks.push id:id, value:value
-      Bridge.saveTasks tasks
-  editTask: (id, value) ->
-    # @getTasks (tasks) ->
-    #   tasks.push id:id, value:value
-    #   Bridge.saveTasks tasks
-  deleteTask: (id) ->
-    @getTasks (tasks) ->
-      tasks.splice i, 1 for task, i in tasks when task.id is id 
-      Bridge.saveTasks tasks
+
+
+# ------------------------------
+# Queue
+# ------------------------------
+Queue = 
+  _: []
+  add: (fn) -> Queue._.push fn
+  execute: -> 
+    do action for action in Queue._
   
-# Bridge.addTask 'I0E3', 'This is a test'
-# Bridge.addTask 'A3C6', 'This is a test 2'
-# Bridge.addTask 'NC94', 'This is a test 3'
-Bridge.deleteTask 'NC94'
+
+
+# ------------------------------
+# Tasks
+# ------------------------------
+
+## Tasks object
+Tasks =
+  _: []
+  file: 'tasks.json'
+  
+  set: (tasks) -> Tasks._ = tasks
+  get: -> Tasks._ 
+  save: -> client.writeFile Tasks.file, JSON.stringify Tasks._
+  
+  # add task
+  add: (id, value) ->
+    Tasks._.push id:id, value:value
+    do Tasks.save
+    
+  # edit task
+  edit: (id, value) ->
+    task.value = value for task in Tasks._ when task.id is id
+    do Tasks.save
+    
+  # delete task
+  delete: (id) -> 
+    Tasks._.splice i, 1 for task, i in Tasks._ when task.id is id
+    do Tasks.save
+    
+    
+
+## Get tasks
+client.readFile Tasks.file, (error, data) ->
+  if error and error.status is Dropbox.ApiError.NOT_FOUND
+    do Tasks.save # create file if doesn't exist
+  else
+    Tasks.set JSON.parse data
+  do Queue.execute
+  
+  
+  
+# Actions
+Queue.add -> Tasks.delete 'I0E3'
+Queue.add -> Tasks.delete 'A3C6'
+Queue.add -> Tasks.add 'I0E3', 'This is a test'
+Queue.add -> Tasks.add 'A3C6', 'This is a test 2'
+Queue.add -> Tasks.add 'NC94', 'This is a test 3'
+Queue.add -> Tasks.delete 'NC94'
+Queue.add -> console.log do Tasks.get
