@@ -1,6 +1,3 @@
-# ------------------------------
-# Helpers
-# ------------------------------
 do ->
   # ------------------------------
   # Dropbox authentification
@@ -14,8 +11,10 @@ do ->
   # Model object // qui fait le café
   # ------------------------------
   class Model
+    # Set json file
     constructor: (@file = 'default.json') ->
       
+    # Queue actions while Dropbox is syncing
     queue: 
       _: []
       skip: false
@@ -23,13 +22,13 @@ do ->
       close: -> @skip = true
       execute: -> do action for action in @_
       stack: (fn) -> if not @skip then @_.push fn else do fn
-      
-    getID: -> ( id = Math.random().toString(36).substr(2,3) while !id or id in ( item.id for item in @_ ) ).toString()
     
+    # Items
     _: []
     set: (@_) ->
     get: -> @_ 
     
+    # Load from Dropbox json file
     load: (callback = false) -> 
       do @queue.open
       $this = @
@@ -42,9 +41,9 @@ do ->
           do $this.save fn # create file if doesn't exist
         else 
           $this.set JSON.parse data
-          # pass conflict manager as argument and inject common data in local data
           do fn
-          
+    
+    # Save to Dropbox json file
     save: (callback = false) -> 
       do @queue.open
       $this = @
@@ -52,14 +51,17 @@ do ->
         do $this.queue.close
         do callback if callback
     
+    # Add item (ID automaticly added)
     add: (data) -> 
       $this = @
       @queue.stack ->
-        output = id:do $this.getID, addDate:new Date(), editDate:new Date(), status:0
+        id = ( n = Math.random().toString(36).substr(2,3) while ( not n ) or n in ( item.id for item in @_ ) ).toString()
+        output = id:id, addDate:new Date(), editDate:new Date(), status:0
         output[k] = v for k, v of data when k not in Object.keys(output)
         $this._.push output
         do $this.save
       
+    # Edit item
     edit: (id, data) -> 
       $this = @
       @queue.stack ->
@@ -69,6 +71,7 @@ do ->
           $this._[i] = item
         do $this.save
       
+    # Delete item
     delete: (id) -> 
       $this = @
       @queue.stack ->
@@ -92,3 +95,5 @@ do ->
 do Data.tasks.load
 
 Data.tasks.add value:'This is a test'
+for task in do Data.tasks.get
+  Data.tasks.edit task.id, value:'Dat ass'
