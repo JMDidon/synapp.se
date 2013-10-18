@@ -17,10 +17,10 @@
     Model.prototype.queue = {
       _: [],
       skip: false,
-      enable: function() {
+      open: function() {
         return this.skip = false;
       },
-      disable: function() {
+      close: function() {
         return this.skip = true;
       },
       execute: function() {
@@ -57,10 +57,10 @@
       if (callback == null) {
         callback = false;
       }
-      this.queue.enable();
+      this.queue.open();
       $this = this;
       fn = function() {
-        $this.queue.disable();
+        $this.queue.close();
         $this.queue.execute();
         if (callback) {
           return callback();

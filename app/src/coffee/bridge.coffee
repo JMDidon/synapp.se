@@ -9,6 +9,7 @@ do ->
   
   # ------------------------------
   # Model object // qui fait le café
+  # /!\ générer les ID automatiquement, et remplace "value" par un object.extend { ID, dateAdd, dateEdit }
   # ------------------------------
   class Model
     constructor: (@file = 'default.json') ->
@@ -16,8 +17,8 @@ do ->
     queue: 
       _: []
       skip: false
-      enable: -> @skip = false
-      disable: -> @skip = true
+      open: -> @skip = false
+      close: -> @skip = true
       execute: -> do action for action in @_
       stack: (fn) -> if @skip then @_.push fn else do fn
     
@@ -26,10 +27,10 @@ do ->
     get: -> @_ 
     
     load: (callback = false) -> 
-      do @queue.enable
+      do @queue.open
       $this = @
       fn = ->
-        do $this.queue.disable
+        do $this.queue.close
         do $this.queue.execute
         do callback if callback
       client.readFile @file, (error, data) ->
@@ -49,6 +50,9 @@ do ->
       @queue.stack ->
         $this._.push id:id, value:value
         do $this.save
+        
+        
+    # move item method
       
     edit: (id, value) -> 
       $this = @
