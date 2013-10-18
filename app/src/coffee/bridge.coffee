@@ -3,76 +3,87 @@
 # ------------------------------
 client = new Dropbox.Client key:'1n83me2ms50l6az'
 client.authenticate (error, client) -> console.log error if (error)
-
-
-
-# ------------------------------
-# Queue
-# ------------------------------
-Queue = (fn) -> if Queue.skip then Queue._.push fn else do fn
-Queue._ = []
-Queue.skip = false
-Queue.execute = -> do action for action in Queue._
-Queue.disable = -> Queue.skip = true
   
 
 
 # ------------------------------
-# Tasks
+# Model object // qui fait le café
 # ------------------------------
-
-## Tasks object
-Tasks =
-  _: []
-  file: 'tasks.json'
-  
-  set: (tasks) -> Tasks._ = tasks
-  get: -> Tasks._ 
-  
-  load: (callback) -> 
-    client.readFile Tasks.file, (error, data) ->
-      if error and error.status is Dropbox.ApiError.NOT_FOUND
-        do Tasks.save callback # create file if doesn't exist
-      else 
-        Tasks.set JSON.parse data
-        do callback
-        
-  save: (callback) -> 
-    client.writeFile Tasks.file, JSON.stringify Tasks._, (error, stat) ->
-      console.log error if error
-      do callback
-  
-  add: (id, value) ->
-    Tasks._.push id:id, value:value
-    do Tasks.save
+class Model
+  constructor: (@file = 'default.json') ->
     
-  edit: (id, value) ->
-    task.value = value for task in Tasks._ when task.id is id
-    do Tasks.save
+  queue: 
+    _: []
+    skip: false
+    enable: -> @skip = false
+    disable: -> @skip = true
+    execute: -> do action for action in @_
+    stack: (fn) -> if @skip then @_.push fn else do fn
+  
+  _: []
+  set: (@_) ->
+  get: -> @_ 
+  
+  load: (callback = false) -> 
+    do @queue.enable
+    $this = @
+    fn = ->
+      do $this.queue.disable
+      do $this.queue.execute
+      do callback if callback
+    client.readFile @file, (error, data) ->
+      if error and error.status is Dropbox.ApiError.NOT_FOUND
+        do $this.save fn # create file if doesn't exist
+      else 
+        $this.set JSON.parse data
+        do fn
+        
+  save: (callback = false) -> 
+    client.writeFile @file, ( JSON.stringify @_ ), (error, stat) ->
+      console.log error if error
+      do callback if callback
+  
+  add: (id, value) -> 
+    $this = @
+    @queue.stack ->
+      $this._.push id:id, value:value
+      do $this.save
+    
+  edit: (id, value) -> 
+    $this = @
+    @queue.stack ->
+      item.value = value for item in $this._ when item.id is id
+      do $this.save
     
   delete: (id) -> 
-    Tasks._ = ( task for task in Tasks._ when task.id isnt id )
-    do Tasks.save
-    
-    
+    $this = @
+    @queue.stack ->
+      $this._ = ( item for item in $this._ when item.id isnt id )
+      do $this.save
 
-## Get tasks (should be repeated once every minute)
-Tasks.load ->
-  do Queue.disable
-  do Queue.execute
-  # call conflict manager and inject common data in local data
+  
+  
+# ------------------------------
+# Data object
+# ------------------------------    
+window.Data = Data = 
+  tasks: new Model 'tasks.json'
   
   
   
 # ------------------------------
 # Tests
 # ------------------------------
-Queue -> Tasks.add 'I0E3', 'This is a test'
-Queue -> Tasks.add 'A3C6', 'This is a test 2'
-Queue -> Tasks.add 'NC94', 'This is a test 3'
-Queue -> Tasks.add 'TU43', 'This is a test 4'
-Queue -> Tasks.delete 'NC94'
-Queue -> Tasks.add 'LI91', 'This is a test 3'
-Queue -> Tasks.edit 'I0E3', 'Dat ass'
-Queue -> Tasks.delete 'A3C6'
-Queue -> console.log do Tasks.get
+## Get Data.tasks (should be repeated once every minute)
+do Data.tasks.load
+# pass conflict manager as argument and inject common data in local data
+
+Data.tasks.add 'I0E3', 'This is a test'
+Data.tasks.add 'A3C6', 'This is a test 2'
+Data.tasks.add 'NC94', 'This is a test 3'
+Data.tasks.add 'TU43', 'This is a test 4'
+Data.tasks.delete 'NC94'
+Data.tasks.add 'LI91', 'This is a test 3'
+Data.tasks.edit 'I0E3', 'Dat ass'
+Data.tasks.delete 'A3C6'
+Data.tasks.queue.stack -> console.log do Data.tasks.get
