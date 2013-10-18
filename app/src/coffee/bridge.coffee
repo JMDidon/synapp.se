@@ -1,15 +1,17 @@
+# ------------------------------
+# Helpers
+# ------------------------------
 do ->
   # ------------------------------
   # Dropbox authentification
   # ------------------------------
   client = new Dropbox.Client key:'1n83me2ms50l6az'
-  client.authenticate (error, client) -> console.log error if (error)
+  client.authenticate (error, client) -> console.log error if (error)    
     
   
   
   # ------------------------------
   # Model object // qui fait le café
-  # /!\ générer les ID automatiquement, et remplace "value" par un object.extend { ID, dateAdd, dateEdit }
   # ------------------------------
   class Model
     constructor: (@file = 'default.json') ->
@@ -20,7 +22,9 @@ do ->
       open: -> @skip = false
       close: -> @skip = true
       execute: -> do action for action in @_
-      stack: (fn) -> if @skip then @_.push fn else do fn
+      stack: (fn) -> if not @skip then @_.push fn else do fn
+      
+    getID: -> ( id = Math.random().toString(36).substr(2,3) while !id or id in ( item.id for item in @_ ) ).toString()
     
     _: []
     set: (@_) ->
@@ -38,26 +42,31 @@ do ->
           do $this.save fn # create file if doesn't exist
         else 
           $this.set JSON.parse data
+          # pass conflict manager as argument and inject common data in local data
           do fn
           
     save: (callback = false) -> 
+      do @queue.open
+      $this = @
       client.writeFile @file, ( JSON.stringify @_ ), (error, stat) ->
-        console.log error if error
+        do $this.queue.close
         do callback if callback
     
-    add: (id, value) -> 
+    add: (data) -> 
       $this = @
       @queue.stack ->
-        $this._.push id:id, value:value
+        output = id:do $this.getID, addDate:new Date(), editDate:new Date(), status:0
+        output[k] = v for k, v of data when k not in Object.keys(output)
+        $this._.push output
         do $this.save
-        
-        
-    # move item method
       
-    edit: (id, value) -> 
+    edit: (id, data) -> 
       $this = @
       @queue.stack ->
-        item.value = value for item in $this._ when item.id is id
+        for item, i in $this._ when item.id is id
+          item = id:id, addDate:item.addDate, editDate:new Date(), status:0
+          item[k] = v for k, v of data when k not in Object.keys(item)
+          $this._[i] = item
         do $this.save
       
     delete: (id) -> 
@@ -81,14 +90,5 @@ do ->
 # ------------------------------
 ## Get Data.tasks (should be repeated once every minute)
 do Data.tasks.load
-# pass conflict manager as argument and inject common data in local data
 
-Data.tasks.add 'I0E3', 'This is a test'
-Data.tasks.add 'A3C6', 'This is a test 2'
-Data.tasks.add 'NC94', 'This is a test 3'
-Data.tasks.add 'TU43', 'This is a test 4'
-Data.tasks.delete 'NC94'
-Data.tasks.add 'LI91', 'This is a test 3'
-Data.tasks.edit 'I0E3', 'Dat ass'
-Data.tasks.delete 'A3C6'
-Data.tasks.queue.stack -> console.log do Data.tasks.get
+Data.tasks.add value:'This is a test'
