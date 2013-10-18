@@ -1,76 +1,77 @@
-# ------------------------------
-# Dropbox authentification
-# ------------------------------
-client = new Dropbox.Client key:'1n83me2ms50l6az'
-client.authenticate (error, client) -> console.log error if (error)
-  
-
-
-# ------------------------------
-# Model object // qui fait le café
-# ------------------------------
-class Model
-  constructor: (@file = 'default.json') ->
+do ->
+  # ------------------------------
+  # Dropbox authentification
+  # ------------------------------
+  client = new Dropbox.Client key:'1n83me2ms50l6az'
+  client.authenticate (error, client) -> console.log error if (error)
     
-  queue: 
+  
+  
+  # ------------------------------
+  # Model object // qui fait le café
+  # ------------------------------
+  class Model
+    constructor: (@file = 'default.json') ->
+      
+    queue: 
+      _: []
+      skip: false
+      enable: -> @skip = false
+      disable: -> @skip = true
+      execute: -> do action for action in @_
+      stack: (fn) -> if @skip then @_.push fn else do fn
+    
     _: []
-    skip: false
-    enable: -> @skip = false
-    disable: -> @skip = true
-    execute: -> do action for action in @_
-    stack: (fn) -> if @skip then @_.push fn else do fn
-  
-  _: []
-  set: (@_) ->
-  get: -> @_ 
-  
-  load: (callback = false) -> 
-    do @queue.enable
-    $this = @
-    fn = ->
-      do $this.queue.disable
-      do $this.queue.execute
-      do callback if callback
-    client.readFile @file, (error, data) ->
-      if error and error.status is Dropbox.ApiError.NOT_FOUND
-        do $this.save fn # create file if doesn't exist
-      else 
-        $this.set JSON.parse data
-        do fn
-        
-  save: (callback = false) -> 
-    client.writeFile @file, ( JSON.stringify @_ ), (error, stat) ->
-      console.log error if error
-      do callback if callback
-  
-  add: (id, value) -> 
-    $this = @
-    @queue.stack ->
-      $this._.push id:id, value:value
-      do $this.save
+    set: (@_) ->
+    get: -> @_ 
     
-  edit: (id, value) -> 
-    $this = @
-    @queue.stack ->
-      item.value = value for item in $this._ when item.id is id
-      do $this.save
+    load: (callback = false) -> 
+      do @queue.enable
+      $this = @
+      fn = ->
+        do $this.queue.disable
+        do $this.queue.execute
+        do callback if callback
+      client.readFile @file, (error, data) ->
+        if error and error.status is Dropbox.ApiError.NOT_FOUND
+          do $this.save fn # create file if doesn't exist
+        else 
+          $this.set JSON.parse data
+          do fn
+          
+    save: (callback = false) -> 
+      client.writeFile @file, ( JSON.stringify @_ ), (error, stat) ->
+        console.log error if error
+        do callback if callback
     
-  delete: (id) -> 
-    $this = @
-    @queue.stack ->
-      $this._ = ( item for item in $this._ when item.id isnt id )
-      do $this.save
-
+    add: (id, value) -> 
+      $this = @
+      @queue.stack ->
+        $this._.push id:id, value:value
+        do $this.save
+      
+    edit: (id, value) -> 
+      $this = @
+      @queue.stack ->
+        item.value = value for item in $this._ when item.id is id
+        do $this.save
+      
+    delete: (id) -> 
+      $this = @
+      @queue.stack ->
+        $this._ = ( item for item in $this._ when item.id isnt id )
+        do $this.save
   
-  
-# ------------------------------
-# Data object
-# ------------------------------    
-window.Data = Data = 
-  tasks: new Model 'tasks.json'
-  
-  
-  
+    
+    
+  # ------------------------------
+  # Data object
+  # ------------------------------    
+  window.Data = Data = 
+    tasks: new Model 'tasks.json'
+    
+    
+    
 # ------------------------------
 # Tests
 # ------------------------------
