@@ -1,99 +1,88 @@
 do ->
   # ------------------------------
+  # Conflicts manager
+  # ------------------------------
+  manageConflicts = (local, remote) ->
+    # for item in local
+    #   if item.id.length isnt 4
+    #     item.id = ( n = Math.random().toString(36).substr(2,4) while ( not n ) or n in ( item.id for item in remote ) ).toString()
+    # for a in similars
+      # if a.edited
+    local
+
+
+  # ------------------------------
   # Dropbox authentification
   # ------------------------------
   client = new Dropbox.Client key:'1n83me2ms50l6az'
-  client.authenticate (error, client) -> console.log error if (error)    
-    
-  
-  
+  client.authenticate (error, client) -> console.log error if error
+
+
+
   # ------------------------------
-  # Model object // qui fait le café
+  # Module object // qui fait le café
   # ------------------------------
-  class Model
+  class Module
     # Set json file
-    constructor: (@file = 'default.json') ->
-      
-    # Queue actions while Dropbox is syncing
-    queue: 
-      _: []
-      skip: false
-      open: -> @skip = false
-      close: -> @skip = true
-      execute: -> do action for action in @_
-      stack: (fn) -> if not @skip then @_.push fn else do fn
-    
+    constructor: (name = 'error') -> 
+      @file = name+'.json'
+      ( localStorage[name] = JSON.stringify [] ) if not localStorage[name]?
+      @_ = JSON.parse localStorage.getItem name
+      @save = -> localStorage[name] = JSON.stringify @_
+
+    # Sync Dropbox
+    sync: -> 
+      $this = @
+      sync = ->
+        client.readFile $this.file, (error, data) ->
+          $this._ = manageConflicts $this._, JSON.parse data
+          console.log $this._
+          do $this.save
+          client.writeFile $this.file, JSON.stringify $this._
+        setTimeout sync, 5*1000
+      do sync
+
     # Items
-    _: []
-    set: (@_) ->
-    get: -> @_ 
-    
-    # Load from Dropbox json file
-    load: (callback = false) -> 
-      do @queue.open
-      $this = @
-      fn = ->
-        do $this.queue.close
-        do $this.queue.execute
-        do callback if callback
-      client.readFile @file, (error, data) ->
-        if error and error.status is Dropbox.ApiError.NOT_FOUND
-          do $this.save fn # create file if doesn't exist
-        else 
-          $this.set JSON.parse data
-          do fn
-    
-    # Save to Dropbox json file
-    save: (callback = false) -> 
-      do @queue.open
-      $this = @
-      client.writeFile @file, ( JSON.stringify @_ ), (error, stat) ->
-        do $this.queue.close
-        do callback if callback
-    
-    # Add item (ID automaticly added)
+    get: -> @_
+
+    # Add item (local ID automatically added)
     add: (data) -> 
-      $this = @
-      @queue.stack ->
-        id = ( n = Math.random().toString(36).substr(2,3) while ( not n ) or n in ( item.id for item in @_ ) ).toString()
-        output = id:id, addDate:new Date(), editDate:new Date(), status:0
-        output[k] = v for k, v of data when k not in Object.keys(output)
-        $this._.push output
-        do $this.save
-      
+      id = ( n = Math.random().toString(36).substr(2,2) while ( not n ) or n in ( item.id for item in @_ ) ).toString()
+      output = id:id, edited: ( new Date ).getTime()
+      output[k] = v for k, v of data when k not in ['id', 'edited']
+      @_.push output
+      do @save
+      id
+
     # Edit item
-    edit: (id, data) -> 
-      $this = @
-      @queue.stack ->
-        for item, i in $this._ when item.id is id
-          item = id:id, addDate:item.addDate, editDate:new Date(), status:0
-          item[k] = v for k, v of data when k not in Object.keys(item)
-          $this._[i] = item
-        do $this.save
-      
+    edit: (id, data) ->
+      for item, i in @_ when item.id is id
+        item.edited = ( new Date ).getTime()
+        item[k] = v for k, v of data when k not in ['id', 'edited']
+      do @save
+
     # Delete item
     delete: (id) -> 
-      $this = @
-      @queue.stack ->
-        $this._ = ( item for item in $this._ when item.id isnt id )
-        do $this.save
-  
-    
-    
+      @_ = ( item for item in @_ when item.id isnt id )
+      do @save
+
+
+
   # ------------------------------
   # Data object
   # ------------------------------    
   window.Data = Data = 
-    tasks: new Model 'tasks.json'
-    
-    
-    
+    tasks: new Module 'tasks'
+
+
+
 # ------------------------------
 # Tests
 # ------------------------------
-## Get Data.tasks (should be repeated once every minute)
-do Data.tasks.load
+# task = value: 'This is a test'
+# id = Data.tasks.add task
+# Data.tasks.edit id, ( value: 'Dat ass' )
 
-Data.tasks.add value:'This is a test'
-for task in do Data.tasks.get
-  Data.tasks.edit task.id, value:'Dat ass'
+console.log localStorage.tasks
+do Data.tasks.sync
+# Data.tasks.delete task.id for task in Data.tasks.get()
