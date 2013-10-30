@@ -3,9 +3,9 @@
 <html ng-app="synappse">
 <head lang="en">
   <meta charset="utf-8">
-  <title>Test Dropbox</title>
+  <title>Synappse</title>
 </head>
-<body>
+<body ng-controller="main">
   
   
   <!-- TASKS -->
@@ -14,7 +14,7 @@
     <ul>
      <li ng-repeat="task in tasks" ng-controller="task">
        {{ task.id }} - {{ task.name }}
-       <a href="#" ng-click="deleteTask()">Delete</a>
+       <a href="" ng-click="deleteTask()">Delete</a>
      </li>
     </ul>
     
@@ -23,6 +23,8 @@
       <input type="text" ng-model="taskName">
       <input type="submit" value="add">
     </form>
+    
+    <a href="" ng-click="sync()">Sync</a>
     
   </section><!-- end of TASKS -->
   

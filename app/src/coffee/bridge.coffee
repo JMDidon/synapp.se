@@ -39,7 +39,7 @@ do ->
           console.log $this._
           do $this.save
           client.writeFile $this.file, JSON.stringify $this._
-        setTimeout sync, 5*1000
+        # setTimeout sync, 5*1000
       do sync
 
     # Items
@@ -71,18 +71,5 @@ do ->
   # ------------------------------
   # Data object
   # ------------------------------    
-  window.Data = Data = 
+  window.DB =
     tasks: new Module 'tasks'
-
-
-
-# ------------------------------
-# Tests
-# ------------------------------
-# task = value: 'This is a test'
-# id = Data.tasks.add task
-# Data.tasks.edit id, ( value: 'Dat ass' )
-
-console.log localStorage.tasks
-do Data.tasks.sync
-# Data.tasks.delete task.id for task in Data.tasks.get()
