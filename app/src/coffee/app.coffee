@@ -31,6 +31,7 @@ encodeProject = ( name, users, tasks ) ->
 app = angular.module 'synappse', []
 Project = 
   name: 'project'
+  folder: 'project/'
   
 
 
@@ -57,7 +58,10 @@ app.controller 'main', ( $scope ) ->
     # manage conflicts : local == distant (generate final IDs)
     # save DB
     # update local
-    client.readFile '_app.json', ( error, data ) ->
+    client.metadata Project.folder, ( error ) ->
+      client.mkdir Project.folder if error and error.status is 404
+      
+    client.readFile Project.folder+'_app.json', ( error, data ) ->
       tasks = if data then ( JSON.parse data ).tasks else []
       distantIDs = ( task.id for task in tasks )
       localIDs = ( task.id for task in $scope.tasks )
@@ -78,7 +82,7 @@ app.controller 'main', ( $scope ) ->
       
       # Save file
       project = encodeProject Project.name, $scope.users, $scope.tasks
-      client.writeFile '_app.json', project, ( error, stat ) ->
+      client.writeFile Project.folder+'_app.json', project, ( error, stat ) ->
         console.log error if error
 
 

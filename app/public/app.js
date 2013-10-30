@@ -60,7 +60,8 @@ encodeProject = function(name, users, tasks) {
 app = angular.module('synappse', []);
 
 Project = {
-  name: 'project'
+  name: 'project',
+  folder: 'project/'
 };
 
 app.controller('main', function($scope) {
@@ -93,7 +94,12 @@ app.controller('main', function($scope) {
     return localStorage[Project.name + '_deletedTasks'] = $scope.deletedTasks;
   };
   return $scope.sync = function() {
-    return client.readFile('_app.json', function(error, data) {
+    client.metadata(Project.folder, function(error) {
+      if (error && error.status === 404) {
+        return client.mkdir(Project.folder);
+      }
+    });
+    return client.readFile(Project.folder + '_app.json', function(error, data) {
       var distantIDs, localIDs, task, tasks, _i, _j, _len, _len1, _ref, _ref1, _ref2;
       tasks = data ? (JSON.parse(data)).tasks : [];
       distantIDs = (function() {
@@ -144,7 +150,7 @@ app.controller('main', function($scope) {
       $scope.$apply();
       $scope.cache();
       project = encodeProject(Project.name, $scope.users, $scope.tasks);
-      return client.writeFile('_app.json', project, function(error, stat) {
+      return client.writeFile(Project.folder + '_app.json', project, function(error, stat) {
         if (error) {
           return console.log(error);
         }
