@@ -1,0 +1,280 @@
+/* -------------------- Reset CSS -------------------- */
+/* ------------------------------------------------------------------------------ */
+*, *:before, *:after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+sup, sub {
+  line-height: 0;
+}
+
+a img {
+  border: 0;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+html {
+  height: 100%;
+  font-size: 62.5%;
+}
+
+body {
+  font-size: 1.6em;
+  -webkit-font-smooth: always;
+  -moz-font-smooth: always;
+  font-smooth: always;
+}
+
+/* -------------------- SASS Variables -------------------- */
+/* ------------------------------------------------------------------------------ */
+/* -------------------- Mixins -------------------- */
+/* ------------------------------------------------------------------------------ */
+/* -------------------- Animations when changing pages -------------------- */
+/* ------------------------------------------------------------------------------ */
+.global-wrapper {
+  position: relative;
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  -ms-transition: all 0.3s;
+  -o-transition: all 0.3s;
+  transition: all 0.3s;
+}
+
+.main-view-frame.ng-enter,
+.main-view-frame.ng-leave {
+  background: white;
+  position: absolute;
+}
+
+.main-view-frame.ng-enter {
+  -webkit-animation: 0.5s fade-in;
+  -moz-animation: 0.5s fade-in;
+  -o-animation: 0.5s fade-in;
+  animation: 0.5s fade-in;
+  z-index: 100;
+}
+
+.main-view-frame.ng-leave {
+  -webkit-animation: 0.5s fade-out;
+  -moz-animation: 0.5s fade-out;
+  -o-animation: 0.5s fade-out;
+  animation: 0.5s fade-out;
+  z-index: 99;
+}
+
+@-webkit-keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@-moz-keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@-ms-keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@-o-keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@-moz-keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@-ms-keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@-o-keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+/* -------------------- General styles -------------------- */
+/* ------------------------------------------------------------------------------ */
+body {
+  height: 100%;
+  font-family: "Lato", sans-serif;
+  color: #262626;
+}
+
+input, textarea, select {
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+  border: solid 1px #cccccc;
+  display: block;
+  padding: 0.5em;
+  font-family: "Lato", sans-serif;
+}
+
+ul {
+  list-style-type: none;
+}
+
+a {
+  font-size: inherit;
+  color: #00aaff;
+  cursor: pointer;
+  text-decoration: none;
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  -ms-transition: all 0.3s;
+  -o-transition: all 0.3s;
+  transition: all 0.3s;
+}
+a:hover {
+  color: blue;
+  text-decoration: none;
+  -webkit-transition: all 0.5s;
+  -moz-transition: all 0.5s;
+  -ms-transition: all 0.5s;
+  -o-transition: all 0.5s;
+  transition: all 0.5s;
+}
+
+h1 {
+  display: inline;
+  font-size: 2em;
+  font-weight: bold;
+}
+
+h2 {
+  display: inline;
+  font-size: 1.66em;
+  font-weight: lighter;
+}
+
+h3 {
+  font-size: 1.5em;
+  font-weight: 700;
+}
+
+/* -------------------- Wrappers -------------------- */
+/* ------------------------------------------------------------------------------ */
+.global-wrapper {
+  padding: 2% 5%;
+}
+
+.wrapper {
+  padding: 2% 5%;
+}
+
+/* -------------------- Header -------------------- */
+/* ------------------------------------------------------------------------------ */
+.header {
+  width: 100%;
+  padding: 2% 5%;
+  background: #262626;
+}
+.header h2 {
+  color: white;
+}
+.header a {
+  color: white;
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  -ms-transition: all 0.3s;
+  -o-transition: all 0.3s;
+  transition: all 0.3s;
+}
+.header a:hover {
+  color: red;
+  -webkit-transition: all 0.5s;
+  -moz-transition: all 0.5s;
+  -ms-transition: all 0.5s;
+  -o-transition: all 0.5s;
+  transition: all 0.5s;
+}
+
+.navbar ul li {
+  display: inline-block;
+}
+.navbar ul li::after {
+  content: "   -   ";
+}
+.navbar ul li:last-child::after {
+  content: "";
+}

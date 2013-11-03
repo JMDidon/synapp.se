@@ -1,0 +1,53 @@
+/* -------------------- Mixins -------------------- */
+/* ------------------------------------------------------------------------------ */
+
+=keyframes($name)
+	@-webkit-keyframes #{$name}
+		@content
+	@-moz-keyframes #{$name}
+		@content
+	@-ms-keyframes #{$name}
+		@content
+	@-o-keyframes #{$name}
+		@content
+	@keyframes #{$name}
+		@content
+
+
+/* -------------------- Animations when changing pages -------------------- */
+/* ------------------------------------------------------------------------------ */
+
+.global-wrapper
+	position: relative
+	@include transitions(all, 0.3s)
+
+.main-view-frame.ng-enter,
+.main-view-frame.ng-leave
+	background: white
+	position: absolute
+
+.main-view-frame.ng-enter
+	-webkit-animation: 0.5s fade-in
+	-moz-animation: 0.5s fade-in
+	-o-animation: 0.5s fade-in
+	animation: 0.5s fade-in
+	z-index: 100
+ 
+.main-view-frame.ng-leave
+	-webkit-animation: 0.5s fade-out
+	-moz-animation: 0.5s fade-out
+	-o-animation: 0.5s fade-out
+	animation: 0.5s fade-out
+	z-index: 99
+ 
++keyframes(fade-in)
+	0%
+		opacity: 0
+	100%
+		opacity: 1
+
++keyframes(fade-out)
+	0%
+		opacity: 1
+	100%
+		opacity: 0

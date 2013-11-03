@@ -1,0 +1,17 @@
+<section class="">
+	<h2>Tasks</h2>
+
+	<p>Task list :</p>
+	<ul class="task-list">
+		<li ng-repeat="task in tasks">
+			<h3>{{ task.taskName }}</h3>
+			<time class="task-date">{{ task.taskDate }}</time>
+			<p class="task-id"># {{ task.id }}</p>
+			<div class="task-description">
+				<p>{{ task.taskDescription }}</p>
+			</div>
+			<p>Created by : {{ task.fromUser }}</p>
+			<p>Assigned to : {{ task.toUser }}</p>
+		</li>
+	</ul>
+</section>

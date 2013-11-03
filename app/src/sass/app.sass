@@ -1,0 +1,148 @@
+/* -------------------- Reset CSS -------------------- */
+/* ------------------------------------------------------------------------------ */
+
+*, *:before, *:after
+	-webkit-box-sizing: border-box
+	-moz-box-sizing: border-box
+	box-sizing: border-box
+	margin: 0
+	padding: 0
+
+sup, sub
+	line-height: 0
+
+a img
+	border: 0
+
+img 
+	max-width: 100%
+	height: auto
+
+html
+	height: 100%
+	font-size: 62.5% /* 1em = 10px */
+
+body
+	font-size: 1.6em /* Childs : 1em = 16px */
+	-webkit-font-smooth: always
+	-moz-font-smooth: always
+	font-smooth: always
+
+
+/* -------------------- SASS Variables -------------------- */
+/* ------------------------------------------------------------------------------ */
+
+$white: #FFFFFF
+$black: #000000
+$grey :	#262626
+$lightgrey: #CCC
+$lightblue: #0AF
+
+@mixin transitions($attribute, $duration)
+	-webkit-transition: $attribute $duration
+	-moz-transition: $attribute $duration
+	-ms-transition: $attribute $duration
+	-o-transition: $attribute $duration
+	transition: $attribute $duration
+
+@mixin borders($radius, $color)
+	-webkit-border-radius: $radius
+	-moz-border-radius: $radius
+	-ms-border-radius: $radius
+	-o-border-radius: $radius
+	border-radius: $radius
+	border: solid 1px $color
+
+@mixin flexbox
+	display: flex
+
+	-webkit-flex-direction: row
+	-ms-flex-direction: row
+	flex-direction: row
+
+	-webkit-justify-content: space-between
+	-ms-justify-content: space-between
+	justify-content: space-between
+
+	-webkit-align-items: center
+	-ms-align-items: center
+	align-items: center
+
+@import "animations.sass"
+
+
+/* -------------------- General styles -------------------- */
+/* ------------------------------------------------------------------------------ */
+
+body
+	height: 100%
+	font-family: "Lato", sans-serif
+	color: $grey
+
+input, textarea, select 
+	@include borders(3px, $lightgrey)
+	display: block
+	padding: 0.5em
+	font-family: "Lato", sans-serif
+
+ul
+	list-style-type: none
+
+a
+	font-size: inherit
+	color: $lightblue
+	cursor: pointer
+	text-decoration: none
+	@include transitions(all, 0.3s)
+	&:hover
+		color: blue
+		text-decoration: none
+		@include transitions(all, 0.5s)
+
+h1
+	display: inline
+	font-size: 2em
+	font-weight: bold
+
+h2
+	display: inline
+	font-size: 1.66em
+	font-weight: lighter
+
+h3
+	font-size: 1.5em
+	font-weight: 700
+
+
+/* -------------------- Wrappers -------------------- */
+/* ------------------------------------------------------------------------------ */
+
+.global-wrapper
+	padding: 2% 5%
+
+.wrapper
+	padding: 2% 5%
+
+/* -------------------- Header -------------------- */
+/* ------------------------------------------------------------------------------ */
+
+.header
+	width: 100%
+	padding: 2% 5%
+	background: $grey
+	h2
+		color: $white
+	a
+		color: $white
+		@include transitions(all, 0.3s)
+		&:hover
+			color: red
+			@include transitions(all, 0.5s)
+
+.navbar
+	ul li
+		display: inline-block
+		&::after
+			content: "   -   "
+		&:last-child::after
+			content: ""
