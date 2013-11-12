@@ -83,7 +83,7 @@ DB = {
             })();
             project = data ? JSON.parse(data) : void 0;
             if (error && error.status === 404) {
-              folder = error.url.replace(/^.+\/([^\/]+)\/_app\.json(?:\?.+)?$/, '$1');
+              folder = (decodeURI(error.url)).replace(/^.+\/([^\/]+)\/_app\.json(?:\?.+)?$/, '$1');
               console.log($this.folder + folder + '/');
               project = {
                 name: folder,

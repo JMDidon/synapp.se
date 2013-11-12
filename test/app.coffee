@@ -48,7 +48,7 @@ DB =
 							
 						if error and error.status is 404
 							# create project even if _app.json is missing
-							folder = error.url.replace /^.+\/([^\/]+)\/_app\.json(?:\?.+)?$/, '$1'
+							folder = ( decodeURI error.url ).replace /^.+\/([^\/]+)\/_app\.json(?:\?.+)?$/, '$1'
 							console.log $this.folder+folder+'/'
 							project =
 								name: folder
