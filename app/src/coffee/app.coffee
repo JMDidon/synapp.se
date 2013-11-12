@@ -18,9 +18,9 @@ synappseApp = angular.module 'synappseApp', [
 
 # Project initialisation
 # ------------------------------
-Project = 
-	name: 'project'
-	folder: 'project/'
+# Project = 
+# 	name: 'project'
+# 	folder: 'project/'
 
 
 # Routes
@@ -31,13 +31,13 @@ synappseApp.config ['$routeProvider',
 			templateUrl: 'views/home.html'
 		).when( '/home',
 			redirectTo: '/'
-		).when( '/users',
-			templateUrl: 'views/users.html'
-			controller : 'UserCtrl'
-		).when( '/tasks',
-			templateUrl: 'views/tasks.html'
-			controller : 'TaskCtrl'
-		).when( '/tasks/new-task',
+		).when( '/projects/:params',
+            templateUrl: 'views/tasks.html'
+            controller : 'ProjectCtrl'
+        ).when( '/tasks',
+            templateUrl: 'views/tasks.html'
+            controller : 'TaskCtrl'
+        ).when( '/tasks/new-task',
 			templateUrl: 'views/new-task.html'
 			controller : 'TaskCtrl'
 		).otherwise
