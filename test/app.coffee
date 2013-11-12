@@ -111,6 +111,8 @@ app.factory 'Projects', ->
 			tasks: []
 		do factory.cache
 		
+	factory.readProject = ( id ) -> ( project for project in Projects when project.id is id )[0]
+		
 		
 	# TASKS
 	factory.createTask = ( projectID, taskName ) ->
