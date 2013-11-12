@@ -43,12 +43,30 @@ DB =
 				for child in children
 					$this.client.readFile $this.folder+child+'/'+'_app.json', ( error, data, stat ) ->
 						waiting--
-						return false if error
-						project = JSON.parse data
-						project.folder = stat.path.replace '_app.json', ''
-						local.push project if project.id not in ( p.id for p in local )
+						localIDs = ( p.id for p in local )
+						project = if data then JSON.parse data else 
+							
+						if error and error.status is 404
+							# create project even if _app.json is missing
+							folder = error.url.replace /^.+\/([^\/]+)\/_app\.json(?:\?.+)?$/, '$1'
+							console.log $this.folder+folder+'/'
+							project =
+								name: folder
+								id: generateID 2, localIDs
+								folder: $this.folder+folder+'/'
+								users: []
+								tasks: []
+						else
+							# get project and update folder
+							project = JSON.parse data
+							project.folder = stat.path.replace stat.name, ''
+						
+						# add projects to local from Dropbox
+						local.push project if project.id not in localIDs
 						projects.push project.id
+						
 						if not waiting
+							# delete form local unexisting projects on Dropbox
 							for removed in ( p.id for p in local when p.id not in projects )
 								index = ( p.id for p in local ).indexOf removed
 								local.splice index, 1 if index > -1
@@ -62,6 +80,7 @@ DB =
 			$this.checkFolder local.folder, ->
 				$this.client.writeFile local.folder+'_app.json', ( angular.toJson local ), ( error, stat ) ->
 					console.log error if error
+					# conflicts manager
 					do callback
 
 
@@ -141,9 +160,6 @@ app.controller 'project', ( $scope, Projects ) ->
 	$scope.createTask = ->
 		Projects.createTask $scope.project.id, $scope.taskName
 		$scope.taskName = ""
-		
-	$scope.deleteProject = ->
-		Projects.deleteProject $scope.project.id
 		
 		
 app.controller 'task', ( $scope, Projects ) ->

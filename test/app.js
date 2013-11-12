@@ -70,14 +70,9 @@ DB = {
         for (_i = 0, _len = children.length; _i < _len; _i++) {
           child = children[_i];
           _results.push($this.client.readFile($this.folder + child + '/' + '_app.json', function(error, data, stat) {
-            var index, p, project, removed, _j, _len1, _ref, _ref1;
+            var folder, index, localIDs, p, project, removed, _j, _len1, _ref, _ref1;
             waiting--;
-            if (error) {
-              return false;
-            }
-            project = JSON.parse(data);
-            project.folder = stat.path.replace('_app.json', '');
-            if (_ref = project.id, __indexOf.call((function() {
+            localIDs = (function() {
               var _j, _len1, _results1;
               _results1 = [];
               for (_j = 0, _len1 = local.length; _j < _len1; _j++) {
@@ -85,7 +80,23 @@ DB = {
                 _results1.push(p.id);
               }
               return _results1;
-            })(), _ref) < 0) {
+            })();
+            project = data ? JSON.parse(data) : void 0;
+            if (error && error.status === 404) {
+              folder = error.url.replace(/^.+\/([^\/]+)\/_app\.json(?:\?.+)?$/, '$1');
+              console.log($this.folder + folder + '/');
+              project = {
+                name: folder,
+                id: generateID(2, localIDs),
+                folder: $this.folder + folder + '/',
+                users: [],
+                tasks: []
+              };
+            } else {
+              project = JSON.parse(data);
+              project.folder = stat.path.replace(stat.name, '');
+            }
+            if (_ref = project.id, __indexOf.call(localIDs, _ref) < 0) {
               local.push(project);
             }
             projects.push(project.id);
@@ -246,12 +257,9 @@ app.controller('project', function($scope, Projects) {
       return $scope.$apply();
     });
   };
-  $scope.createTask = function() {
+  return $scope.createTask = function() {
     Projects.createTask($scope.project.id, $scope.taskName);
     return $scope.taskName = "";
-  };
-  return $scope.deleteProject = function() {
-    return Projects.deleteProject($scope.project.id);
   };
 });
 
