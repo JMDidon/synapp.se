@@ -1,6 +1,7 @@
 <?php
 # Initialize
   session_start();
+  $_SESSION['access'] = true;
   include 'site/helpers.php';
   $site = include 'site/r76.php';
   
@@ -23,7 +24,7 @@
     // load tokens
     $tokens = json_decode(file_get_contents(tokens), true);
     
-    // abord if token doesn't exist
+    // abort if token doesn't exist
     if (!in_array(sha1(uri('token')), $tokens)) return false;
     
     // grant access & redirect to app

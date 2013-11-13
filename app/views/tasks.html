@@ -1,17 +1,31 @@
-<section class="">
-	<h2>Tasks</h2>
+<section class="main-project">
+	<h1>{{ project.name }} - Tasks</h1>
 
-	<p>Task list :</p>
+	<h2 class="section-title">Task list :</h2>
+
+	<p class="sync-buttons" ng-show="auth">
+		<a href="" ng-click="syncProjects()">Sync projects</a>
+	</p>
+
 	<ul class="task-list">
-		<li ng-repeat="task in tasks">
-			<h3>{{ task.taskName }}</h3>
-			<time class="task-date">{{ task.taskDate }}</time>
-			<p class="task-id"># {{ task.id }}</p>
-			<div class="task-description">
-				<p>{{ task.taskDescription }}</p>
-			</div>
-			<p>Created by : {{ task.fromUser }}</p>
-			<p>Assigned to : {{ task.toUser }}</p>
+		<li ng-repeat="task in project.tasks" ng-controller="TaskCtrl">
+			<span class="bold">{{ task.id }}</span> — {{ task.name }} 
+			<a class="delete-link" href="" ng-click="deleteTask()">Delete task</a>
 		</li>
 	</ul>
+
+	<p class="sync-buttons" ng-show="auth">
+		<a href="" ng-click="syncProject()">sync project</a>
+	</p>
 </section>
+
+<!--<li ng-repeat="task in tasks">
+	<h3>{{ task.taskName }}</h3>
+	<time class="task-date">{{ task.taskDate }}</time>
+	<p class="task-id"># {{ task.id }}</p>
+	<div class="task-description">
+		<p>{{ task.taskDescription }}</p>
+	</div>
+	<p>Created by : {{ task.fromUser }}</p>
+	<p>Assigned to : {{ task.toUser }}</p>
+</li>-->
