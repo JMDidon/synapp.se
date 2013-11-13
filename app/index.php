@@ -1,4 +1,3 @@
-<?php session_start(); if (!$_SESSION['access']) { header('location:../'); exit; } ?>
 <!DOCTYPE html>
 <html lang="en" ng-app="synappseApp">
 	<head>
