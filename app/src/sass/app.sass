@@ -113,6 +113,9 @@ h3
 	font-size: 1.5em
 	font-weight: 700
 
+.bold
+	font-weight: bold
+
 
 /* -------------------- Wrappers -------------------- */
 /* ------------------------------------------------------------------------------ */
@@ -146,3 +149,33 @@ h3
 			content: "   -   "
 		&:last-child::after
 			content: ""
+
+
+/* -------------------- Project page -------------------- */
+/* ------------------------------------------------------------------------------ */
+
+.main-project
+	li
+		max-width: 500px
+		padding: 1em
+		border-bottom: 1px solid $black
+
+	.section-title
+		display: block
+		margin: 0.6em 0
+		font-size 1.2em
+
+	.sync-buttons
+		margin: 1em 0
+		a
+			color: red
+			&:hover
+				color: $black
+
+	.task-list
+		padding: 0 1em
+
+	.delete-link
+		display: block
+		&:before
+			content: "\u2718 - "
