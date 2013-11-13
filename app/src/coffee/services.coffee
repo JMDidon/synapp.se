@@ -27,11 +27,11 @@ synappseApp.factory 'Projects', ->
 		( project for project in Projects when project.id is id )[0]
 		
 	# TASKS
-	factory.createTask = ( projectID, taskName ) ->
+	factory.createTask = ( projectID, task ) ->
 		for project in Projects when project.id is projectID
-			project.tasks.push
-				name: taskName
-				id: generateID 2, ( task.id for task in project.tasks )
+			# console.log generateID 2, ( t.id for t in project.tasks )
+			task.id = generateID 2, ( t.id for t in project.tasks )
+			project.tasks.push task
 		do factory.cache
 		
 	factory.deleteTask = ( projectID, taskID ) ->

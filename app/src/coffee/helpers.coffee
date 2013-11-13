@@ -25,7 +25,7 @@ synappseApp = angular.module 'synappseHelpers', []
 # 
 # 		undefined
 # ]
-generateID = ( n, list ) -> ( k = Math.random().toString(36).substr(2,n) while ( not k ) or k in list ).toString()
+generateID = ( n, list ) -> ( k = Math.random().toString(36).substr(2,n) while ( not k? ) or ( k in list ) ).toString()
 slug = ( str ) ->
 	[from, to, str] = ['àáäãâèéëêìíïîòóöôõùúüûñç·/_,:;', 'aaaaaeeeeiiiiooooouuuunc------', str.toLowerCase()]
 	( str = str.replace ( new RegExp from.charAt(i), 'g' ), to.charAt i ) for i in from.length

@@ -202,8 +202,10 @@ synappseApp.controller('ProjectCtrl', function($scope, $routeParams, Projects) {
     });
   };
   return $scope.createTask = function() {
-    Projects.createTask($scope.project.id, $scope.taskName);
-    return $scope.taskName = "";
+    Projects.createTask($scope.project.id, {
+      name: $scope.task.taskName
+    });
+    return $scope.task.taskName = "";
   };
 });
 
@@ -267,25 +269,24 @@ synappseApp.factory('Projects', function() {
       return _results;
     })())[0];
   };
-  factory.createTask = function(projectID, taskName) {
-    var project, task, _i, _len;
+  factory.createTask = function(projectID, task) {
+    var project, t, _i, _len;
     for (_i = 0, _len = Projects.length; _i < _len; _i++) {
       project = Projects[_i];
-      if (project.id === projectID) {
-        project.tasks.push({
-          name: taskName,
-          id: generateID(2, (function() {
-            var _j, _len1, _ref, _results;
-            _ref = project.tasks;
-            _results = [];
-            for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
-              task = _ref[_j];
-              _results.push(task.id);
-            }
-            return _results;
-          })())
-        });
+      if (!(project.id === projectID)) {
+        continue;
       }
+      task.id = generateID(2, (function() {
+        var _j, _len1, _ref, _results;
+        _ref = project.tasks;
+        _results = [];
+        for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+          t = _ref[_j];
+          _results.push(t.id);
+        }
+        return _results;
+      })());
+      project.tasks.push(task);
     }
     return factory.cache();
   };
@@ -328,7 +329,7 @@ generateID = function(n, list) {
   return ((function() {
     var _results;
     _results = [];
-    while ((!k) || __indexOf.call(list, k) >= 0) {
+    while ((k == null) || (__indexOf.call(list, k) >= 0)) {
       _results.push(k = Math.random().toString(36).substr(2, n));
     }
     return _results;
