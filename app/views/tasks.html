@@ -17,6 +17,17 @@
 	<p class="sync-buttons" ng-show="auth">
 		<a href="" ng-click="syncProject()">sync project</a>
 	</p>
+
+	<h2 class="section-title">Add a task :</h2>
+
+	<form ng-submit="createTask()">
+		<label for="taskName">Task name :</label>
+		<input name="taskName" ng-Model="task.taskName" type="text">
+
+		<label for="taskDescription">Task description :</label>
+		<!--<textarea name="taskDescription" ng-Model="task.taskDescription"></textarea>--><p>Bypassed for the moment</p>
+		<input type="submit" value="Add the new task">
+	</form>
 </section>
 
 <!--<li ng-repeat="task in tasks">
