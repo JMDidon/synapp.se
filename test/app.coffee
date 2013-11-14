@@ -56,6 +56,7 @@ DB =
 								folder: $this.folder+folder+'/'
 								users: []
 								tasks: []
+								deletedTasks: []
 						else
 							# get project and update folder
 							project = JSON.parse data
@@ -125,6 +126,7 @@ app.factory 'Projects', ->
 			folder: DB.folder+( slug name )+'/'
 			users: []
 			tasks: []
+			deletedTasks: []
 		do factory.cache
 		
 	factory.readProject = ( id ) -> ( project for project in Projects when project.id is id )[0]

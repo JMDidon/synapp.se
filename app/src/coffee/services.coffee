@@ -21,6 +21,7 @@ synappseApp.factory 'Projects', ->
 			folder: DB.folder+( slug name )+'/'
 			users: []
 			tasks: []
+			deletedTasks: []
 		do factory.cache
 	
 	factory.readProject = ( id ) ->

@@ -90,7 +90,8 @@ DB = {
                 id: generateID(2, localIDs),
                 folder: $this.folder + folder + '/',
                 users: [],
-                tasks: []
+                tasks: [],
+                deletedTasks: []
               };
             } else {
               project = JSON.parse(data);
@@ -231,7 +232,8 @@ app.factory('Projects', function() {
       id: id,
       folder: DB.folder + (slug(name)) + '/',
       users: [],
-      tasks: []
+      tasks: [],
+      deletedTasks: []
     });
     return factory.cache();
   };

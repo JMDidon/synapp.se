@@ -46,6 +46,7 @@ DB =
 								folder: $this.folder+folder+'/'
 								users: []
 								tasks: []
+								deletedTasks: []
 						else
 							# get project and update folder
 							project = JSON.parse data
