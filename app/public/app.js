@@ -2,7 +2,9 @@
 var DB, generateID, slug, synappseApp,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-synappseApp = angular.module('synappseApp', ['ngRoute', 'synappseDropbox', 'synappseControllers', 'synappseServices', 'synappseHelpers', 'synappseConflictManager']);
+__indexOf.call([1, 2, 3], 2) >= 0;
+
+synappseApp = angular.module('synappseApp', ['ngRoute', 'synappseControllers', 'synappseServices', 'synappseHelpers', 'synappseConflictManager']);
 
 synappseApp.config([
   '$routeProvider', function($routeProvider) {
@@ -33,8 +35,6 @@ console.log('App loaded');
 --------------------------------------------
 */
 
-
-synappseApp = angular.module('synappseDropbox', []);
 
 DB = {
   key: '8437zcdkz4nvggb',
@@ -94,7 +94,7 @@ DB = {
             })();
             project = data ? JSON.parse(data) : void 0;
             if (error && error.status === 404) {
-              folder = error.url.replace(/^.+\/([^\/]+)\/_app\.json(?:\?.+)?$/, '$1');
+              folder = (decodeURI(error.url)).replace(/^.+\/([^\/]+)\/_app\.json(?:\?.+)?$/, '$1');
               console.log($this.folder + folder + '/');
               project = {
                 name: folder,
@@ -151,11 +151,63 @@ DB = {
     $this = this;
     return this.client.stat(local.folder, function(error, stats) {
       return $this.checkFolder(local.folder, function() {
-        return $this.client.writeFile(local.folder + '_app.json', angular.toJson(local), function(error, stat) {
+        return $this.client.readFile(local.folder + '_app.json', function(error, data, stat) {
+          var distantIDs, localIDs, task, tasks, _i, _j, _len, _len1, _ref, _ref1, _ref2;
           if (error) {
             console.log(error);
           }
-          return callback();
+          tasks = data ? (JSON.parse(data)).tasks : [];
+          distantIDs = (function() {
+            var _i, _len, _results;
+            _results = [];
+            for (_i = 0, _len = tasks.length; _i < _len; _i++) {
+              task = tasks[_i];
+              _results.push(task.id);
+            }
+            return _results;
+          })();
+          localIDs = (function() {
+            var _i, _len, _ref, _results;
+            _ref = local.tasks;
+            _results = [];
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              task = _ref[_i];
+              _results.push(task.id);
+            }
+            return _results;
+          })();
+          local.tasks = (function() {
+            var _i, _len, _ref, _ref1, _results;
+            _ref = local.tasks;
+            _results = [];
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              task = _ref[_i];
+              if (task.id.length === 2 || (_ref1 = task.id, __indexOf.call(distantIDs, _ref1) >= 0)) {
+                _results.push(task);
+              }
+            }
+            return _results;
+          })();
+          _ref = local.tasks;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            task = _ref[_i];
+            if (task.id.length === 2) {
+              task.id = generateID(3, distantIDs);
+            }
+          }
+          for (_j = 0, _len1 = tasks.length; _j < _len1; _j++) {
+            task = tasks[_j];
+            if ((_ref1 = task.id, __indexOf.call(localIDs, _ref1) < 0) && (_ref2 = task.id, __indexOf.call(local.deletedTasks, _ref2) < 0)) {
+              local.tasks.push(task);
+            }
+          }
+          local.deletedTasks = [];
+          return $this.client.writeFile(local.folder + '_app.json', angular.toJson(local), function(error, stat) {
+            if (error) {
+              console.log(error);
+            }
+            return callback();
+          });
         });
       });
     });
@@ -294,20 +346,33 @@ synappseApp.factory('Projects', function() {
     var project, task, _i, _len;
     for (_i = 0, _len = Projects.length; _i < _len; _i++) {
       project = Projects[_i];
-      if (project.id === projectID) {
-        project.tasks = (function() {
-          var _j, _len1, _ref, _results;
-          _ref = project.tasks;
-          _results = [];
-          for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
-            task = _ref[_j];
-            if (task.id !== taskID) {
-              _results.push(task);
-            }
-          }
-          return _results;
-        })();
+      if (!(project.id === projectID)) {
+        continue;
       }
+      project.deletedTasks.push(((function() {
+        var _j, _len1, _ref, _results;
+        _ref = project.tasks;
+        _results = [];
+        for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+          task = _ref[_j];
+          if (task.id === taskID) {
+            _results.push(task.id);
+          }
+        }
+        return _results;
+      })())[0]);
+      project.tasks = (function() {
+        var _j, _len1, _ref, _results;
+        _ref = project.tasks;
+        _results = [];
+        for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+          task = _ref[_j];
+          if (task.id !== taskID) {
+            _results.push(task);
+          }
+        }
+        return _results;
+      })();
     }
     return factory.cache();
   };

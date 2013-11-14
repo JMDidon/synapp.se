@@ -78,10 +78,26 @@ DB =
 		$this = @
 		@client.stat local.folder, ( error, stats ) ->
 			$this.checkFolder local.folder, ->
-				$this.client.writeFile local.folder+'_app.json', ( angular.toJson local ), ( error, stat ) ->
+				$this.client.readFile local.folder+'_app.json', ( error, data, stat ) ->
 					console.log error if error
-					# conflicts manager
-					do callback
+					tasks = if data then ( JSON.parse data ).tasks else []
+					distantIDs = ( task.id for task in tasks )
+					localIDs = ( task.id for task in local.tasks )
+					
+					# Delete local items missing in distant
+					local.tasks = ( task for task in local.tasks when task.id.length is 2 or task.id in distantIDs )
+					
+					# Add local items missing in distant
+					( task.id = generateID 3, distantIDs ) for task in local.tasks when task.id.length is 2
+					
+					# Add distant items missing in local
+					local.tasks.push task for task in tasks when task.id not in localIDs and task.id not in local.deletedTasks
+					local.deletedTasks = []
+					
+					# Save file
+					$this.client.writeFile local.folder+'_app.json', ( angular.toJson local ), ( error, stat ) ->
+						console.log error if error
+						do callback
 
 
 
@@ -124,6 +140,7 @@ app.factory 'Projects', ->
 		
 	factory.deleteTask = ( projectID, taskID ) ->
 		for project in Projects when project.id is projectID
+			project.deletedTasks.push ( task.id for task in project.tasks when task.id is taskID )[0]
 			project.tasks = ( task for task in project.tasks when task.id isnt taskID )
 		do factory.cache
 		

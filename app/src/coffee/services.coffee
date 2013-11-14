@@ -36,6 +36,7 @@ synappseApp.factory 'Projects', ->
 		
 	factory.deleteTask = ( projectID, taskID ) ->
 		for project in Projects when project.id is projectID
+			project.deletedTasks.push ( task.id for task in project.tasks when task.id is taskID )[0]
 			project.tasks = ( task for task in project.tasks when task.id isnt taskID )
 		do factory.cache
 		
