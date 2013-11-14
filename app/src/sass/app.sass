@@ -102,19 +102,22 @@ a
 h1
 	display: inline
 	font-size: 2em
-	font-weight: bold
+	font-weight: 700
 
 h2
 	display: inline
 	font-size: 1.66em
-	font-weight: lighter
+	font-weight: 300
 
 h3
 	font-size: 1.5em
 	font-weight: 700
 
 .bold
-	font-weight: bold
+	font-weight: 700
+
+.italic
+	font-style: italic
 
 
 /* -------------------- Wrappers -------------------- */
@@ -155,15 +158,14 @@ h3
 /* ------------------------------------------------------------------------------ */
 
 .main-project
-	li
-		max-width: 500px
-		padding: 1em
-		border-bottom: 1px solid $black
-
 	.section-title
 		display: block
+		margin: 1em 0
+
+	.part-title
+		display: block
 		margin: 0.6em 0
-		font-size 1.2em
+		font-size: 1.2em
 
 	.sync-buttons
 		margin: 1em 0
@@ -173,10 +175,24 @@ h3
 				color: $black
 
 	.task-list
+		display: inline-block
+		width: 500px
 		padding: 0 1em
+		.task-title
+			font-size: 1.2em
+			font-weight: 700
+		.task-description
+			margin: 1em
+		li
+			padding: 1em
+			border-bottom: 1px solid $black
+		.delete-link
+			display: block
+			&:before
+				content: "× - "
 
-	.delete-link
-		display: block
-		&:before
-			content: "× - "
+	.task-create
+		display: inline-block
+		min-width: 500px
+		vertical-align: top
 

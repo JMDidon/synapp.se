@@ -1,33 +1,39 @@
 <section class="main-project">
-	<h1>{{ project.name }} - Tasks</h1>
+	<h1 class="section-title">{{ project.name }} - Tasks</h1>
 
-	<h2 class="section-title">Task list :</h2>
+	<div class="task-list">
+		<h2 class="part-title">Task list :</h2>
+		<p class="sync-buttons" ng-show="auth">
+			<a href="" ng-click="syncProjects()">Sync projects</a>
+		</p>
+		
+		<ul>
+			<li ng-repeat="task in project.tasks" ng-controller="TaskCtrl">
+				<h3 class="task-title">{{ task.name }}</h3>
+				<p class="italic"># {{ task.id }}</p>
+				<p class="task-description">{{ task.description }}</p>
+				<a class="delete-link" href="" ng-click="deleteTask()">Delete task</a>
+			</li>
+		</ul>
 
-	<p class="sync-buttons" ng-show="auth">
-		<a href="" ng-click="syncProjects()">Sync projects</a>
-	</p>
+		<p class="sync-buttons" ng-show="auth">
+			<a href="" ng-click="syncProject()">sync project</a>
+		</p>
+	</div>
 
-	<ul class="task-list">
-		<li ng-repeat="task in project.tasks" ng-controller="TaskCtrl">
-			<span class="bold">{{ task.id }}</span> — {{ task.name }} 
-			<a class="delete-link" href="" ng-click="deleteTask()">Delete task</a>
-		</li>
-	</ul>
+	<div class="task-create">
+		<h2 class="part-title">Add a task :</h2>
 
-	<p class="sync-buttons" ng-show="auth">
-		<a href="" ng-click="syncProject()">sync project</a>
-	</p>
+		<form ng-submit="createTask()">
+			<label for="taskName">Task name :</label>
+			<input name="taskName" ng-Model="task.name" type="text" placeholder="Task name">
 
-	<h2 class="section-title">Add a task :</h2>
+			<label for="taskDescription">Task description :</label>
+			<textarea name="taskDescription" ng-Model="task.description" placeholder="Task description"></textarea>
 
-	<form ng-submit="createTask()">
-		<label for="taskName">Task name :</label>
-		<input name="taskName" ng-Model="task.taskName" type="text">
-
-		<label for="taskDescription">Task description :</label>
-		<!--<textarea name="taskDescription" ng-Model="task.taskDescription"></textarea>--><p>Bypassed for the moment</p>
-		<input type="submit" value="Add the new task">
-	</form>
+			<input type="submit" value="Add the new task">
+		</form>
+	</div>
 </section>
 
 <!--<li ng-repeat="task in tasks">

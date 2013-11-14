@@ -219,13 +219,13 @@ a:hover {
 h1 {
   display: inline;
   font-size: 2em;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 h2 {
   display: inline;
   font-size: 1.66em;
-  font-weight: lighter;
+  font-weight: 300;
 }
 
 h3 {
@@ -234,7 +234,11 @@ h3 {
 }
 
 .bold {
-  font-weight: bold;
+  font-weight: 700;
+}
+
+.italic {
+  font-style: italic;
 }
 
 /* -------------------- Wrappers -------------------- */
@@ -286,14 +290,14 @@ h3 {
 
 /* -------------------- Project page -------------------- */
 /* ------------------------------------------------------------------------------ */
-.main-project li {
-  max-width: 500px;
-  padding: 1em;
-  border-bottom: 1px solid black;
-}
 .main-project .section-title {
   display: block;
+  margin: 1em 0;
+}
+.main-project .part-title {
+  display: block;
   margin: 0.6em 0;
+  font-size: 1.2em;
 }
 .main-project .sync-buttons {
   margin: 1em 0;
@@ -305,11 +309,29 @@ h3 {
   color: black;
 }
 .main-project .task-list {
+  display: inline-block;
+  width: 500px;
   padding: 0 1em;
 }
-.main-project .delete-link {
+.main-project .task-list .task-title {
+  font-size: 1.2em;
+  font-weight: 700;
+}
+.main-project .task-list .task-description {
+  margin: 1em;
+}
+.main-project .task-list li {
+  padding: 1em;
+  border-bottom: 1px solid black;
+}
+.main-project .task-list .delete-link {
   display: block;
 }
-.main-project .delete-link:before {
+.main-project .task-list .delete-link:before {
   content: "× - ";
+}
+.main-project .task-create {
+  display: inline-block;
+  min-width: 500px;
+  vertical-align: top;
 }

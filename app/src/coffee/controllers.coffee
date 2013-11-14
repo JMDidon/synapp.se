@@ -39,8 +39,9 @@ synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, Projects ) ->
 	
 	$scope.createTask = ->
 		Projects.createTask $scope.project.id, 
-			name: $scope.task.taskName
-		$scope.task.taskName = ""
+			name: $scope.task.name
+			description: $scope.task.description
+		$scope.task.name = ""
 		
 
 # Task Controller
