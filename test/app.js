@@ -73,21 +73,23 @@ DB = {
   },
   checkProject: function(folder, localIDs, callback) {
     var $this;
+    console.log(folder);
     $this = this;
     return this.client.readFile(folder + this.file, function(error, data, stat) {
       var name, project;
       if (error && error.status === 404) {
         name = (folder.substring($this.folder.length + 1)).replace(/\/$/, '');
+        project = {
+          name: name,
+          id: generateID(2, localIDs, $this.user.uid + '_'),
+          folder: folder,
+          slug: slug(name),
+          users: [$this.user],
+          tasks: [],
+          deletedTasks: []
+        };
         return $this.saveProject(project, function() {
-          return callback({
-            name: name,
-            id: generateID(2, localIDs, $this.user.uid + '_'),
-            folder: folder,
-            slug: slug(name),
-            users: [$this.user],
-            tasks: [],
-            deletedTasks: []
-          });
+          return callback(project);
         });
       } else {
         project = angular.fromJson(data);
@@ -109,6 +111,48 @@ DB = {
       }
     });
   },
+  checkLocalProjects: function(local, folders, callback) {
+    var index, localIDs, p, t, task, _i, _j, _len, _len1, _ref, _ref1;
+    localIDs = (function() {
+      var _i, _len, _results;
+      _results = [];
+      for (_i = 0, _len = local.length; _i < _len; _i++) {
+        p = local[_i];
+        _results.push(p.id);
+      }
+      return _results;
+    })();
+    for (_i = 0, _len = local.length; _i < _len; _i++) {
+      p = local[_i];
+      if (_ref = p.folder, __indexOf.call(folders, _ref) < 0) {
+        if (p.id.length === 2) {
+          p.id = generateID(2, localIDs, this.user.uid + '_');
+          p.users.push(this.user);
+          _ref1 = p.tasks;
+          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+            task = _ref1[_j];
+            task.id = generateID(3, (function() {
+              var _k, _len2, _ref2, _results;
+              _ref2 = p.tasks;
+              _results = [];
+              for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
+                t = _ref2[_k];
+                _results.push(t.id);
+              }
+              return _results;
+            })());
+          }
+          this.saveProject(p);
+        } else {
+          index = localIDs.indexOf(p.id);
+          if (~index) {
+            local.splice(index, 1);
+          }
+        }
+      }
+    }
+    return callback();
+  },
   sync: function(local, callback) {
     var $this;
     if (!this.client) {
@@ -129,6 +173,9 @@ DB = {
         return _results;
       })();
       waiting = projects.length;
+      if (!waiting) {
+        return $this.checkLocalProjects(local, [], callback);
+      }
       localIDs = (function() {
         var _i, _len, _results;
         _results = [];
@@ -142,7 +189,7 @@ DB = {
       for (_i = 0, _len = projects.length; _i < _len; _i++) {
         project = projects[_i];
         _results.push($this.checkProject(project.path + '/', localIDs, function(data) {
-          var c, index, localProject, t, task, _j, _k, _len1, _len2, _ref, _ref1, _ref2;
+          var c, localProject, _ref;
           waiting--;
           if (_ref = data.id, __indexOf.call(localIDs, _ref) < 0) {
             local.push(data);
@@ -161,53 +208,18 @@ DB = {
             $this.solveConflicts(localProject, data);
           }
           if (!waiting) {
-            localIDs = (function() {
+            return $this.checkLocalProjects(local, (function() {
               var _j, _len1, _results1;
               _results1 = [];
-              for (_j = 0, _len1 = local.length; _j < _len1; _j++) {
-                p = local[_j];
-                _results1.push(p.id);
+              for (_j = 0, _len1 = projects.length; _j < _len1; _j++) {
+                c = projects[_j];
+                _results1.push(c.path + '/');
               }
               return _results1;
-            })();
-            for (_j = 0, _len1 = local.length; _j < _len1; _j++) {
-              p = local[_j];
-              if (_ref1 = p.folder, __indexOf.call((function() {
-                var _k, _len2, _results1;
-                _results1 = [];
-                for (_k = 0, _len2 = projects.length; _k < _len2; _k++) {
-                  c = projects[_k];
-                  _results1.push(c.path + '/');
-                }
-                return _results1;
-              })(), _ref1) < 0) {
-                if (p.id.length === 2) {
-                  p.id = generateID(2, localIDs, $this.user.uid + '_');
-                  p.users.push($this.user);
-                  _ref2 = p.tasks;
-                  for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
-                    task = _ref2[_k];
-                    task.id = generateID(3, (function() {
-                      var _l, _len3, _ref3, _results1;
-                      _ref3 = p.tasks;
-                      _results1 = [];
-                      for (_l = 0, _len3 = _ref3.length; _l < _len3; _l++) {
-                        t = _ref3[_l];
-                        _results1.push(t.id);
-                      }
-                      return _results1;
-                    })());
-                  }
-                  $this.saveProject(p);
-                } else {
-                  index = localIDs.indexOf(p.id);
-                  if (~index) {
-                    local.splice(index, 1);
-                  }
-                }
-              }
-            }
-            return callback();
+            })(), (function() {
+              console.log("sync complete");
+              return callback();
+            }));
           }
         }));
       }
@@ -216,6 +228,7 @@ DB = {
   },
   solveConflicts: function(local, distant) {
     var distantIDs, localIDs, task, u, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
+    local.folder = distant.folder;
     local.users = (function() {
       var _i, _len, _ref, _results;
       _ref = distant.users;

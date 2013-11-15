@@ -43,11 +43,12 @@ DB =
 
 	# Check if project file exists or create it
 	checkProject: ( folder, localIDs, callback ) ->
+		console.log folder
 		$this = @
 		@client.readFile folder+@file, ( error, data, stat ) ->
 			if error and error.status is 404 # create project
 				name = ( folder.substring $this.folder.length+1 ).replace /\/$/, ''
-				$this.saveProject project, -> callback 
+				project = 
 					name: name
 					id: generateID 2, localIDs, $this.user.uid+'_'
 					folder: folder
@@ -55,6 +56,7 @@ DB =
 					users: [$this.user]
 					tasks: []
 					deletedTasks: []
+				$this.saveProject project, -> callback project
 			else # restore project
 				project = angular.fromJson data
 				project.folder = folder
@@ -66,6 +68,21 @@ DB =
 		@client.writeFile project.folder+@file, ( angular.toJson project ), ( error, stat ) ->
 			console.log error if error
 			do callback if callback
+			
+			
+	# process local projects which miss their Dropbox folder
+	checkLocalProjects: ( local, folders, callback ) ->
+		localIDs = ( p.id for p in local )
+		for p in local when p.folder not in folders
+			if p.id.length is 2 # create Dropbox folder from recently created local project
+				p.id = generateID 2, localIDs, @user.uid+'_'
+				p.users.push @user
+				( task.id = generateID 3, ( t.id for t in p.tasks ) ) for task in p.tasks
+				@saveProject p
+			else # delete local project from recently removed Dropbox folder
+				index = localIDs.indexOf p.id
+				local.splice index, 1 if ~index
+		do callback
 
 
 	# Synchronize
@@ -76,6 +93,7 @@ DB =
 			# get projects (children folders)
 			projects = ( child for child in children when child.isFolder )
 			waiting = projects.length
+			return $this.checkLocalProjects local, [], callback if not waiting
 			localIDs = ( p.id for p in local )
 			for project in projects
 				# check project file
@@ -88,25 +106,16 @@ DB =
 						$this.solveConflicts localProject, data
 
 					# when all DB folders are sync
-					if not waiting
-						localIDs = ( p.id for p in local )
-
-						# process local projects which miss their Dropbox folder
-						for p in local when p.folder not in ( c.path+'/' for c in projects )
-							if p.id.length is 2 # create Dropbox folder from recently created local project
-								p.id = generateID 2, localIDs, $this.user.uid+'_'
-								p.users.push $this.user
-								( task.id = generateID 3, ( t.id for t in p.tasks ) ) for task in p.tasks
-								$this.saveProject p
-							else # delete local project from recently removed Dropbox folder
-								index = localIDs.indexOf p.id
-								local.splice index, 1 if ~index
+					$this.checkLocalProjects local, ( c.path+'/' for c in projects ), ( -> 
+						console.log "sync complete"
 						do callback
-
+					) if not waiting
 
 
 	# Manage conflicts
 	solveConflicts: ( local, distant ) ->
+		local.folder = distant.folder
+		
 		# USERS
 		local.users = ( u for u in distant.users )
 		if @user.uid in ( u.uid for u in local.users )

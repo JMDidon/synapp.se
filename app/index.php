@@ -20,6 +20,7 @@
 		<nav class="wrapper navbar">
 			<ul>
 				<li><a href="#/home">Home</a></li>
+				<li ng-show="auth"><a href="" ng-click="sync()">Sync</a></li>
 				<li ng-repeat="project in projects"><a href="#/projects/{{ project.id }}">{{ project.name }}</a></li>
 			</ul>
 		</nav>
