@@ -74,7 +74,7 @@ DB = {
   checkProject: function(folder, localIDs, callback) {
     var $this;
     $this = this;
-    return $this.client.readFile(folder + $this.file, function(error, data, stat) {
+    return this.client.readFile(folder + this.file, function(error, data, stat) {
       var name, project;
       if (error && error.status === 404) {
         name = (folder.substring($this.folder.length + 1)).replace(/\/$/, '');
@@ -115,7 +115,7 @@ DB = {
       return;
     }
     $this = this;
-    return $this.readFolder($this.folder, function(children) {
+    return this.readFolder(this.folder, function(children) {
       var child, localIDs, p, project, projects, waiting, _i, _len, _results;
       projects = (function() {
         var _i, _len, _results;

@@ -428,13 +428,3 @@ slug = function(str) {
 };
 
 console.log('Helpers module loaded');
-
-/* --------------------------------------------
-     Begin conflictManager.coffee
---------------------------------------------
-*/
-
-
-synappseApp = angular.module('synappseConflictManager', []);
-
-console.log('Conflict manager loaded');

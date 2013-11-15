@@ -39,12 +39,12 @@ DB =
 					console.log error if error
 					callback []
 			else callback childrenStat
-			
+
 
 	# Check if project file exists or create it
 	checkProject: ( folder, localIDs, callback ) ->
 		$this = @
-		$this.client.readFile folder+$this.file, ( error, data, stat ) ->
+		@client.readFile folder+@file, ( error, data, stat ) ->
 			if error and error.status is 404 # create project
 				name = ( folder.substring $this.folder.length+1 ).replace /\/$/, ''
 				$this.saveProject project, -> callback 
@@ -59,8 +59,8 @@ DB =
 				project = angular.fromJson data
 				project.folder = folder
 				callback project
-				
-				
+
+
 	# Save project file
 	saveProject: ( project, callback = false ) ->
 		@client.writeFile project.folder+@file, ( angular.toJson project ), ( error, stat ) ->
@@ -72,7 +72,7 @@ DB =
 	sync: ( local, callback ) ->
 		return if not @client
 		$this = @
-		$this.readFolder $this.folder, ( children ) ->
+		@readFolder @folder, ( children ) ->
 			# get projects (children folders)
 			projects = ( child for child in children when child.isFolder )
 			waiting = projects.length
@@ -90,7 +90,7 @@ DB =
 					# when all DB folders are sync
 					if not waiting
 						localIDs = ( p.id for p in local )
-						
+
 						# process local projects which miss their Dropbox folder
 						for p in local when p.folder not in ( c.path+'/' for c in projects )
 							if p.id.length is 2 # create Dropbox folder from recently created local project
@@ -129,6 +129,7 @@ DB =
 
 		# save file
 		@saveProject local
+
 
 
 # Synappse
@@ -212,4 +213,3 @@ app.controller 'project', ( $scope, Projects ) ->
 app.controller 'task', ( $scope, Projects ) ->
 	$scope.deleteTask = ->
 		Projects.deleteTask $scope.project.id, $scope.task.id
-
