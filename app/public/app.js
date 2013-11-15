@@ -248,6 +248,7 @@ synappseApp.controller('MainCtrl', function($scope, Projects) {
 
 synappseApp.controller('ProjectCtrl', function($scope, $routeParams, Projects) {
   $scope.project = Projects.readProject($routeParams.params);
+  console.log($scope.task);
   $scope.syncProject = function() {
     return DB.syncProject($scope.project, function() {
       Projects.cache();
@@ -255,11 +256,22 @@ synappseApp.controller('ProjectCtrl', function($scope, $routeParams, Projects) {
     });
   };
   return $scope.createTask = function() {
+    var now, tags;
+    now = new Date().toLocaleString();
+    tags = $scope.task.tags;
+    tags = tags.toString().split(',');
+    console.log(tags);
     Projects.createTask($scope.project.id, {
       name: $scope.task.name,
-      description: $scope.task.description
+      description: $scope.task.description,
+      status: $scope.task.status,
+      priority: $scope.task.priority,
+      dateBegin: $scope.task.dateBegin,
+      dateEnd: $scope.task.dateEnd,
+      dateCreation: now,
+      tags: tags
     });
-    return $scope.task.name = "";
+    return $scope.task = "";
   };
 });
 

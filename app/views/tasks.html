@@ -8,10 +8,25 @@
 		</p>
 		
 		<ul>
-			<li ng-repeat="task in project.tasks" ng-controller="TaskCtrl">
+			<li class="task-item" ng-repeat="task in project.tasks" ng-controller="TaskCtrl">
 				<h3 class="task-title">{{ task.name }}</h3>
-				<p class="italic"># {{ task.id }}</p>
+				<time class="task-dateCreation italic">{{ task.dateCreation }}</time>
+				<p class="task-id italic"># {{ task.id }}</p>
+				
 				<p class="task-description">{{ task.description }}</p>
+				
+				<div class="task-dates">
+					Begin : {{ task.dateBegin }} <br/>
+					End : {{ task.dateEnd }}
+				</div>
+				
+				<p>Status : {{ task.status }}</p>
+				<p class="red" ng-show="{{ task.priority }}">This task is a priority !</p>
+				<ul>
+					<li ng-repeat"tag in task.tags">{{ tag }}</li>
+				</ul>
+				
+				<a class="edit-link" href="" ng-click="editTask()">Edit task</a>
 				<a class="delete-link" href="" ng-click="deleteTask()">Delete task</a>
 			</li>
 		</ul>
@@ -30,6 +45,34 @@
 
 			<label for="taskDescription">Task description :</label>
 			<textarea name="taskDescription" ng-Model="task.description" placeholder="Task description"></textarea>
+
+			<label for="taskStatus">Task status :</label>
+			<select name="taskStatus" ng-Model="task.status">
+				<option selected>Pending ...</option>
+				<option>25 %</option>
+				<option>50 %</option>
+				<option>75 %</option>
+				<option>Finished</option>
+			</select>
+
+			<label for="taskPriority">Is this task a priority ?</label>
+			<input name="taskPriority" ng-Model="task.priority" type="checkbox">
+
+			<label for="taskDateBegin">Begin date :</label>
+			<input name="taskDateBegin" ng-Model="task.dateBegin" type="text">
+
+			<label for="taskDateEnd">End date :</label>
+			<input name="taskDateEnd" ng-Model="task.dateEnd" type="text">
+			<!--<div class="calendar-container">
+				<div class="calendar-header">
+					<a class="calendar-arrow">< </a>
+					<h3 class="calendar-month" >November</h3>
+					<a class="calendar-arrow"> ></a>
+				</div>
+			</div>-->
+			
+			<label for="taskTags">Tags (separate the differents tags with a coma (,) ):</label>
+			<input name="taskTags" ng-Model="task.tags" type="text">
 
 			<input type="submit" value="Add the new task">
 		</form>

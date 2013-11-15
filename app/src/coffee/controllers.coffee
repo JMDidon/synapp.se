@@ -24,13 +24,15 @@ synappseApp.controller 'MainCtrl', ( $scope, Projects ) ->
 		Projects.createProject $scope.projectName
 		$scope.projectName = ""
 		$scope.projectFolder = ""
-		
+
 
 # Project Controller
 # ------------------------------	
 synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, Projects ) ->
 	
 	$scope.project = Projects.readProject $routeParams.params
+	# $scope.task.status = 'Pending ...'
+	console.log $scope.task
 
 	$scope.syncProject = -> 
 		DB.syncProject $scope.project, ->
@@ -38,11 +40,22 @@ synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, Projects ) ->
 			do $scope.$apply
 	
 	$scope.createTask = ->
+		now = new Date().toLocaleString()
+		tags = $scope.task.tags
+		tags = tags.toString().split(',')
+		console.log tags
+		
 		Projects.createTask $scope.project.id, 
 			name: $scope.task.name
 			description: $scope.task.description
-		$scope.task.name = ""
-		
+			status: $scope.task.status
+			priority: $scope.task.priority
+			dateBegin: $scope.task.dateBegin
+			dateEnd: $scope.task.dateEnd
+			dateCreation: now
+			tags: tags
+		$scope.task = ""
+
 
 # Task Controller
 # ------------------------------		
