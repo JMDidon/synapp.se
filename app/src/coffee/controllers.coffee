@@ -15,8 +15,8 @@ synappseApp.controller 'MainCtrl', ( $scope, Projects ) ->
 		
 	DB.auth $scope.login
 	
-	$scope.syncProjects = -> 
-		DB.syncProjects $scope.projects, ->
+	$scope.sync = -> 
+		DB.sync $scope.projects, ->
 			do Projects.cache
 			do $scope.$apply
 	
@@ -33,11 +33,6 @@ synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, Projects ) ->
 	$scope.project = Projects.readProject $routeParams.params
 	# $scope.task.status = 'Pending ...'
 	console.log $scope.task
-
-	$scope.syncProject = -> 
-		DB.syncProject $scope.project, ->
-			do Projects.cache
-			do $scope.$apply
 	
 	$scope.createTask = ->
 		now = new Date().toLocaleString()
