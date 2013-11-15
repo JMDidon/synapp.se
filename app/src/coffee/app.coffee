@@ -13,7 +13,6 @@ synappseApp = angular.module 'synappseApp', [
 	'synappseControllers'
 	'synappseServices'
 	'synappseHelpers'
-	'synappseConflictManager'
 ]
 
 # Project initialisation

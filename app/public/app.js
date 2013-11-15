@@ -4,7 +4,7 @@ var DB, generateID, slug, synappseApp,
 
 __indexOf.call([1, 2, 3], 2) >= 0;
 
-synappseApp = angular.module('synappseApp', ['ngRoute', 'synappseControllers', 'synappseServices', 'synappseHelpers', 'synappseConflictManager']);
+synappseApp = angular.module('synappseApp', ['ngRoute', 'synappseControllers', 'synappseServices', 'synappseHelpers']);
 
 synappseApp.config([
   '$routeProvider', function($routeProvider) {
