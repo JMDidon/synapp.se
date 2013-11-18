@@ -260,7 +260,7 @@ DB = {
       _ref1 = local.users;
       for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
         u = _ref1[_i];
-        if (u.uid = this.user.uid) {
+        if (u.uid === this.user.uid) {
           u = this.user;
         }
       }

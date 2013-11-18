@@ -109,7 +109,7 @@ DB =
 		# USERS
 		local.users = ( u for u in distant.users )
 		if @user.uid in ( u.uid for u in local.users )
-			( u = @user for u in local.users when u.uid = @user.uid )
+			( u = @user for u in local.users when u.uid is @user.uid )
 		else local.users.push @user
 
 		# TASKS
