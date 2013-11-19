@@ -335,6 +335,17 @@ h3 {
   padding: 1em;
   border-bottom: 1px solid black;
 }
+.main-project .task-list .task-tag-list {
+  padding: 1em 2em;
+  list-style-type: katakana;
+}
+.main-project .task-list .task-tag-list li {
+  display: inline-block;
+  margin-right: 2em;
+}
+.main-project .task-list .task-tag-list li:last-child {
+  margin: 0;
+}
 .main-project .task-list .delete-link {
   display: block;
 }

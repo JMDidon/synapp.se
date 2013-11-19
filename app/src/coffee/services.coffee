@@ -15,7 +15,8 @@ synappseApp.factory 'Projects', ->
 	# PROJECTS
 	factory.createProject = ( name ) ->
 		id = generateID 2, ( project.id for project in Projects )
-		# check if folder exists
+
+		# Check if folder exists
 		Projects.push
 			name: name
 			id: id
@@ -35,6 +36,15 @@ synappseApp.factory 'Projects', ->
 			task.id = generateID 2, ( t.id for t in project.tasks )
 			project.tasks.push task
 		do factory.cache
+
+	factory.editTask = ( projectID, taskID, task ) ->
+		for project in Projects when project.id is projectID
+			#for t in project.tasks when t.id is taskID
+			#	task.id = t.id
+			#	t = task
+			#	console.log task
+			for task in project.tasks when task.id is taskID
+				console.log null
 		
 	factory.deleteTask = ( projectID, taskID ) ->
 		for project in Projects when project.id is projectID

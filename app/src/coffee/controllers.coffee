@@ -32,13 +32,17 @@ synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, Projects ) ->
 	
 	$scope.project = Projects.readProject $routeParams.params
 	# $scope.task.status = 'Pending ...'
-	console.log $scope.task
+
+	$scope.edit_mode = false
+	console.log $scope.edit_mode
+
+	$scope.toggleEditMode = ->
+		$scope.edit_mode = not $scope.edit_mode
 	
 	$scope.createTask = ->
 		now = new Date().toLocaleString()
 		tags = $scope.task.tags
 		tags = tags.toString().split(',')
-		console.log tags
 		
 		Projects.createTask $scope.project.id, 
 			name: $scope.task.name
@@ -52,12 +56,18 @@ synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, Projects ) ->
 		$scope.task = ""
 
 
+
 # Task Controller
 # ------------------------------		
 synappseApp.controller 'TaskCtrl', ( $scope, $routeParams, Projects ) ->
 
+	$scope.editTask = ->
+		do $scope.toggleEditMode
+		console.log $scope.edit_mode
+		Projects.editTask $scope.project.id, $scope.task.id
+
 	$scope.deleteTask = ->
-		Projects.deleteTask $scope.project.id, $scope.task.id
+		Projects.deleteTask $scope.project.id, $scope.task.id, $scope.task
 
 
 console.log 'Controllers loaded'

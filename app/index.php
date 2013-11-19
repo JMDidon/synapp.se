@@ -7,7 +7,7 @@
 		<meta name="HandheldFriendly" content="true" />
 		<meta name="viewport" content="initial-scale=1.0" />
 
-		<link href='http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" type="text/css" href="public/app.css">
 	</head>
 	<body ng-controller="MainCtrl">
