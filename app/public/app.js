@@ -526,5 +526,3 @@ splitTags = function(tags) {
   return tags.toString().split(',');
 };
 console.log('Helpers module loaded');
-synappseApp = angular.module('synappseConflictManager', []);
-console.log('Conflict manager loaded');

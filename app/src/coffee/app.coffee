@@ -2,7 +2,6 @@
 #@prepros-append controllers.coffee
 #@prepros-append services.coffee
 #@prepros-append helpers.coffee
-#@prepros-append conflictManager.coffee
 
 
 # App initialisation : get the various modules and include them
