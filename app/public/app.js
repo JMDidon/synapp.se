@@ -14,12 +14,9 @@ synappseApp.config([
     }).when('/projects/:params', {
       templateUrl: 'views/tasks.html',
       controller: 'ProjectCtrl'
-    }).when('/tasks', {
-      templateUrl: 'views/tasks.html',
-      controller: 'TaskCtrl'
-    }).when('/tasks/new-task', {
-      templateUrl: 'views/new-task.html',
-      controller: 'TaskCtrl'
+    }).when('/projects/:params/users', {
+      templateUrl: 'views/users.html',
+      controller: 'ProjectCtrl'
     }).otherwise({
       redirectTo: '/'
     });
@@ -335,15 +332,13 @@ synappseApp.controller('MainCtrl', function($scope, Projects) {
 synappseApp.controller('ProjectCtrl', function($scope, $routeParams, Projects) {
   $scope.project = Projects.readProject($routeParams.params);
   $scope.edit_mode = false;
-  console.log($scope.edit_mode);
   $scope.toggleEditMode = function() {
     return $scope.edit_mode = !$scope.edit_mode;
   };
   return $scope.createTask = function() {
     var now, tags;
     now = new Date().toLocaleString();
-    tags = $scope.task.tags;
-    tags = tags.toString().split(',');
+    tags = splitTags($scope.task.tags);
     Projects.createTask($scope.project.id, {
       name: $scope.task.name,
       description: $scope.task.description,
@@ -358,10 +353,12 @@ synappseApp.controller('ProjectCtrl', function($scope, $routeParams, Projects) {
   };
 });
 synappseApp.controller('TaskCtrl', function($scope, $routeParams, Projects) {
+  $scope.taskEdit = angular.copy($scope.task);
   $scope.editTask = function() {
     $scope.toggleEditMode();
-    console.log($scope.edit_mode);
-    return Projects.editTask($scope.project.id, $scope.task.id);
+    $scope.taskEdit.tags = splitTags($scope.taskEdit.tags);
+    $scope.taskEdit.dateEdit = new Date().toLocaleString();
+    return Projects.editTask($scope.project.id, $scope.task, $scope.taskEdit);
   };
   return $scope.deleteTask = function() {
     return Projects.deleteTask($scope.project.id, $scope.task.id, $scope.task);
@@ -435,27 +432,36 @@ synappseApp.factory('Projects', function() {
     }
     return factory.cache();
   };
-  factory.editTask = function(projectID, taskID, task) {
-    var project, _i, _len, _results;
-    _results = [];
+  factory.editTask = function(projectID, oldTask, newTask) {
+    var project, t, task, _i, _j, _len, _len1, _ref;
     for (_i = 0, _len = Projects.length; _i < _len; _i++) {
       project = Projects[_i];
       if (project.id === projectID) {
-        _results.push((function() {
-          var _j, _len1, _ref, _results1;
-          _ref = project.tasks;
-          _results1 = [];
-          for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
-            task = _ref[_j];
-            if (task.id === taskID) {
-              _results1.push(console.log(null));
-            }
+        _ref = project.tasks;
+        for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+          t = _ref[_j];
+          if (!(t.id === oldTask.id)) {
+            continue;
           }
-          return _results1;
-        })());
+          t = newTask;
+          project.tasks = (function() {
+            var _k, _len2, _ref1, _results;
+            _ref1 = project.tasks;
+            _results = [];
+            for (_k = 0, _len2 = _ref1.length; _k < _len2; _k++) {
+              task = _ref1[_k];
+              if (task.id !== oldTask.id) {
+                _results.push(task);
+              }
+            }
+            return _results;
+          })();
+          console.log(newTask);
+          project.tasks.push(newTask);
+        }
       }
     }
-    return _results;
+    return factory.cache();
   };
   factory.deleteTask = function(projectID, taskID) {
     var project, task, _i, _len;
@@ -515,6 +521,9 @@ slug = function(str) {
     str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
   }
   return str.replace(/^\s+|\s+$/g, '').replace(/[^-a-zA-Z0-9\s]+/ig, '').replace(/\s/gi, "-");
+};
+splitTags = function(tags) {
+  return tags.toString().split(',');
 };
 console.log('Helpers module loaded');
 synappseApp = angular.module('synappseConflictManager', []);

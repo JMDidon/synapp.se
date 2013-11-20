@@ -13,6 +13,7 @@ synappseApp = angular.module 'synappseApp', [
 	'synappseControllers'
 	'synappseServices'
 	'synappseHelpers'
+	'synappseConflictManager'
 ]
 
 # Project initialisation
@@ -33,12 +34,9 @@ synappseApp.config ['$routeProvider',
 		).when( '/projects/:params',
             templateUrl: 'views/tasks.html'
             controller : 'ProjectCtrl'
-        ).when( '/tasks',
-            templateUrl: 'views/tasks.html'
-            controller : 'TaskCtrl'
-        ).when( '/tasks/new-task',
-			templateUrl: 'views/new-task.html'
-			controller : 'TaskCtrl'
+        ).when( '/projects/:params/users',
+            templateUrl: 'views/users.html'
+            controller : 'ProjectCtrl'
 		).otherwise
 			redirectTo: '/'
 		undefined

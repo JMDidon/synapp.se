@@ -1,5 +1,6 @@
 <section class="main-project">
 	<h1 class="section-title">{{ project.name }} - Tasks</h1>
+	<p>Want to see the users of this project ? <a href="#/projects/{{ project.id }}/users">Click here !</a></p>
 
 	<div class="task-list">
 		<h2 class="part-title">Task list :</h2>
@@ -28,7 +29,7 @@
 					</li>
 				</ul>
 				
-				<a class="edit-link" href="" ng-click="editTask()">Edit task</a>
+				<a class="edit-link" href="" ng-click="toggleEditMode()">Edit task</a>
 				<a class="delete-link" href="" ng-click="deleteTask()">Delete task</a>
 			</li>
 		</ul>
@@ -37,14 +38,14 @@
 			<h3 class="task-title">Edit mode</h3>
 			<li class="task-item" ng-repeat="task in project.tasks" ng-controller="TaskCtrl">
 				<label for="taskName">Task name : ({{ task.name }})</label>
-				<input name="taskName" ng-Model="task.name" type="text" placeholder="Task name">
+				<input name="taskName" ng-Model="taskEdit.name" type="text">
 	
 				<label for="taskDescription">Task description :</label>
-				<textarea name="taskDescription" ng-Model="task.description" placeholder="Task description"></textarea>
+				<textarea name="taskDescription" ng-Model="taskEdit.description" value="{{ task.description }}"></textarea>
 	
 				<label for="taskStatus">Task status :</label>
-				<select name="taskStatus" ng-Model="task.status">
-					<option selected>Pending ...</option>
+				<select name="taskStatus" ng-Model="taskEdit.status">
+					<option>Pending ...</option>
 					<option>25 %</option>
 					<option>50 %</option>
 					<option>75 %</option>
@@ -52,28 +53,21 @@
 				</select>
 	
 				<label for="taskPriority">Is this task a priority ?</label>
-				<input name="taskPriority" ng-Model="task.priority" type="checkbox">
+				<input name="taskPriority" ng-Model="taskEdit.priority" type="checkbox">
 	
 				<label for="taskDateBegin">Begin date :</label>
-				<input name="taskDateBegin" ng-Model="task.dateBegin" type="text">
+				<input name="taskDateBegin" ng-Model="taskEdit.dateBegin" type="text" value="{{ task.dateBegin }}">
 	
 				<label for="taskDateEnd">End date :</label>
-				<input name="taskDateEnd" ng-Model="task.dateEnd" type="text">
-				<!--<div class="calendar-container">
-					<div class="calendar-header">
-						<a class="calendar-arrow">< </a>
-						<h3 class="calendar-month" >November</h3>
-						<a class="calendar-arrow"> ></a>
-					</div>
-				</div>-->
+				<input name="taskDateEnd" ng-Model="taskEdit.dateEnd" type="text" value="{{ task.dateEnd }}">
 				
 				<label for="taskTags">Tags (separate the differents tags with a coma (,) ):</label>
-				<input name="taskTags" ng-Model="task.tags" type="text">
+				<input name="taskTags" ng-Model="taskEdit.tags" type="text" value="{{ task.tags }}">
 	
-				<a class="edit-link" href="" ng-click="editTask()">Cancel edit</a>
+				<a class="edit-link" href="" ng-click="toggleEditMode()">Cancel edit</a>
 				<a class="delete-link" href="" ng-click="deleteTask()">Delete task</a>
 				
-				<input type="submit" value="Update task">
+				<input type="submit" value="Update task" ng-click="editTask()">
 			</li>
 		</ul>
 	</div>

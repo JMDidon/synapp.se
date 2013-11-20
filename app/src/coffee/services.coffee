@@ -32,19 +32,22 @@ synappseApp.factory 'Projects', ->
 	# TASKS
 	factory.createTask = ( projectID, task ) ->
 		for project in Projects when project.id is projectID
-			# console.log generateID 2, ( t.id for t in project.tasks )
 			task.id = generateID 2, ( t.id for t in project.tasks )
 			project.tasks.push task
 		do factory.cache
 
-	factory.editTask = ( projectID, taskID, task ) ->
+	factory.editTask = ( projectID, oldTask, newTask ) ->
+		# Get the project
 		for project in Projects when project.id is projectID
-			#for t in project.tasks when t.id is taskID
-			#	task.id = t.id
-			#	t = task
-			#	console.log task
-			for task in project.tasks when task.id is taskID
-				console.log null
+			# Get the tasks
+			for t in project.tasks when t.id is oldTask.id
+				t = newTask
+				# Delete the old task, then we save the edited one
+				project.tasks = ( task for task in project.tasks when task.id isnt oldTask.id )
+				console.log newTask
+				project.tasks.push newTask
+		# Save changes
+		do factory.cache
 		
 	factory.deleteTask = ( projectID, taskID ) ->
 		for project in Projects when project.id is projectID

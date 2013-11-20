@@ -31,18 +31,14 @@ synappseApp.controller 'MainCtrl', ( $scope, Projects ) ->
 synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, Projects ) ->
 	
 	$scope.project = Projects.readProject $routeParams.params
-	# $scope.task.status = 'Pending ...'
 
 	$scope.edit_mode = false
-	console.log $scope.edit_mode
-
 	$scope.toggleEditMode = ->
 		$scope.edit_mode = not $scope.edit_mode
 	
 	$scope.createTask = ->
-		now = new Date().toLocaleString()
-		tags = $scope.task.tags
-		tags = tags.toString().split(',')
+		now  = new Date().toLocaleString()
+		tags = splitTags $scope.task.tags
 		
 		Projects.createTask $scope.project.id, 
 			name: $scope.task.name
@@ -54,17 +50,20 @@ synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, Projects ) ->
 			dateCreation: now
 			tags: tags
 		$scope.task = ""
-
+		
+	# $scope.users = $scope.project.users
 
 
 # Task Controller
 # ------------------------------		
 synappseApp.controller 'TaskCtrl', ( $scope, $routeParams, Projects ) ->
+	$scope.taskEdit = angular.copy $scope.task
 
 	$scope.editTask = ->
 		do $scope.toggleEditMode
-		console.log $scope.edit_mode
-		Projects.editTask $scope.project.id, $scope.task.id
+		$scope.taskEdit.tags = splitTags $scope.taskEdit.tags
+		$scope.taskEdit.dateEdit = new Date().toLocaleString()
+		Projects.editTask $scope.project.id, $scope.task, $scope.taskEdit
 
 	$scope.deleteTask = ->
 		Projects.deleteTask $scope.project.id, $scope.task.id, $scope.task
