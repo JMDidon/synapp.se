@@ -12,6 +12,6 @@ slug = ( str ) ->
 	( str = str.replace ( new RegExp from.charAt(i), 'g' ), to.charAt i ) for i in from.length
 	str.replace(/^\s+|\s+$/g, '').replace(/[^-a-zA-Z0-9\s]+/ig, '').replace(/\s/gi, "-")
 
-splitTags = (tags) -> tags.toString().split(',')
+splitTags = ( str ) -> if not str.length then else str.toString().split(',').map ( a ) -> a.trim() if a.trim
 
 console.log 'Helpers module loaded'

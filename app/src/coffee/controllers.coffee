@@ -37,19 +37,15 @@ synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, Projects ) ->
 		$scope.edit_mode = not $scope.edit_mode
 	
 	$scope.createTask = ->
-		now  = new Date().toLocaleString()
-		tags = splitTags $scope.task.tags
-		
 		Projects.createTask $scope.project.id, 
 			name: $scope.task.name
-			description: $scope.task.description
 			status: $scope.task.status
 			priority: $scope.task.priority
-			dateBegin: $scope.task.dateBegin
-			dateEnd: $scope.task.dateEnd
-			dateCreation: now
-			tags: tags
+			start: $scope.task.start
+			end: $scope.task.end
+			tags: splitTags $scope.task.tags
 		$scope.task = ""
+		# creation date is the role of the Factory, because de user doesn't see/use it (it's only for the system to work)
 		
 	# $scope.users = $scope.project.users
 
@@ -58,12 +54,13 @@ synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, Projects ) ->
 # ------------------------------		
 synappseApp.controller 'TaskCtrl', ( $scope, $routeParams, Projects ) ->
 	$scope.taskEdit = angular.copy $scope.task
+	$scope.taskEdit.tags = $scope.taskEdit.tags.join(', ')
 
 	$scope.editTask = ->
 		do $scope.toggleEditMode
 		$scope.taskEdit.tags = splitTags $scope.taskEdit.tags
-		$scope.taskEdit.dateEdit = new Date().toLocaleString()
-		Projects.editTask $scope.project.id, $scope.task, $scope.taskEdit
+		# edition date is the role of the Factory, because de user doesn't see/use it (it's only for the system to work)
+		Projects.editTask $scope.project.id, $scope.task.id, $scope.taskEdit
 
 	$scope.deleteTask = ->
 		Projects.deleteTask $scope.project.id, $scope.task.id, $scope.task

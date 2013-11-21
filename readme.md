@@ -37,7 +37,7 @@ Original documentation: https://www.dropbox.com/developers/core
       },
       …
     ]
-    deletedTasks: [ (int), … ] store IDs
+    deletedTasks: [ (int), … ] storing IDs
     comments: [
       {
         id: (int) generated
@@ -50,4 +50,4 @@ Original documentation: https://www.dropbox.com/developers/core
       },
       …
     ]
-    deletedComments: [ (int), … ] store IDs
+    deletedComments: [ (int), … ] storing IDs

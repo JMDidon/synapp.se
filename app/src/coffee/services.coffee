@@ -33,19 +33,18 @@ synappseApp.factory 'Projects', ->
 	factory.createTask = ( projectID, task ) ->
 		for project in Projects when project.id is projectID
 			task.id = generateID 2, ( t.id for t in project.tasks )
+			task.date = ( new Date ).getTime()
+			task.edit = ( new Date ).getTime()
 			project.tasks.push task
 		do factory.cache
 
-	factory.editTask = ( projectID, oldTask, newTask ) ->
+	factory.editTask = ( projectID, taskID, values ) ->
 		# Get the project
 		for project in Projects when project.id is projectID
-			# Get the tasks
-			for t in project.tasks when t.id is oldTask.id
-				t = newTask
-				# Delete the old task, then we save the edited one
-				project.tasks = ( task for task in project.tasks when task.id isnt oldTask.id )
-				console.log newTask
-				project.tasks.push newTask
+			# Get the task
+			for task in project.tasks when task.id is taskID
+				values.edit = ( new Date ).getTime()
+				task[k] = v for k, v of values when k not in ['id', 'date']
 		# Save changes
 		do factory.cache
 		

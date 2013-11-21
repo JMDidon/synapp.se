@@ -14,11 +14,9 @@
 				<time class="task-dateCreation italic">{{ task.dateCreation }}</time>
 				<p class="task-id italic"># {{ task.id }}</p>
 				
-				<p class="task-description">{{ task.description }}</p>
-				
 				<div class="task-dates">
-					Begin : {{ task.dateBegin }} <br/>
-					End : {{ task.dateEnd }}
+					Begin : {{ task.start }} <br/>
+					End : {{ task.end }}
 				</div>
 				
 				<p>Status : {{ task.status }}</p>
@@ -40,9 +38,6 @@
 				<label for="taskName">Task name : ({{ task.name }})</label>
 				<input name="taskName" ng-Model="taskEdit.name" type="text">
 	
-				<label for="taskDescription">Task description :</label>
-				<textarea name="taskDescription" ng-Model="taskEdit.description" value="{{ task.description }}"></textarea>
-	
 				<label for="taskStatus">Task status :</label>
 				<select name="taskStatus" ng-Model="taskEdit.status">
 					<option>Pending ...</option>
@@ -55,14 +50,14 @@
 				<label for="taskPriority">Is this task a priority ?</label>
 				<input name="taskPriority" ng-Model="taskEdit.priority" type="checkbox">
 	
-				<label for="taskDateBegin">Begin date :</label>
-				<input name="taskDateBegin" ng-Model="taskEdit.dateBegin" type="text" value="{{ task.dateBegin }}">
+				<label for="taskstart">Begin date :</label>
+				<input name="taskstart" ng-Model="taskEdit.start" type="text">
 	
-				<label for="taskDateEnd">End date :</label>
-				<input name="taskDateEnd" ng-Model="taskEdit.dateEnd" type="text" value="{{ task.dateEnd }}">
+				<label for="taskend">End date :</label>
+				<input name="taskend" ng-Model="taskEdit.end" type="text">
 				
-				<label for="taskTags">Tags (separate the differents tags with a coma (,) ):</label>
-				<input name="taskTags" ng-Model="taskEdit.tags" type="text" value="{{ task.tags }}">
+				<label for="taskTags">Tags (separate the differents tags with a coma):</label>
+				<input name="taskTags" ng-Model="taskEdit.tags" type="text">
 	
 				<a class="edit-link" href="" ng-click="toggleEditMode()">Cancel edit</a>
 				<a class="delete-link" href="" ng-click="deleteTask()">Delete task</a>
@@ -79,9 +74,6 @@
 			<label for="taskName">Task name :</label>
 			<input name="taskName" ng-Model="task.name" type="text" placeholder="Task name">
 
-			<label for="taskDescription">Task description :</label>
-			<textarea name="taskDescription" ng-Model="task.description" placeholder="Task description"></textarea>
-
 			<label for="taskStatus">Task status :</label>
 			<select name="taskStatus" ng-Model="task.status">
 				<option selected>Pending ...</option>
@@ -94,11 +86,11 @@
 			<label for="taskPriority">Is this task a priority ?</label>
 			<input name="taskPriority" ng-Model="task.priority" type="checkbox">
 
-			<label for="taskDateBegin">Begin date :</label>
-			<input name="taskDateBegin" ng-Model="task.dateBegin" type="text">
+			<label for="taskstart">Begin date :</label>
+			<input name="taskstart" ng-Model="task.start" type="text">
 
-			<label for="taskDateEnd">End date :</label>
-			<input name="taskDateEnd" ng-Model="task.dateEnd" type="text">
+			<label for="taskend">End date :</label>
+			<input name="taskend" ng-Model="task.end" type="text">
 			<!--<div class="calendar-container">
 				<div class="calendar-header">
 					<a class="calendar-arrow">< </a>

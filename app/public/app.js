@@ -353,18 +353,13 @@ synappseApp.controller('ProjectCtrl', function($scope, $routeParams, Projects) {
     return $scope.edit_mode = !$scope.edit_mode;
   };
   return $scope.createTask = function() {
-    var now, tags;
-    now = new Date().toLocaleString();
-    tags = splitTags($scope.task.tags);
     Projects.createTask($scope.project.id, {
       name: $scope.task.name,
-      description: $scope.task.description,
       status: $scope.task.status,
       priority: $scope.task.priority,
-      dateBegin: $scope.task.dateBegin,
-      dateEnd: $scope.task.dateEnd,
-      dateCreation: now,
-      tags: tags
+      start: $scope.task.start,
+      end: $scope.task.end,
+      tags: splitTags($scope.task.tags)
     });
     return $scope.task = "";
   };
@@ -372,11 +367,11 @@ synappseApp.controller('ProjectCtrl', function($scope, $routeParams, Projects) {
 
 synappseApp.controller('TaskCtrl', function($scope, $routeParams, Projects) {
   $scope.taskEdit = angular.copy($scope.task);
+  $scope.taskEdit.tags = $scope.taskEdit.tags.join(', ');
   $scope.editTask = function() {
     $scope.toggleEditMode();
     $scope.taskEdit.tags = splitTags($scope.taskEdit.tags);
-    $scope.taskEdit.dateEdit = new Date().toLocaleString();
-    return Projects.editTask($scope.project.id, $scope.task, $scope.taskEdit);
+    return Projects.editTask($scope.project.id, $scope.task.id, $scope.taskEdit);
   };
   return $scope.deleteTask = function() {
     return Projects.deleteTask($scope.project.id, $scope.task.id, $scope.task);
@@ -455,36 +450,30 @@ synappseApp.factory('Projects', function() {
         }
         return _results;
       })());
+      task.date = (new Date).getTime();
+      task.edit = (new Date).getTime();
       project.tasks.push(task);
     }
     return factory.cache();
   };
-  factory.editTask = function(projectID, oldTask, newTask) {
-    var project, t, task, _i, _j, _len, _len1, _ref;
+  factory.editTask = function(projectID, taskID, values) {
+    var k, project, task, v, _i, _j, _len, _len1, _ref;
     for (_i = 0, _len = Projects.length; _i < _len; _i++) {
       project = Projects[_i];
       if (project.id === projectID) {
         _ref = project.tasks;
         for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
-          t = _ref[_j];
-          if (!(t.id === oldTask.id)) {
+          task = _ref[_j];
+          if (!(task.id === taskID)) {
             continue;
           }
-          t = newTask;
-          project.tasks = (function() {
-            var _k, _len2, _ref1, _results;
-            _ref1 = project.tasks;
-            _results = [];
-            for (_k = 0, _len2 = _ref1.length; _k < _len2; _k++) {
-              task = _ref1[_k];
-              if (task.id !== oldTask.id) {
-                _results.push(task);
-              }
+          values.edit = (new Date).getTime();
+          for (k in values) {
+            v = values[k];
+            if (k !== 'id' && k !== 'date') {
+              task[k] = v;
             }
-            return _results;
-          })();
-          console.log(newTask);
-          project.tasks.push(newTask);
+          }
         }
       }
     }
@@ -560,8 +549,16 @@ slug = function(str) {
   return str.replace(/^\s+|\s+$/g, '').replace(/[^-a-zA-Z0-9\s]+/ig, '').replace(/\s/gi, "-");
 };
 
-splitTags = function(tags) {
-  return tags.toString().split(',');
+splitTags = function(str) {
+  if (!str.length) {
+
+  } else {
+    return str.toString().split(',').map(function(a) {
+      if (a.trim) {
+        return a.trim();
+      }
+    });
+  }
 };
 
 console.log('Helpers module loaded');
