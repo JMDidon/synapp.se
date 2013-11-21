@@ -232,7 +232,7 @@ DB = {
     });
   },
   solveConflicts: function(local, distant) {
-    var distantIDs, localIDs, task, u, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
+    var distantIDs, distantTask, k, localIDs, localTask, task, u, v, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8;
     local.folder = distant.folder;
     local.users = (function() {
       var _i, _len, _ref, _results;
@@ -311,6 +311,24 @@ DB = {
       }
     }
     local.deletedTasks = [];
+    _ref6 = local.tasks;
+    for (_l = 0, _len3 = _ref6.length; _l < _len3; _l++) {
+      localTask = _ref6[_l];
+      if (task.id.length === 3 && (_ref7 = task.id, __indexOf.call(distantIDs, _ref7) >= 0)) {
+        _ref8 = distant.tasks;
+        for (_m = 0, _len4 = _ref8.length; _m < _len4; _m++) {
+          distantTask = _ref8[_m];
+          if (localTask.id === distantTask.id) {
+            if (localTask.edit <= distantTask.edit) {
+              for (k in distantTask) {
+                v = distantTask[k];
+                localTask[k] = v;
+              }
+            }
+          }
+        }
+      }
+    }
     return this.saveProject(local);
   }
 };

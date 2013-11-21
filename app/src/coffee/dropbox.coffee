@@ -125,6 +125,11 @@ DB =
 		# add distant items missing in local
 		local.tasks.push task for task in distant.tasks when task.id not in localIDs and task.id not in local.deletedTasks
 		local.deletedTasks = []
+		
+		# edit local tasks from distant
+		for localTask in local.tasks when task.id.length is 3 and task.id in distantIDs
+			for distantTask in distant.tasks when localTask.id is distantTask.id
+				( localTask[k] = v for k, v of distantTask ) if localTask.edit <= distantTask.edit
 
 		# save file
 		@saveProject local
