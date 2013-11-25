@@ -54,7 +54,7 @@ synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, Projects ) ->
 # ------------------------------		
 synappseApp.controller 'TaskCtrl', ( $scope, $routeParams, Projects ) ->
 	$scope.taskEdit = angular.copy $scope.task
-	$scope.taskEdit.tags = joinTags $scope.taskEdit.tags
+	$scope.taskEdit.tags = $scope.taskEdit.tags.join(', ')
 
 	$scope.editTask = ->
 		do $scope.toggleEditMode
