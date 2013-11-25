@@ -7,7 +7,7 @@ Original documentation: https://www.dropbox.com/developers/core
 
 ### actions available
 - `DB.auth( callback )`
-- `DB.sync( projects, callback )`
+- `DB.sync( [ (project), … ], callback )`
 
 ### project object structure
 
