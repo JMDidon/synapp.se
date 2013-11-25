@@ -93,7 +93,7 @@ DB =
 					# solve conflicts
 					if data.id not in localIDs then local.push data else
 						localProject = ( p for p in local when p.id is data.id )[0]
-						$this.solveConflicts localProject, data
+						$this.updateProject localProject, data
 
 					# when all DB folders are sync
 					$this.checkLocalProjects local, ( c.path+'/' for c in projects ), ( -> 
@@ -102,8 +102,8 @@ DB =
 					) if not waiting
 
 
-	# Manage conflicts
-	solveConflicts: ( local, distant ) ->
+	# Update project
+	updateProject: ( local, distant ) ->
 		local.folder = distant.folder
 
 		# USERS
@@ -113,25 +113,35 @@ DB =
 		else local.users.push @user
 
 		# TASKS
-		distantIDs = ( task.id for task in distant.tasks )
-		localIDs = ( task.id for task in local.tasks )
-
-		# delete local items missing in distant
-		local.tasks = ( task for task in local.tasks when task.id.length is 2 or task.id in distantIDs )
-
-		# add local items missing in distant
-		( task.id = generateID 3, distantIDs ) for task in local.tasks when task.id.length is 2
-
-		# add distant items missing in local
-		local.tasks.push task for task in distant.tasks when task.id not in localIDs and task.id not in local.deletedTasks
-		local.deletedTasks = []
-		
-		# edit local tasks from distant
-		for localTask in local.tasks when task.id.length is 3 and task.id in distantIDs
-			for distantTask in distant.tasks when localTask.id is distantTask.id
-				( localTask[k] = v for k, v of distantTask ) if localTask.edit <= distantTask.edit
+		@solveConflicts local.tasks, distant.tasks, local.deletedTasks
+		# @solveConflicts local.comments, distant.comments, local.deletedComments
 
 		# save file
 		@saveProject local
+		
+		
+		
+	# Solve conflicts
+	solveConflicts: ( localItems, distantItems, deletedItems ) ->
+		distantIDs = ( item.id for item in distantItems )
+		localIDs = ( item.id for item in localItems )
+		
+		# delete local items missing in distant
+		localItems = ( item for item in localItems when item.id.length is 2 or item.id in distantIDs )
+		
+		# add local items missing in distant
+		( item.id = generateID 3, distantIDs ) for item in localItems when item.id.length is 2
+		
+		# add distant items missing in local
+		localItems.push item for item in distantItems when item.id not in localIDs and item.id not in deletedItems
+		deletedItems = []
+		
+		# edit local tasks from distant
+		for localItem in localItems when item.id.length is 3 and item.id in distantIDs
+			for distantItem in distantItems when localItem.id is distantItem.id
+				( localItem[k] = v for k, v of distantItem ) if localItem.edit <= distantItem.edit
+		
+		
+		
 
 console.log 'Dropbox module loaded'
