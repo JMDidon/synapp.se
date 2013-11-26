@@ -1,60 +1,18 @@
 <?php
-# Initialize
-  session_start();
-  $_SESSION['access'] = true;
-  include 'site/helpers.php';
-  $site = include 'site/r76.php';
-  
-  define('tokens', 'site/tokens.json');
-  
-  
-  
-# Home
-  $site->get('/', function() {
-    // abort if access denied
-    if (!$_SESSION['access']) return false;
-    
-    // redirect to app
-    go(url('app'));
-  });
-  
-  
-# Validate access
-  $site->get('/@token', function() {
-    // load tokens
-    $tokens = json_decode(file_get_contents(tokens), true);
-    
-    // abort if token doesn't exist
-    if (!in_array(sha1(uri('token')), $tokens)) return false;
-    
-    // grant access & redirect to app
-    $_SESSION['access'] = true;
-    go(url('app'));
-  });
-  
-  
-  
-# Create access token
-# /add/@token/pass:enterThePasswordHere
-  $site->get('/add/@token', function() {
-    // abort if wrong password
-    if (sha1(get('pass')) != '52aed46e5779a541b46cc77c1cfd18acb08e69c0') return false;
-    
-    // load tokens
-    $tokens = is_file(tokens) ? json_decode(file_get_contents(tokens), true) : array();
-    
-    // add token
-    if (!in_array(sha1(uri('token')), $tokens)) $tokens[] = sha1(uri('token'));
-    
-    // save token & redirect to root
-    file_put_contents(tokens, json_encode($tokens), LOCK_EX);
-    go(root());
-  });
-
-
-
-# Run (default callback: display an error)
-  $site->run(function() { 
-    header('HTTP/1.0 403 Access Denied', true, 403); 
-    exit('403 Error: Access Denied'); 
-  });
+	include 'site/r76.php';
+	
+	define('emails', 'site/emails.json');
+	define('template', 'site/template.php');
+	
+	get('/', template);
+	post('/', function() {
+		if (!isset($_POST['email']) OR !preg_match('#^[a-z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$#i', $_POST['email'])) go(url(array('error' => 'true')));
+		$emails = json_decode(file_get_contents(emails), true);
+		if (in_array($_POST['email'], $emails)) go(url(array('exists' => 'true')));
+		$emails[] = $_POST['email'];
+		file_put_contents(emails, json_encode($emails), LOCK_EX);
+		go(url(array('subscribed' => 'true')));
+	});
+	
+	run(function() { header('HTTP/1.0 404 Not Found', true, 404); exit('404 Error'); });
+?>
