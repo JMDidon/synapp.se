@@ -23,6 +23,7 @@ synappseApp.factory 'Projects', ->
 			folder: DB.folder+( slug name )+'/'
 			users: []
 			tasks: []
+			comments: []
 			deletedTasks: []
 		do factory.cache
 	
@@ -53,7 +54,22 @@ synappseApp.factory 'Projects', ->
 			project.deletedTasks.push ( task.id for task in project.tasks when task.id is taskID )[0]
 			project.tasks = ( task for task in project.tasks when task.id isnt taskID )
 		do factory.cache
-		
+	
+
+	# DISCUSSIONS
+	factory.createCommentsModule = ( projectID, taskID ) ->
+		console.log 'Comments Module created', projectID, taskID
+
+	factory.createComment = ( projectID, comment ) ->
+		console.log projectID, comment
+		for project in Projects when project.id is projectID
+			comment.id = generateID 2, ( c.id for c in project.comments )
+			comment.date = ( new Date ).getTime()
+			comment.edit = ( new Date ).getTime()
+			project.comments.push comment
+		do factory.cache	
+
+
 	factory
 
 console.log 'Services loaded'

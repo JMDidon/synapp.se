@@ -45,6 +45,7 @@ DB =
 					slug: slug name
 					users: [$this.user]
 					tasks: []
+					comments: []
 					deletedTasks: []
 				$this.saveProject project, -> callback project
 			else # restore project
