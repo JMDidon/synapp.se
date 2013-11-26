@@ -1,0 +1,23 @@
+<div class="comments-module-wrapper" ng-controller="CommentCtrl">
+	<div class="title-wrapper wrapper">
+		<h1 class="title" ng-show="task">{{ task.name }}</h1>
+		<h1 class="title" ng-hide="task">No task selected</h1>
+	</div>
+	<section class="comments-module wrapper">
+		<form ng-submit="createComment(task.id, comment)" ng-show="opened" class="animate-show">
+			<label>Write a comment :</label>
+			<input class="input-comments" type="text"  ng-Model="comment.text">
+
+			<input class="input-comments" type="submit" value="Add the new comment">
+		</form>
+		<ul class="comments-list">
+			<li ng-if="project.comments" ng-repeat="comment in project.comments">
+				<p><span class="bold">{{ comment.author }}</span> said at {{ comment.date }}:</p>
+				<p>{{ comment.text }}</p>
+			</li>
+			<li ng-if="!project.comments">
+				<p>There is no comments on this task (yet !)</p>
+			</li>
+		</ul>
+	</section>
+</div>

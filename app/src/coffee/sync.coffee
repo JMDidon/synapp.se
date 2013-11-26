@@ -44,6 +44,7 @@ DB =
 					slug: slug name
 					users: [$this.user]
 					tasks: []
+					comments: []
 					deletedTasks: []
 					comments: []
 					deletedComments: []

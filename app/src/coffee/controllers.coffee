@@ -29,25 +29,26 @@ synappseApp.controller 'MainCtrl', ( $scope, Projects ) ->
 # Project Controller
 # ------------------------------	
 synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, Projects ) ->
-	
 	$scope.project = Projects.readProject $routeParams.params
 
 	$scope.edit_mode = false
 	$scope.toggleEditMode = ->
 		$scope.edit_mode = not $scope.edit_mode
 	
-	$scope.createTask = ->
+	$scope.createTask = ( task ) ->
 		Projects.createTask $scope.project.id, 
-			name: $scope.task.name
-			status: $scope.task.status
-			priority: $scope.task.priority
-			start: $scope.task.start
-			end: $scope.task.end
-			tags: splitTags $scope.task.tags
-		$scope.task = ""
-		# creation date is the role of the Factory, because de user doesn't see/use it (it's only for the system to work)
-		
-	# $scope.users = $scope.project.users
+			name: task.name
+			status: task.status
+			priority: task.priority
+			start: task.start
+			end: task.end
+			tags: splitTags task.tags
+		task = ''
+
+	$scope.openComments = ( task, id ) ->
+		$scope.opened = true
+		$scope.task = task
+		Projects.createCommentsModule $scope.project.id, id
 
 
 # Task Controller
@@ -59,11 +60,22 @@ synappseApp.controller 'TaskCtrl', ( $scope, $routeParams, Projects ) ->
 	$scope.editTask = ->
 		do $scope.toggleEditMode
 		$scope.taskEdit.tags = splitTags $scope.taskEdit.tags
-		# edition date is the role of the Factory, because de user doesn't see/use it (it's only for the system to work)
 		Projects.editTask $scope.project.id, $scope.task.id, $scope.taskEdit
 
 	$scope.deleteTask = ->
 		Projects.deleteTask $scope.project.id, $scope.task.id, $scope.task
+
+
+# Comment Controller
+# ------------------------------		
+synappseApp.controller 'CommentCtrl', ( $scope, $routeParams, Projects ) ->
+	
+	$scope.createComment = ( taskID, comment ) ->
+		Projects.createComment $scope.project.id,
+			author: 'tmp'
+			taskID: taskID
+			parentID: 0
+			text: comment.text
 
 
 console.log 'Controllers loaded'

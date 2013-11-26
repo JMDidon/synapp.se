@@ -1,7 +1,4 @@
 <section class="main-project">
-	<h1 class="section-title">{{ project.name }} - Tasks</h1>
-	<p>Want to see the users of this project ? <a href="#/projects/{{ project.id }}/users">Click here !</a></p>
-
 	<div class="task-list">
 		<h2 class="part-title">Task list :</h2>
 		<p class="sync-buttons" ng-show="auth">
@@ -27,8 +24,9 @@
 					</li>
 				</ul>
 				
-				<a class="edit-link" href="" ng-click="toggleEditMode()">Edit task</a>
-				<a class="delete-link" href="" ng-click="deleteTask()">Delete task</a>
+				<a class="action-link" href="" ng-click="openComments(task, task.id)">Open a comments on this task</a>
+				<a class="action-link" href="" ng-click="toggleEditMode()">Edit task</a>
+				<a class="action-link" href="" ng-click="deleteTask()">Delete task</a>
 			</li>
 		</ul>
 		
@@ -51,13 +49,13 @@
 				<input name="taskPriority" ng-Model="taskEdit.priority" type="checkbox">
 	
 				<label for="taskstart">Begin date :</label>
-				<input name="taskstart" ng-Model="taskEdit.start" type="text">
+				<input name="taskstart" ng-Model="taskEdit.start" type="text" value="{{ task.start }}">
 	
 				<label for="taskend">End date :</label>
-				<input name="taskend" ng-Model="taskEdit.end" type="text">
+				<input name="taskend" ng-Model="taskEdit.end" type="text" value="{{ task.end }}">
 				
-				<label for="taskTags">Tags (separate the differents tags with a coma):</label>
-				<input name="taskTags" ng-Model="taskEdit.tags" type="text">
+				<label for="taskTags">Tags (separate the differents tags with a coma (,) ):</label>
+				<input name="taskTags" ng-Model="taskEdit.tags" type="text" value="{{ task.tags }}">
 	
 				<a class="edit-link" href="" ng-click="toggleEditMode()">Cancel edit</a>
 				<a class="delete-link" href="" ng-click="deleteTask()">Delete task</a>
@@ -70,7 +68,7 @@
 	<div class="task-create">
 		<h2 class="part-title">Add a task :</h2>
 
-		<form ng-submit="createTask()">
+		<form ng-submit="createTask(task)">
 			<label for="taskName">Task name :</label>
 			<input name="taskName" ng-Model="task.name" type="text" placeholder="Task name">
 

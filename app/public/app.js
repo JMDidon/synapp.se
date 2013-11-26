@@ -13,10 +13,7 @@ synappseApp.config([
     }).when('/home', {
       redirectTo: '/'
     }).when('/projects/:params', {
-      templateUrl: 'views/tasks.html',
-      controller: 'ProjectCtrl'
-    }).when('/projects/:params/users', {
-      templateUrl: 'views/users.html',
+      templateUrl: 'views/project.html',
       controller: 'ProjectCtrl'
     }).otherwise({
       redirectTo: '/'
@@ -90,6 +87,7 @@ DB = {
           slug: slug(name),
           users: [$this.user],
           tasks: [],
+          comments: [],
           deletedTasks: [],
           comments: [],
           deletedComments: []
@@ -382,16 +380,21 @@ synappseApp.controller('ProjectCtrl', function($scope, $routeParams, Projects) {
   $scope.toggleEditMode = function() {
     return $scope.edit_mode = !$scope.edit_mode;
   };
-  return $scope.createTask = function() {
+  $scope.createTask = function(task) {
     Projects.createTask($scope.project.id, {
-      name: $scope.task.name,
-      status: $scope.task.status,
-      priority: $scope.task.priority,
-      start: $scope.task.start,
-      end: $scope.task.end,
-      tags: splitTags($scope.task.tags)
+      name: task.name,
+      status: task.status,
+      priority: task.priority,
+      start: task.start,
+      end: task.end,
+      tags: splitTags(task.tags)
     });
-    return $scope.task = "";
+    return task = '';
+  };
+  return $scope.openComments = function(task, id) {
+    $scope.opened = true;
+    $scope.task = task;
+    return Projects.createCommentsModule($scope.project.id, id);
   };
 });
 
@@ -405,6 +408,17 @@ synappseApp.controller('TaskCtrl', function($scope, $routeParams, Projects) {
   };
   return $scope.deleteTask = function() {
     return Projects.deleteTask($scope.project.id, $scope.task.id, $scope.task);
+  };
+});
+
+synappseApp.controller('CommentCtrl', function($scope, $routeParams, Projects) {
+  return $scope.createComment = function(taskID, comment) {
+    return Projects.createComment($scope.project.id, {
+      author: 'tmp',
+      taskID: taskID,
+      parentID: 0,
+      text: comment.text
+    });
   };
 });
 
@@ -445,6 +459,7 @@ synappseApp.factory('Projects', function() {
       folder: DB.folder + (slug(name)) + '/',
       users: [],
       tasks: [],
+      comments: [],
       deletedTasks: []
     });
     return factory.cache();
@@ -543,6 +558,33 @@ synappseApp.factory('Projects', function() {
     }
     return factory.cache();
   };
+  factory.createCommentsModule = function(projectID, taskID) {
+    return console.log('Comments Module created', projectID, taskID);
+  };
+  factory.createComment = function(projectID, comment) {
+    var c, project, _i, _len;
+    console.log(projectID, comment);
+    for (_i = 0, _len = Projects.length; _i < _len; _i++) {
+      project = Projects[_i];
+      if (!(project.id === projectID)) {
+        continue;
+      }
+      comment.id = generateID(2, (function() {
+        var _j, _len1, _ref, _results;
+        _ref = project.comments;
+        _results = [];
+        for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+          c = _ref[_j];
+          _results.push(c.id);
+        }
+        return _results;
+      })());
+      comment.date = (new Date).getTime();
+      comment.edit = (new Date).getTime();
+      project.comments.push(comment);
+    }
+    return factory.cache();
+  };
   return factory;
 });
 
@@ -583,7 +625,7 @@ slug = function(str) {
 };
 
 splitTags = function(str) {
-  if (!str) {
+  if (str == null) {
     return [];
   } else {
     return str.toString().split(',').map(function(a) {
