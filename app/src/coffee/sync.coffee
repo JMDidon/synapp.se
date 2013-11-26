@@ -33,19 +33,20 @@ DB =
 
 	# Check if project file exists or create it
 	checkProject: ( folder, localIDs, callback ) ->
-		console.log folder
 		$this = @
 		@client.readFile folder+@file, ( error, data, stat ) ->
 			if error and error.status is 404 # create project
 				name = ( folder.substring $this.folder.length+1 ).replace /\/$/, ''
 				project = 
 					name: name
-					id: generateID 2, localIDs, $this.user.uid+'_'
+					id: generateID 3, localIDs, $this.user.uid+'_'
 					folder: folder
 					slug: slug name
 					users: [$this.user]
 					tasks: []
 					deletedTasks: []
+					comments: []
+					deletedComments: []
 				$this.saveProject project, -> callback project
 			else # restore project
 				project = angular.fromJson data
@@ -65,7 +66,7 @@ DB =
 		localIDs = ( p.id for p in local )
 		for p in local when p.folder not in folders
 			if p.id.length is 2 # create Dropbox folder from recently created local project
-				p.id = generateID 2, localIDs, @user.uid+'_'
+				p.id = generateID 3, localIDs, @user.uid+'_'
 				p.users.push @user
 				( task.id = generateID 3, ( t.id for t in p.tasks ) ) for task in p.tasks
 				@saveProject p
@@ -96,10 +97,10 @@ DB =
 						$this.updateProject localProject, data
 
 					# when all DB folders are sync
-					$this.checkLocalProjects local, ( c.path+'/' for c in projects ), ( -> 
-						console.log "sync complete"
-						do callback
-					) if not waiting
+					if not waiting
+						$this.checkLocalProjects local, ( c.path+'/' for c in projects ), -> 
+							console.log "sync complete"
+							do callback
 
 
 	# Update project

@@ -78,7 +78,6 @@ DB = {
   },
   checkProject: function(folder, localIDs, callback) {
     var $this;
-    console.log(folder);
     $this = this;
     return this.client.readFile(folder + this.file, function(error, data, stat) {
       var name, project;
@@ -86,12 +85,14 @@ DB = {
         name = (folder.substring($this.folder.length + 1)).replace(/\/$/, '');
         project = {
           name: name,
-          id: generateID(2, localIDs, $this.user.uid + '_'),
+          id: generateID(3, localIDs, $this.user.uid + '_'),
           folder: folder,
           slug: slug(name),
           users: [$this.user],
           tasks: [],
-          deletedTasks: []
+          deletedTasks: [],
+          comments: [],
+          deletedComments: []
         };
         return $this.saveProject(project, function() {
           return callback(project);
@@ -131,7 +132,7 @@ DB = {
       p = local[_i];
       if (_ref = p.folder, __indexOf.call(folders, _ref) < 0) {
         if (p.id.length === 2) {
-          p.id = generateID(2, localIDs, this.user.uid + '_');
+          p.id = generateID(3, localIDs, this.user.uid + '_');
           p.users.push(this.user);
           _ref1 = p.tasks;
           for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
@@ -221,10 +222,10 @@ DB = {
                 _results1.push(c.path + '/');
               }
               return _results1;
-            })(), (function() {
+            })(), function() {
               console.log("sync complete");
               return callback();
-            }));
+            });
           }
         }));
       }
@@ -555,13 +556,16 @@ console.log('Services loaded');
 
 synappseApp = angular.module('synappseHelpers', []);
 
-generateID = function(n, list) {
+generateID = function(n, list, prefix) {
   var k;
+  if (prefix == null) {
+    prefix = '';
+  }
   return ((function() {
     var _results;
     _results = [];
     while ((k == null) || (__indexOf.call(list, k) >= 0)) {
-      _results.push(k = Math.random().toString(36).substr(2, n));
+      _results.push(k = prefix + Math.random().toString(36).substr(2, n));
     }
     return _results;
   })()).toString();
@@ -579,7 +583,7 @@ slug = function(str) {
 };
 
 splitTags = function(str) {
-  if (!str.length) {
+  if (!str) {
     return [];
   } else {
     return str.toString().split(',').map(function(a) {
