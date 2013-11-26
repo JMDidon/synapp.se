@@ -1,5 +1,5 @@
 # Synappse
-Internal documentation
+Internal documentation.
 
 ## Dropbox model
 JavaScript SDK: https://github.com/dropbox/dropbox-js  
