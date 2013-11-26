@@ -1,4 +1,4 @@
-#@prepros-append dropbox.coffee
+#@prepros-append sync.coffee
 #@prepros-append controllers.coffee
 #@prepros-append services.coffee
 #@prepros-append helpers.coffee

@@ -28,7 +28,7 @@ synappseApp.config([
 console.log('App loaded');
 
 /* --------------------------------------------
-     Begin dropbox.coffee
+     Begin sync.coffee
 --------------------------------------------
 */
 
