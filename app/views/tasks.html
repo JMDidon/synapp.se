@@ -28,7 +28,7 @@
 					<li ng-repeat="user in task.users">{{ user }}</li>
 				</ul>
 				
-				<a class="action-link" href="" ng-click="openComments(task, task.id)">Open a comments on this task</a>
+				<a class="action-link" href="" ng-click="openCommentsFromTask()">Open a comments on this task</a>
 				<a class="action-link" href="" ng-click="toggleEditMode()">Edit task</a>
 				<a class="action-link" href="" ng-click="deleteTask()">Delete task</a>
 			</li>
@@ -77,12 +77,12 @@
 	<div class="task-create">
 		<h2 class="part-title">Add a task :</h2>
 
-		<form ng-submit="createTask(task)">
+		<form ng-submit="createTask()">
 			<label for="taskName">Task name :</label>
-			<input name="taskName" ng-Model="task.name" type="text" placeholder="Task name">
+			<input name="taskName" ng-Model="newTask.name" type="text" placeholder="Task name">
 
 			<label for="taskStatus">Task status :</label>
-			<select name="taskStatus" ng-Model="task.status">
+			<select name="taskStatus" ng-Model="newTask.status">
 				<option selected>Pending ...</option>
 				<option>25 %</option>
 				<option>50 %</option>
@@ -91,13 +91,13 @@
 			</select>
 
 			<label for="taskPriority">Is this task a priority ?</label>
-			<input name="taskPriority" ng-Model="task.priority" type="checkbox">
+			<input name="taskPriority" ng-Model="newTask.priority" type="checkbox">
 
 			<label for="taskstart">Begin date :</label>
-			<input name="taskstart" ng-Model="task.start" type="text">
+			<input name="taskstart" ng-Model="newTask.start" type="text">
 
 			<label for="taskend">End date :</label>
-			<input name="taskend" ng-Model="task.end" type="text">
+			<input name="taskend" ng-Model="newTask.end" type="text">
 			<!--<div class="calendar-container">
 				<div class="calendar-header">
 					<a class="calendar-arrow">< </a>
@@ -107,11 +107,11 @@
 			</div>-->
 			
 			<label for="taskTags">Tags (separate the differents tags with a coma (,) ):</label>
-			<input name="taskTags" ng-Model="task.tags" type="text">
+			<input name="taskTags" ng-Model="newTask.tags" type="text">
 
 			<label for="taskUsers">Who to assign this task to ?</label>
 			<ul>
-				<li ng-repeat="user in project.users"><input ng-Model="task.users" value="'user.name'" type="checkbox">{{ user.name }}</li>
+				<li ng-repeat="user in project.users"><input ng-Model="newTask.users" value="'user.name'" type="checkbox">{{ user.name }}</li>
 			</ul>
 
 			<input type="submit" value="Add the new task">

@@ -1,12 +1,12 @@
 <div class="comments-module-wrapper">
 	<div class="title-wrapper wrapper">
-		<h1 class="title" ng-show="task">{{ task.name }}</h1>
-		<h1 class="title" ng-hide="task">No task selected</h1>
+		<h1 class="title" ng-show="selectedTask">{{ selectedTask.name }}</h1>
+		<h1 class="title" ng-hide="selectedTask">No task selected</h1>
 	</div>
 	<section class="comments-module wrapper">
-		<form ng-submit="createComment(task.id, comment)" ng-show="opened" class="animate-show" ng-controller="CommentCtrl">
+		<form ng-submit="createComment()" ng-show="opened" class="animate-show" ng-controller="CommentCtrl">
 			<label>Write a comment :</label>
-			<input class="input-comments" type="text"  ng-Model="comment.text">
+			<input class="input-comments" type="text"  ng-Model="newComment.text">
 
 			<input class="input-comments" type="submit" value="Add the new comment">
 		</form>
@@ -14,7 +14,7 @@
 			<li ng-if="project.comments" ng-repeat="comment in project.comments" ng-controller="CommentCtrl">
 				<p><span class="bold">{{ comment.author }}</span> said at {{ comment.date }}:</p>
 				<p>{{ comment.text }}</p>
-				<a class="action-link" href="" ng-click="deleteComment(comment.id)">Delete comment</a>
+				<a class="action-link" href="" ng-click="deleteComment()">Delete comment</a>
 			</li>
 			<li ng-if="!project.comments">
 				<p>There is no comments on this task (yet !)</p>

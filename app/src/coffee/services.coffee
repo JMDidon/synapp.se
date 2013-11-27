@@ -53,8 +53,8 @@ synappseApp.factory 'Projects', ->
 		
 	factory.deleteTask = ( projectID, taskID ) ->
 		for project in Projects when project.id is projectID
-			project.deletedTasks.push ( task.id for task in project.tasks when task.id is taskID )[0]
-			project.tasks = ( task for task in project.tasks when task.id isnt taskID )
+			project.deletedTasks.push taskID if taskID not in project.deletedTasks
+			project.tasks = angular.copy ( task for task in project.tasks when task.id not in project.deletedTasks )
 		do factory.cache
 	
 
@@ -73,10 +73,8 @@ synappseApp.factory 'Projects', ->
 
 	factory.deleteComment = ( projectID, commentID ) ->
 		for project in Projects when project.id is projectID
-			console.log 'Before : ', project.comments
-			project.deletedComments.push ( comment.id for comment in project.comments when comment.id is commentID )[0]
-			project.comments = ( comment for comment in project.comments when comment.id isnt commentID )
-			console.log 'After : ', project.comments
+			project.deletedComments.push commentID if commentID not in project.deletedComments
+			project.comments = angular.copy ( comment for comment in project.comments when comment.id not in project.deletedComments )
 		do factory.cache
 
 

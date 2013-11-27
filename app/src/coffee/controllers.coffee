@@ -31,6 +31,9 @@ synappseApp.controller 'MainCtrl', ( $scope, Projects ) ->
 # ------------------------------	
 synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, Projects ) ->
 	$scope.project = Projects.readProject $routeParams.params
+	$scope.newTask = {}
+	$scope.newComment = {}
+	$scope.selectedTask = {}
 
 	$scope.edit_mode = false
 	$scope.toggleEditMode = ->
@@ -40,21 +43,22 @@ synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, Projects ) ->
 		$scope.comment.text = '' if $scope.comment != undefined
 		$scope.opened = not $scope.opened
 	
-	$scope.createTask = ( task ) ->
+	$scope.createTask = ->
 		Projects.createTask $scope.project.id, 
-			name: task.name
-			status: task.status
-			priority: task.priority
-			start: task.start
-			end: task.end
-			tags: splitTags task.tags
+			name: $scope.newTask.name
+			author: 0
+			status: $scope.newTask.status
+			priority: $scope.newTask.priority
+			start: $scope.newTask.start
+			end: $scope.newTask.end
+			tags: splitTags $scope.newTask.tags
 			users: [] # task.users missing in view, should be an array
-		task = ''
+		$scope.newTask = {}
 
-	$scope.openComments = ( task, id ) ->
+	$scope.openComments = ( task ) ->
 		$scope.opened = true
-		$scope.task = task
-		Projects.createCommentsModule $scope.project.id, id
+		$scope.selectedTask = task
+		Projects.createCommentsModule $scope.project.id, task.id
 
 
 # Task Controller
@@ -69,22 +73,26 @@ synappseApp.controller 'TaskCtrl', ( $scope, $routeParams, Projects ) ->
 		Projects.editTask $scope.project.id, $scope.task.id, $scope.taskEdit
 
 	$scope.deleteTask = ->
-		Projects.deleteTask $scope.project.id, $scope.task.id, $scope.task
+		Projects.deleteTask $scope.project.id, $scope.task.id
+		
+	$scope.openCommentsFromTask = ->
+		$scope.openComments $scope.task
 
 
 # Comment Controller
 # ------------------------------		
 synappseApp.controller 'CommentCtrl', ( $scope, $routeParams, Projects ) ->
-	
-	$scope.createComment = ( taskID, comment ) ->
+	$scope.createComment = ->
 		Projects.createComment $scope.project.id,
-			author: 'tmp'
-			taskID: taskID
+			author: 0
+			taskID: $scope.selectedTask.id
 			parentID: 0
-			text: comment.text
+			text: $scope.newComment.text
+		$scope.newComment = {}
 
-	$scope.deleteComment = ( commentID ) ->
-		Projects.deleteComment $scope.project.id, commentID, $scope.comment
+	$scope.deleteComment = ->
+		Projects.deleteComment $scope.project.id, $scope.comment.id
+		
 
 
 console.log 'Controllers loaded'

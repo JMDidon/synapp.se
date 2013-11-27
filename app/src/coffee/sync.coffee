@@ -123,13 +123,15 @@ DB =
 		# tasks & comments
 		@solveConflicts local.tasks, distant.tasks, local.deletedTasks
 		@solveConflicts local.comments, distant.comments, local.deletedComments
+		local.deletedTasks = []
+		local.deletedComments = []
 		
 		# update comments taskIDs
 		( comment.taskID = task.id for task in local.tasks when task.oldID is comment.taskID ) for comment in local.comments
 		delete task.oldID for task in local.tasks
 		# update replies parentIDs
 		# ( reply.parentID = comment.id for comment in local.comments when comment.oldID is reply.parentID ) for reply in local.comments 
-		delete comment.oldID for comment in local.comments
+		# delete comment.oldID for comment in local.comments
 
 		# save file
 		@saveProject local
@@ -147,12 +149,12 @@ DB =
 		# add local items missing in distant
 		for item in localItems when item.id.length is 2
 			item.oldID = item.id
+			item.author = DB.user.uid
 			item.id = generateID 3, distantIDs
 		
 		# add distant items missing in local
 		localIDs = ( item.id for item in localItems )
 		localItems.push item for item in distantItems when item.id not in localIDs and item.id not in deletedItems
-		deletedItems = []
 		
 		# edit local items from distant
 		for localItem in localItems when item.id.length is 3 and item.id in distantIDs
