@@ -29,11 +29,12 @@ Original documentation: https://www.dropbox.com/developers/core
         id: (int) generated
         date: (timestamp) creation date
         edit: (timestamp) systematically updated using ( new Date ).getTime()
+        author: (int) user UID
         name: (string)
         start: (timestamp) start date
         end: (timestamp) end date
         tags: [ (string), … ]
-        users: [ (user), … ] assigned users
+        users: [ (int), … ] assigned users UIDs
       },
       …
     ]
@@ -43,7 +44,7 @@ Original documentation: https://www.dropbox.com/developers/core
         id: (int) generated
         date: (timestamp) creation date
         edit: (timestamp) systematically updated using ( new Date ).getTime()
-        author: (user)
+        author: (int) user UID
         taskID: (int) task ID reference, "0" if none
         parentID: (int) comment ID reference, "0" if none
         text: (string)
