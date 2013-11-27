@@ -44,7 +44,6 @@ DB =
 					slug: slug name
 					users: [$this.user]
 					tasks: []
-					comments: []
 					deletedTasks: []
 					comments: []
 					deletedComments: []
@@ -79,7 +78,7 @@ DB =
 
 	# Synchronize
 	sync: ( local, callback ) ->
-		return if not @client
+		return do callback if not @client
 		$this = @
 		@readFolder @folder, ( children ) ->
 			# get projects (children folders)
@@ -108,18 +107,22 @@ DB =
 	updateProject: ( local, distant ) ->
 		local.folder = distant.folder
 
-		# USERS
+		# users
 		local.users = ( u for u in distant.users )
 		if @user.uid in ( u.uid for u in local.users )
 			( u = @user for u in local.users when u.uid is @user.uid )
 		else local.users.push @user
 
-		# TASKS & comments
+		# tasks & comments
 		@solveConflicts local.tasks, distant.tasks, local.deletedTasks
 		@solveConflicts local.comments, distant.comments, local.deletedComments
 		
+		# update comments taskIDs
 		( comment.taskID = task.id for task in local.tasks when task.oldID is comment.taskID ) for comment in local.comments
 		delete task.oldID for task in local.tasks
+		# update replies parentIDs
+		# ( reply.parentID = comment.id for comment in local.comments when comment.oldID is reply.parentID ) for reply in local.comments 
+		delete comment.oldID for comment in local.comments
 
 		# save file
 		@saveProject local
@@ -135,8 +138,9 @@ DB =
 		localItems = ( item for item in localItems when item.id.length is 2 or item.id in distantIDs )
 		
 		# add local items missing in distant
-		item.oldID = item.id
-		( item.id = generateID 3, distantIDs ) for item in localItems when item.id.length is 2
+		for item in localItems when item.id.length is 2
+			item.oldID = item.id
+			item.id = generateID 3, distantIDs
 		
 		# add distant items missing in local
 		localItems.push item for item in distantItems when item.id not in localIDs and item.id not in deletedItems

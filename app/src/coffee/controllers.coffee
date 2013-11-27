@@ -16,6 +16,7 @@ synappseApp.controller 'MainCtrl', ( $scope, Projects ) ->
 	DB.auth $scope.login
 	
 	$scope.sync = -> 
+		localStorage['projects'] = [] # reinitialize cache
 		DB.sync $scope.projects, ->
 			do Projects.cache
 			do $scope.$apply
@@ -30,7 +31,6 @@ synappseApp.controller 'MainCtrl', ( $scope, Projects ) ->
 # ------------------------------	
 synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, Projects ) ->
 	$scope.project = Projects.readProject $routeParams.params
-	console.log $scope.project
 
 	$scope.edit_mode = false
 	$scope.toggleEditMode = ->
@@ -44,7 +44,7 @@ synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, Projects ) ->
 			start: task.start
 			end: task.end
 			tags: splitTags task.tags
-			users: task.users
+			users: [] # task.users missing in view, should be an array
 		task = ''
 
 	$scope.openComments = ( task, id ) ->
