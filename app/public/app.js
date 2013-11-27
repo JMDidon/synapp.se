@@ -224,7 +224,7 @@ DB = {
     });
   },
   updateProject: function(local, distant) {
-    var u, _i, _len, _ref, _ref1;
+    var comment, task, u, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2, _ref3, _ref4;
     local.folder = distant.folder;
     local.users = (function() {
       var _i, _len, _ref, _results;
@@ -257,6 +257,23 @@ DB = {
       local.users.push(this.user);
     }
     this.solveConflicts(local.tasks, distant.tasks, local.deletedTasks);
+    this.solveConflicts(local.comments, distant.comments, local.deletedComments);
+    _ref2 = local.comments;
+    for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
+      comment = _ref2[_j];
+      _ref3 = local.tasks;
+      for (_k = 0, _len2 = _ref3.length; _k < _len2; _k++) {
+        task = _ref3[_k];
+        if (task.oldID === comment.taskID) {
+          comment.taskID = task.id;
+        }
+      }
+    }
+    _ref4 = local.tasks;
+    for (_l = 0, _len3 = _ref4.length; _l < _len3; _l++) {
+      task = _ref4[_l];
+      delete task.oldID;
+    }
     return this.saveProject(local);
   },
   solveConflicts: function(localItems, distantItems, deletedItems) {
@@ -290,6 +307,7 @@ DB = {
       }
       return _results;
     })();
+    item.oldID = item.id;
     for (_i = 0, _len = localItems.length; _i < _len; _i++) {
       item = localItems[_i];
       if (item.id.length === 2) {

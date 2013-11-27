@@ -114,9 +114,12 @@ DB =
 			( u = @user for u in local.users when u.uid is @user.uid )
 		else local.users.push @user
 
-		# TASKS
+		# TASKS & comments
 		@solveConflicts local.tasks, distant.tasks, local.deletedTasks
-		# @solveConflicts local.comments, distant.comments, local.deletedComments
+		@solveConflicts local.comments, distant.comments, local.deletedComments
+		
+		( comment.taskID = task.id for task in local.tasks when task.oldID is comment.taskID ) for comment in local.comments
+		delete task.oldID for task in local.tasks
 
 		# save file
 		@saveProject local
@@ -132,6 +135,7 @@ DB =
 		localItems = ( item for item in localItems when item.id.length is 2 or item.id in distantIDs )
 		
 		# add local items missing in distant
+		item.oldID = item.id
 		( item.id = generateID 3, distantIDs ) for item in localItems when item.id.length is 2
 		
 		# add distant items missing in local
