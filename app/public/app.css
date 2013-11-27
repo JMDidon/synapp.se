@@ -174,7 +174,6 @@ body {
 /* -------------------- General styles -------------------- */
 /* ------------------------------------------------------------------------------ */
 body {
-  height: 100%;
   font-family: "Lato", sans-serif;
   color: #262626;
 }
@@ -187,7 +186,6 @@ input, textarea, select {
   border-radius: 3px;
   border: solid 1px #cccccc;
   display: block;
-  width: 100%;
   max-width: 300px;
   padding: 0.5em;
   font-family: "Lato", sans-serif;
@@ -249,12 +247,36 @@ h3 {
 
 /* -------------------- Wrappers -------------------- */
 /* ------------------------------------------------------------------------------ */
-.global-wrapper {
-  padding: 2% 5%;
+.main-project {
+  display: inline-block;
+  width: 100%;
+  vertical-align: top;
+}
+
+.comments-module-wrapper {
+  display: inline-block;
+  float: right;
+  width: 100%;
+  background: #891e89;
+  color: white;
+  text-align: right;
+  vertical-align: top;
 }
 
 .wrapper {
   padding: 2% 5%;
+}
+
+.main-section {
+  display: inline-block;
+  width: 66%;
+  vertical-align: top;
+}
+
+.comments-section {
+  display: inline-block;
+  width: 33%;
+  vertical-align: top;
 }
 
 /* -------------------- Header -------------------- */
@@ -318,7 +340,7 @@ h3 {
 }
 .main-project .task-list {
   display: inline-block;
-  width: 500px;
+  width: 49.9%;
   padding: 0 1em;
 }
 .main-project .task-list .task-title {
@@ -346,16 +368,44 @@ h3 {
 .main-project .task-list .task-tag-list li:last-child {
   margin: 0;
 }
-.main-project .task-list .delete-link {
+.main-project .task-list .action-link {
   display: block;
 }
-.main-project .task-list .delete-link:before {
+.main-project .task-list .action-link:before {
   content: "× - ";
 }
 .main-project .task-create {
   display: inline-block;
-  min-width: 500px;
+  max-width: 49.9%;
+  padding: 0 1em;
   vertical-align: top;
+}
+
+/* -------------------- Comments module -------------------- */
+/* ------------------------------------------------------------------------------ */
+.comments-module {
+  width: 100%;
+}
+
+.title-wrapper {
+  width: 100%;
+  border-bottom: solid white 1px;
+}
+
+.input-comments {
+  display: block;
+  position: relative;
+  right: 0;
+}
+
+.comments-list {
+  display: block;
+  margin: 1em 0;
+}
+.comments-list li {
+  margin: 0 0 1em 0;
+  padding: 1em 0;
+  border-bottom: 1px solid white;
 }
 
 /* -------------------- Calendar -------------------- */

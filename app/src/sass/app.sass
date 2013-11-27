@@ -32,9 +32,10 @@ body
 /* -------------------- SASS Variables -------------------- */
 /* ------------------------------------------------------------------------------ */
 
-$white: #FFFFFF
-$black: #000000
-$grey :	#262626
+$white : #FFFFFF
+$black : #000000
+$grey  : #262626
+$violet: rgb(137, 30, 137)
 $lightgrey: #CCC
 $lightblue: #0AF
 
@@ -75,14 +76,13 @@ $lightblue: #0AF
 /* ------------------------------------------------------------------------------ */
 
 body
-	height: 100%
+	// height: 100%
 	font-family: "Lato", sans-serif
 	color: $grey
 
 input, textarea, select 
 	@include borders(3px, $lightgrey)
 	display: block
-	width: 100%
 	max-width: 300px
 	padding: 0.5em
 	font-family: "Lato", sans-serif
@@ -128,11 +128,33 @@ h3
 /* -------------------- Wrappers -------------------- */
 /* ------------------------------------------------------------------------------ */
 
-.global-wrapper
-	padding: 2% 5%
+.main-project
+	display: inline-block
+	width: 100%
+	vertical-align: top
+
+.comments-module-wrapper
+	display: inline-block
+	float: right
+	width: 100%
+	background: $violet
+	color: $white
+	text-align: right
+	vertical-align: top
 
 .wrapper
 	padding: 2% 5%
+
+.main-section
+	display: inline-block
+	width: (99%*2/3)
+	vertical-align: top
+
+.comments-section
+	display: inline-block
+	width: (99%/3)
+	vertical-align: top
+
 
 /* -------------------- Header -------------------- */
 /* ------------------------------------------------------------------------------ */
@@ -183,7 +205,7 @@ h3
 
 	.task-list
 		display: inline-block
-		width: 500px
+		width: 49.9%
 		padding: 0 1em
 		.task-title
 			display: inline-block
@@ -192,8 +214,6 @@ h3
 		.task-dateCreation
 			display: block
 			float: right
-			//position: relative
-			//top: 0
 		.task-item
 			padding: 1em
 			border-bottom: 1px solid $black
@@ -205,17 +225,42 @@ h3
 				margin-right: 2em
 				&:last-child
 					margin: 0
-		.delete-link
+		.action-link
 			display: block
 			&:before
 				content: "× - "
 
 	.task-create
 		display: inline-block
-		min-width: 500px
+		max-width: 49.9%
+		padding: 0 1em
 		vertical-align: top
 
 
+/* -------------------- Comments module -------------------- */
+/* ------------------------------------------------------------------------------ */
+
+.comments-module
+	width: 100%
+
+.title-wrapper
+	width: 100%
+	border-bottom: solid white 1px
+	
+.input-comments
+	display: block
+	position: relative
+	right: 0
+
+.comments-list
+	display: block
+	margin: 1em 0
+	li
+		margin: 0 0 1em 0
+		padding: 1em 0
+		border-bottom: 1px solid $white
+
+	
 /* -------------------- Calendar -------------------- */
 /* ------------------------------------------------------------------------------ */
 

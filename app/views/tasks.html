@@ -23,6 +23,10 @@
 						<a href="">{{ tag }}</a>
 					</li>
 				</ul>
+				<ul>
+					<li>Assigned to :</li>
+					<li ng-repeat="user in task.users">{{ user }}</li>
+				</ul>
 				
 				<a class="action-link" href="" ng-click="openComments(task, task.id)">Open a comments on this task</a>
 				<a class="action-link" href="" ng-click="toggleEditMode()">Edit task</a>
@@ -59,6 +63,11 @@
 	
 				<a class="edit-link" href="" ng-click="toggleEditMode()">Cancel edit</a>
 				<a class="delete-link" href="" ng-click="deleteTask()">Delete task</a>
+
+				<label for="taskUsers">Who to assign this task to ?</label>
+				<ul>
+					<li ng-repeat="user in project.users"><input ng-Model="task.users" type="checkbox">{{ user.name }}</li>
+				</ul>
 				
 				<input type="submit" value="Update task" ng-click="editTask()">
 			</li>
@@ -99,6 +108,11 @@
 			
 			<label for="taskTags">Tags (separate the differents tags with a coma (,) ):</label>
 			<input name="taskTags" ng-Model="task.tags" type="text">
+
+			<label for="taskUsers">Who to assign this task to ?</label>
+			<ul>
+				<li ng-repeat="user in project.users"><input ng-Model="task.users" type="checkbox">{{ user.name }}</li>
+			</ul>
 
 			<input type="submit" value="Add the new task">
 		</form>

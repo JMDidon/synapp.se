@@ -30,6 +30,7 @@ synappseApp.controller 'MainCtrl', ( $scope, Projects ) ->
 # ------------------------------	
 synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, Projects ) ->
 	$scope.project = Projects.readProject $routeParams.params
+	console.log $scope.project
 
 	$scope.edit_mode = false
 	$scope.toggleEditMode = ->
@@ -43,6 +44,7 @@ synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, Projects ) ->
 			start: task.start
 			end: task.end
 			tags: splitTags task.tags
+			users: task.users
 		task = ''
 
 	$scope.openComments = ( task, id ) ->
