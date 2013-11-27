@@ -407,6 +407,14 @@ h3 {
   padding: 1em 0;
   border-bottom: 1px solid white;
 }
+.comments-list li .action-link {
+  color: white;
+  text-decoration: underline;
+}
+.comments-list li .action-link:hover {
+  color: white;
+  text-decoration: none;
+}
 
 /* -------------------- Calendar -------------------- */
 /* ------------------------------------------------------------------------------ */

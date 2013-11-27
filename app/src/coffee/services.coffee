@@ -69,7 +69,15 @@ synappseApp.factory 'Projects', ->
 			comment.date = ( new Date ).getTime()
 			comment.edit = ( new Date ).getTime()
 			project.comments.push comment
-		do factory.cache	
+		do factory.cache
+
+	factory.deleteComment = ( projectID, commentID ) ->
+		for project in Projects when project.id is projectID
+			console.log 'Before : ', project.comments
+			project.deletedComments.push ( comment.id for comment in project.comments when comment.id is commentID )[0]
+			project.comments = ( comment for comment in project.comments when comment.id isnt commentID )
+			console.log 'After : ', project.comments
+		do factory.cache
 
 
 	factory

@@ -35,6 +35,10 @@ synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, Projects ) ->
 	$scope.edit_mode = false
 	$scope.toggleEditMode = ->
 		$scope.edit_mode = not $scope.edit_mode
+
+	$scope.toggleCommentForm = ->
+		$scope.comment.text = '' if $scope.comment != undefined
+		$scope.opened = not $scope.opened
 	
 	$scope.createTask = ( task ) ->
 		Projects.createTask $scope.project.id, 
@@ -78,6 +82,9 @@ synappseApp.controller 'CommentCtrl', ( $scope, $routeParams, Projects ) ->
 			taskID: taskID
 			parentID: 0
 			text: comment.text
+
+	$scope.deleteComment = ( commentID ) ->
+		Projects.deleteComment $scope.project.id, commentID, $scope.comment
 
 
 console.log 'Controllers loaded'
