@@ -10,6 +10,7 @@ DB =
 
 
 	# Authenticate to Dropbox account
+	# ---
 	auth: ( callback ) ->
 		$this = @
 		@client = new Dropbox.Client key:@key
@@ -21,6 +22,7 @@ DB =
 
 
 	# Check if Synappse folder exists, else create it
+	# ---
 	readFolder: ( folder, callback ) ->
 		$this = @
 		@client.readdir folder, ( error, children, stat, childrenStat ) ->
@@ -32,6 +34,7 @@ DB =
 
 
 	# Check if project file exists or create it
+	# ---
 	checkProject: ( folder, localIDs, callback ) ->
 		$this = @
 		@client.readFile folder+@file, ( error, data, stat ) ->
@@ -55,13 +58,15 @@ DB =
 
 
 	# Save project file
+	# ---
 	saveProject: ( project, callback = false ) ->
 		@client.writeFile project.folder+@file, ( angular.toJson project ), ( error, stat ) ->
 			console.log error if error
 			do callback if callback
 
 
-	# process local projects which miss their Dropbox folder
+	# Process local projects which miss their Dropbox folder
+	# ---
 	checkLocalProjects: ( local, folders, callback ) ->
 		localIDs = ( p.id for p in local )
 		for p in local when p.folder not in folders
@@ -77,6 +82,7 @@ DB =
 
 
 	# Synchronize
+	# ---
 	sync: ( local, callback ) ->
 		return do callback if not @client
 		$this = @
@@ -104,6 +110,7 @@ DB =
 
 
 	# Update project
+	# ---
 	updateProject: ( local, distant ) ->
 		local.folder = distant.folder
 
@@ -129,10 +136,10 @@ DB =
 		
 		
 		
-	# Solve conflicts
+	# Solve conflicts (add, edit, delete)
+	# ---
 	solveConflicts: ( localItems, distantItems, deletedItems ) ->
 		distantIDs = ( item.id for item in distantItems )
-		localIDs = ( item.id for item in localItems )
 		
 		# delete local items missing in distant
 		localItems = ( item for item in localItems when item.id.length is 2 or item.id in distantIDs )
@@ -143,10 +150,11 @@ DB =
 			item.id = generateID 3, distantIDs
 		
 		# add distant items missing in local
+		localIDs = ( item.id for item in localItems )
 		localItems.push item for item in distantItems when item.id not in localIDs and item.id not in deletedItems
 		deletedItems = []
 		
-		# edit local tasks from distant
+		# edit local items from distant
 		for localItem in localItems when item.id.length is 3 and item.id in distantIDs
 			for distantItem in distantItems when localItem.id is distantItem.id
 				( localItem[k] = v for k, v of distantItem ) if localItem.edit <= distantItem.edit

@@ -291,15 +291,6 @@ DB = {
       }
       return _results;
     })();
-    localIDs = (function() {
-      var _i, _len, _results;
-      _results = [];
-      for (_i = 0, _len = localItems.length; _i < _len; _i++) {
-        item = localItems[_i];
-        _results.push(item.id);
-      }
-      return _results;
-    })();
     localItems = (function() {
       var _i, _len, _ref, _results;
       _results = [];
@@ -319,6 +310,15 @@ DB = {
       item.oldID = item.id;
       item.id = generateID(3, distantIDs);
     }
+    localIDs = (function() {
+      var _j, _len1, _results;
+      _results = [];
+      for (_j = 0, _len1 = localItems.length; _j < _len1; _j++) {
+        item = localItems[_j];
+        _results.push(item.id);
+      }
+      return _results;
+    })();
     for (_j = 0, _len1 = distantItems.length; _j < _len1; _j++) {
       item = distantItems[_j];
       if ((_ref = item.id, __indexOf.call(localIDs, _ref) < 0) && (_ref1 = item.id, __indexOf.call(deletedItems, _ref1) < 0)) {
