@@ -89,6 +89,7 @@ synappseApp.controller 'CommentCtrl', ( $scope, $routeParams, Projects ) ->
 			parentID: 0
 			text: $scope.newComment.text
 		$scope.newComment = {}
+		do $scope.toggleCommentForm
 
 	$scope.deleteComment = ->
 		Projects.deleteComment $scope.project.id, $scope.comment.id

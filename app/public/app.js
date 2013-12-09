@@ -435,7 +435,8 @@ synappseApp.controller('CommentCtrl', function($scope, $routeParams, Projects) {
       parentID: 0,
       text: $scope.newComment.text
     });
-    return $scope.newComment = {};
+    $scope.newComment = {};
+    return $scope.toggleCommentForm();
   };
   return $scope.deleteComment = function() {
     return Projects.deleteComment($scope.project.id, $scope.comment.id);
