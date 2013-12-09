@@ -52,7 +52,7 @@ synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, Projects ) ->
 			start: $scope.newTask.start
 			end: $scope.newTask.end
 			tags: splitTags $scope.newTask.tags
-			users: [] # task.users missing in view, should be an array
+			users: $scope.newTask.users
 		$scope.newTask = {}
 
 	$scope.openComments = ( task ) ->

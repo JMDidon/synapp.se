@@ -65,8 +65,13 @@
 				<a class="action-link" href="" ng-click="deleteTask()">Delete task</a>
 
 				<label for="taskUsers">Who to assign this task to ?</label>
+				<select multiple ng-Model="taskEdit.users">
+					<option ng-repeat="user in project.users" value="{{ user.name }}">{{ user.name }}</option>
+				</select>
 				<ul>
-					<li ng-repeat="user in project.users"><input ng-Model="task.users" value="'user.name'" type="checkbox">{{ user.name }}</li>
+					<li ng-if="taskEdit.users" ng-repeat="user in taskEdit.users">
+						[ <a href="" ng-click="removeUserToTask()">X</a> ] - {{ user }}
+					</li>
 				</ul>
 				
 				<input type="submit" value="Update task" ng-click="editTask()">
@@ -79,11 +84,11 @@
 
 		<form ng-submit="createTask()">
 			<label for="taskName">Task name :</label>
-			<input name="taskName" ng-Model="newTask.name" type="text" placeholder="Task name">
+			<input name="taskName" ng-Model="newTask.name" type="text">
 
 			<label for="taskStatus">Task status :</label>
 			<select name="taskStatus" ng-Model="newTask.status">
-				<option selected>Pending ...</option>
+				<option ng-selected="true">Pending ...</option>
 				<option>25 %</option>
 				<option>50 %</option>
 				<option>75 %</option>
@@ -98,6 +103,7 @@
 
 			<label for="taskend">End date :</label>
 			<input name="taskend" ng-Model="newTask.end" type="text">
+
 			<!--<div class="calendar-container">
 				<div class="calendar-header">
 					<a class="calendar-arrow">< </a>
@@ -110,9 +116,26 @@
 			<input name="taskTags" ng-Model="newTask.tags" type="text">
 
 			<label for="taskUsers">Who to assign this task to ?</label>
+			<select multiple ng-Model="newTask.users">
+				<option ng-repeat="user in project.users" value="{{ user.name }}">{{ user.name }}</option>
+			</select>
 			<ul>
-				<li ng-repeat="user in project.users"><input ng-Model="newTask.users" value="'user.name'" type="checkbox">{{ user.name }}</li>
+				<li ng-if="newTask.users" ng-repeat="user in newTask.users">
+					[ <a href="" ng-click="removeUserToTask()">X</a> ] - {{ user }}
+				</li>
 			</ul>
+			<!--<ul>
+				<li ng-repeat="user in project.users">
+					<input type="checkbox" ng-Model="newTask.users.selected">
+					<span> - {{ user.name }}</span>
+				</li>
+			</ul>
+			<ul class="items-list">
+				<li ng-repeat="user in project.users">
+					<input type="checkbox" ng-model="newTask.users.user " />
+					<span>{{ user.name }}</span>
+				</li>
+			</ul>-->
 
 			<input type="submit" value="Add the new task">
 		</form>
