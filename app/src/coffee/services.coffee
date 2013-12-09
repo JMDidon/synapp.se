@@ -16,7 +16,7 @@ synappseApp.factory 'Projects', ->
 	factory.createProject = ( name ) ->
 		id = generateID 2, ( project.id for project in Projects )
 
-		# should check if folder exists
+		# Should check if folder exists
 		Projects.push
 			name: name
 			id: id
@@ -29,8 +29,9 @@ synappseApp.factory 'Projects', ->
 			deletedComments: []
 		do factory.cache
 	
-	factory.readProject = ( id ) ->
-		( project for project in Projects when project.id is id )[0]
+	factory.readProject = ( slug ) ->
+		for project in Projects when project.slug is slug
+			return project
 		
 	# TASKS
 	factory.createTask = ( projectID, task ) ->

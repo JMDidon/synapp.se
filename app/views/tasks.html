@@ -6,9 +6,10 @@
 		</p>
 		
 		<ul class="view-mode">
-
-			<!-- Task display -->
 			<li class="task-item" ng-repeat="task in project.tasks" ng-controller="TaskCtrl" >
+				
+
+				<!-- Task display -->
 				<div ng-hide="edit_mode">
 					<h3 class="task-title">{{ task.name }}</h3>
 					<time class="task-dateCreation italic">{{ task.dateCreation }}</time>
@@ -35,6 +36,7 @@
 					<a class="action-link" href="" ng-click="deleteTask()">Delete task</a>
 				</div>
 			
+				
 				<!-- Edit display -->
 				<div ng-show="edit_mode">
 					<label for="taskName">Task name : ({{ task.name }})</label>
@@ -77,58 +79,8 @@
 					<input type="submit" value="Update task" ng-click="editTask()">
 				</div>
 			</li>
-
-
-			<!-- Edit of a task 
-			<h3 class="task-title" ng-show="edit_mode">Edit mode</h3>
-			<li class="task-item" ng-repeat="task in project.tasks" ng-controller="TaskCtrl">
-				
-			</li>-->
 		</ul>
-		
-		<!--<ul class="edit-mode" ng-show="edit_mode">
-			<h3 class="task-title">Edit mode</h3>
-			<li class="task-item" ng-repeat="task in project.tasks" ng-controller="TaskCtrl">
-				<label for="taskName">Task name : ({{ task.name }})</label>
-				<input name="taskName" ng-Model="taskEdit.name" type="text">
-	
-				<label for="taskStatus">Task status :</label>
-				<select name="taskStatus" ng-Model="taskEdit.status">
-					<option>Pending ...</option>
-					<option>25 %</option>
-					<option>50 %</option>
-					<option>75 %</option>
-					<option>Finished</option>
-				</select>
-	
-				<label for="taskPriority">Is this task a priority ?</label>
-				<input name="taskPriority" ng-Model="taskEdit.priority" type="checkbox">
-	
-				<label for="taskstart">Begin date :</label>
-				<input name="taskstart" ng-Model="taskEdit.start" type="text" value="{{ task.start }}">
-	
-				<label for="taskend">End date :</label>
-				<input name="taskend" ng-Model="taskEdit.end" type="text" value="{{ task.end }}">
-				
-				<label for="taskTags">Tags (separate the differents tags with a coma (,) ):</label>
-				<input name="taskTags" ng-Model="taskEdit.tags" type="text" value="{{ task.tags }}">
-	
-				<label for="taskUsers">Who to assign this task to ?</label>
-				<select multiple ng-Model="taskEdit.users">
-					<option ng-repeat="user in project.users" value="{{ user.name }}">{{ user.name }}</option>
-				</select>
-				<ul>
-					<li ng-if="taskEdit.users" ng-repeat="user in taskEdit.users">
-						[ <a href="" ng-click="removeUserToTask()">X</a> ] - {{ user }}
-					</li>
-				</ul>
 
-				<a class="action-link" href="" ng-click="toggleEditMode()">Cancel edit</a>
-				<a class="action-link" href="" ng-click="deleteTask()">Delete task</a>
-				
-				<input type="submit" value="Update task" ng-click="editTask()">
-			</li>
-		</ul>-->
 	</div>
 
 	<div class="task-create">

@@ -16,7 +16,7 @@ synappseApp.controller 'MainCtrl', ( $scope, Projects ) ->
 	DB.auth $scope.login
 	
 	$scope.sync = -> 
-		localStorage['projects'] = [] # reinitialize cache
+		localStorage['projects'] = [] # Reinitialize cache
 		DB.sync $scope.projects, ->
 			do Projects.cache
 			do $scope.$apply
@@ -72,7 +72,6 @@ synappseApp.controller 'TaskCtrl', ( $scope, $routeParams, Projects ) ->
 		$scope.edit_mode = not $scope.edit_mode
 
 	$scope.editTask = ->
-		# do $scope.toggleEditMode
 		$scope.edit_mode = not $scope.edit_mode
 		$scope.taskEdit.tags = splitTags $scope.taskEdit.tags
 		Projects.editTask $scope.project.id, $scope.task.id, $scope.taskEdit
