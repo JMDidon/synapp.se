@@ -383,10 +383,6 @@ synappseApp.controller('ProjectCtrl', function($scope, $routeParams, Projects) {
   $scope.newTask = {};
   $scope.newComment = {};
   $scope.selectedTask = {};
-  $scope.edit_mode = false;
-  $scope.toggleEditMode = function() {
-    return $scope.edit_mode = !$scope.edit_mode;
-  };
   $scope.toggleCommentForm = function() {
     if ($scope.comment !== void 0) {
       $scope.comment.text = '';
@@ -415,8 +411,12 @@ synappseApp.controller('ProjectCtrl', function($scope, $routeParams, Projects) {
 synappseApp.controller('TaskCtrl', function($scope, $routeParams, Projects) {
   $scope.taskEdit = angular.copy($scope.task);
   $scope.taskEdit.tags = $scope.taskEdit.tags.join(', ');
+  $scope.edit_mode = false;
+  $scope.toggleEditMode = function() {
+    return $scope.edit_mode = !$scope.edit_mode;
+  };
   $scope.editTask = function() {
-    $scope.toggleEditMode();
+    $scope.edit_mode = !$scope.edit_mode;
     $scope.taskEdit.tags = splitTags($scope.taskEdit.tags);
     return Projects.editTask($scope.project.id, $scope.task.id, $scope.taskEdit);
   };

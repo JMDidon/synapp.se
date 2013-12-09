@@ -35,9 +35,9 @@ synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, Projects ) ->
 	$scope.newComment = {}
 	$scope.selectedTask = {}
 
-	$scope.edit_mode = false
-	$scope.toggleEditMode = ->
-		$scope.edit_mode = not $scope.edit_mode
+	#$scope.edit_mode = false
+	#$scope.toggleEditMode = ->
+	#	$scope.edit_mode = not $scope.edit_mode
 
 	$scope.toggleCommentForm = ->
 		$scope.comment.text = '' if $scope.comment != undefined
@@ -66,9 +66,14 @@ synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, Projects ) ->
 synappseApp.controller 'TaskCtrl', ( $scope, $routeParams, Projects ) ->
 	$scope.taskEdit = angular.copy $scope.task
 	$scope.taskEdit.tags = $scope.taskEdit.tags.join(', ')
+	$scope.edit_mode = false
+
+	$scope.toggleEditMode = -> 
+		$scope.edit_mode = not $scope.edit_mode
 
 	$scope.editTask = ->
-		do $scope.toggleEditMode
+		# do $scope.toggleEditMode
+		$scope.edit_mode = not $scope.edit_mode
 		$scope.taskEdit.tags = splitTags $scope.taskEdit.tags
 		Projects.editTask $scope.project.id, $scope.task.id, $scope.taskEdit
 
