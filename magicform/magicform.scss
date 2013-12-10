@@ -1,0 +1,65 @@
+*{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;margin:0;padding:0}
+body { padding: 100px 50px; }
+
+.pointer { cursor: pointer; }
+.noselect { -webkit-touch-callout: none; -webkit-user-select: none; -moz-user-select: -moz-none; -ms-user-select: none; user-select: none; }
+.clearfix:after { content: ""; display: table; clear: both; }
+
+$mf-base: 14px;
+$mf-border: #F0F0F0;
+$mf-label: #B8B8B8;
+$mf-light: #7E7E7E;
+$mf-dark: #303030;
+$mf-error: red;
+.mf-base { font-size: $mf-base; line-height: 1.5em; font-family: sans-serif; }
+.mf-form {
+  @extend .mf-base;
+  max-width: 40em; margin: auto;
+  border: 1px solid $mf-border; color: $mf-label;
+}
+.mf-reset { 
+  @extend .mf-base;
+  display: block; width: 100%; height: 3em; padding: .75em;
+  border: 0; background: #fff; 
+  color: $mf-light;
+}
+.mf-field {
+  &:focus { outline: none; color: $mf-dark; }
+  &:invalid { color: $mf-error; }
+  &::-webkit-input-placeholder { color: $mf-label; }
+  &::-moz-placeholder { color: $mf-label; }
+  &:-ms-input-placeholder { color: $mf-label; }
+  &:-moz-placeholder { color: $mf-label; }
+}
+.mf-line { 
+  @extend .clearfix;
+  border-top: 1px solid $mf-border; 
+  .mf-label { float: left; width: 7.5em; padding: .75em; }
+  .mf-input { 
+    margin-left: 7.5em; 
+    input { @extend .mf-reset, .mf-field; }
+  }
+}
+.mf-date { .mf-label { width: 4.5em; } .mf-input { margin-left: 4.5em; } }
+.mf-text { 
+  @extend .mf-reset, .mf-field; 
+  resize: none; height: 4.5em; 
+}
+.mf-item:not(:last-child) { float: left; }
+.mf-dates { margin-right: 10.5em; }
+.mf-date { float: left; width: 50%; border-right: 1px solid $mf-border; }
+.mf-checkbox { display: none; }
+.mf-button { 
+  @extend .pointer, .noselect; 
+  display: block; height: 3em;
+  background: #808080;
+  line-height: 3em; color: #fff;
+  .mf-checkbox:checked + & { background: #973611; }
+}
+.mf-priority { float: left; width: 3em; text-align: center; }
+.mf-send { 
+  @extend .pointer, .mf-reset; 
+  float: left; width: 7.5em; background: #236193; 
+  text-transform: uppercase; color: #fff; 
+  &:focus, &:hover { }
+}

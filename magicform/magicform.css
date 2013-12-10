@@ -1,0 +1,111 @@
+* {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0; }
+
+body {
+  padding: 100px 50px; }
+
+.pointer, .mf-button, .mf-send {
+  cursor: pointer; }
+
+.noselect, .mf-button {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: -moz-none;
+  -ms-user-select: none;
+  user-select: none; }
+
+.clearfix:after, .mf-line:after {
+  content: "";
+  display: table;
+  clear: both; }
+
+.mf-base, .mf-form, .mf-reset, .mf-line .mf-input input, .mf-text, .mf-send {
+  font-size: 14px;
+  line-height: 1.5em;
+  font-family: sans-serif; }
+
+.mf-form {
+  max-width: 40em;
+  margin: auto;
+  border: 1px solid #f0f0f0;
+  color: #b8b8b8; }
+
+.mf-reset, .mf-line .mf-input input, .mf-text, .mf-send {
+  display: block;
+  width: 100%;
+  height: 3em;
+  padding: .75em;
+  border: 0;
+  background: #fff;
+  color: #7e7e7e; }
+
+.mf-field:focus, .mf-line .mf-input input:focus, .mf-text:focus {
+  outline: none;
+  color: #303030; }
+.mf-field:invalid, .mf-line .mf-input input:invalid, .mf-text:invalid {
+  color: red; }
+.mf-field::-webkit-input-placeholder, .mf-line .mf-input input::-webkit-input-placeholder, .mf-text::-webkit-input-placeholder {
+  color: #b8b8b8; }
+.mf-field::-moz-placeholder, .mf-line .mf-input input::-moz-placeholder, .mf-text::-moz-placeholder {
+  color: #b8b8b8; }
+.mf-field:-ms-input-placeholder, .mf-line .mf-input input:-ms-input-placeholder, .mf-text:-ms-input-placeholder {
+  color: #b8b8b8; }
+.mf-field:-moz-placeholder, .mf-line .mf-input input:-moz-placeholder, .mf-text:-moz-placeholder {
+  color: #b8b8b8; }
+
+.mf-line {
+  border-top: 1px solid #f0f0f0; }
+  .mf-line .mf-label {
+    float: left;
+    width: 7.5em;
+    padding: .75em; }
+  .mf-line .mf-input {
+    margin-left: 7.5em; }
+
+.mf-date .mf-label {
+  width: 4.5em; }
+.mf-date .mf-input {
+  margin-left: 4.5em; }
+
+.mf-text {
+  resize: none;
+  height: 4.5em; }
+
+.mf-item:not(:last-child) {
+  float: left; }
+
+.mf-dates {
+  margin-right: 10.5em; }
+
+.mf-date {
+  float: left;
+  width: 50%;
+  border-right: 1px solid #f0f0f0; }
+
+.mf-checkbox {
+  display: none; }
+
+.mf-button {
+  display: block;
+  height: 3em;
+  background: #808080;
+  line-height: 3em;
+  color: #fff; }
+  .mf-checkbox:checked + .mf-button {
+    background: #973611; }
+
+.mf-priority {
+  float: left;
+  width: 3em;
+  text-align: center; }
+
+.mf-send {
+  float: left;
+  width: 7.5em;
+  background: #236193;
+  text-transform: uppercase;
+  color: #fff; }
