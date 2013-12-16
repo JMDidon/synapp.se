@@ -4,4 +4,9 @@
     <p class="sync-buttons" ng-show="auth">
 		<a href="" ng-click="sync()">Get projects (= Sync Projects)</a>
     </p>
+
+    <form ng-submit="createProject()">
+    	<input ng-model="name" type="text" placeholder="Choose a name for a new project !">
+    	<input type="submit" value="Create new project">
+    </form>
 </section>

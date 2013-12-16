@@ -27,6 +27,13 @@ synappseApp.controller 'MainCtrl', ( $scope, Projects ) ->
 		$scope.projectFolder = ""
 
 
+# Home Controller
+# ------------------------------
+synappseApp.controller 'HomeCtrl', ( $scope, $routeParams, Projects ) ->
+	$scope.createProject = ->
+		Projects.createProject $scope.name
+
+
 # Project Controller
 # ------------------------------	
 synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, Projects ) ->
@@ -34,10 +41,6 @@ synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, Projects ) ->
 	$scope.newTask = {}
 	$scope.newComment = {}
 	$scope.selectedTask = {}
-
-	#$scope.edit_mode = false
-	#$scope.toggleEditMode = ->
-	#	$scope.edit_mode = not $scope.edit_mode
 
 	$scope.toggleCommentForm = ->
 		$scope.comment.text = '' if $scope.comment != undefined
