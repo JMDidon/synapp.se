@@ -59,7 +59,13 @@ synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, Projects ) ->
 		$scope.opened = true
 		$scope.selectedTask = task
 		Projects.createCommentsModule $scope.project.id, task.id
-
+		
+	$scope.getUserName = ( uid ) ->
+		result = ( user for user in $scope.project.users when user.uid is uid )[0]
+		return "Unnamed" if not result
+		result = (result.substring 0, 2+result.indexOf ' ' )+'.' if ~( user.name for user in $scope.project.users ).indexOf result
+		result
+		
 
 # Task Controller
 # ------------------------------		

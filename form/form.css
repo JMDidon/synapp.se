@@ -92,11 +92,10 @@ body {
 .mf-button {
   display: block;
   height: 3em;
-  background: #808080;
-  line-height: 3em;
-  color: #fff; }
+  line-height: 3em; }
   .mf-checkbox:checked + .mf-button {
-    background: #973611; }
+    background: #973611;
+    color: #fff; }
 
 .mf-priority {
   float: left;

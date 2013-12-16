@@ -52,9 +52,8 @@ $mf-error: red;
 .mf-button { 
   @extend .pointer, .noselect; 
   display: block; height: 3em;
-  background: #808080;
-  line-height: 3em; color: #fff;
-  .mf-checkbox:checked + & { background: #973611; }
+  line-height: 3em;
+  .mf-checkbox:checked + & { background: #973611; color: #fff; }
 }
 .mf-priority { float: left; width: 3em; text-align: center; }
 .mf-send { 
