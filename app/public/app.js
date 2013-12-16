@@ -9,7 +9,8 @@ synappseApp = angular.module('synappseApp', ['ngRoute', 'synappseControllers', '
 synappseApp.config([
   '$routeProvider', function($routeProvider) {
     $routeProvider.when('/', {
-      templateUrl: 'views/home.html'
+      templateUrl: 'views/home.html',
+      controller: 'HomeCtrl'
     }).when('/home', {
       redirectTo: '/'
     }).when('/projects/:params', {
@@ -395,6 +396,12 @@ synappseApp.controller('MainCtrl', function($scope, Projects) {
   };
 });
 
+synappseApp.controller('HomeCtrl', function($scope, $routeParams, Projects) {
+  return $scope.createProject = function() {
+    return Projects.createProject($scope.name);
+  };
+});
+
 synappseApp.controller('ProjectCtrl', function($scope, $routeParams, Projects) {
   $scope.project = Projects.readProject($routeParams.params);
   $scope.newTask = {};
@@ -514,28 +521,41 @@ synappseApp.factory('Projects', function() {
     return Projects;
   };
   factory.createProject = function(name) {
-    var id, project;
-    id = generateID(2, (function() {
-      var _i, _len, _results;
-      _results = [];
-      for (_i = 0, _len = Projects.length; _i < _len; _i++) {
-        project = Projects[_i];
-        _results.push(project.id);
+    var id, project, projectExist, projectTestName, _i, _len;
+    projectExist = false;
+    projectTestName = name.toLowerCase();
+    for (_i = 0, _len = Projects.length; _i < _len; _i++) {
+      project = Projects[_i];
+      if (project.name === projectTestName) {
+        projectExist = true;
       }
-      return _results;
-    })());
-    Projects.push({
-      name: name,
-      id: id,
-      folder: DB.folder + (slug(name)) + '/',
-      slug: slug(name),
-      users: [],
-      tasks: [],
-      deletedTasks: [],
-      comments: [],
-      deletedComments: []
-    });
-    return factory.cache();
+    }
+    if (projectExist === true) {
+      console.log('Project already exists !');
+    } else {
+      id = generateID(2, (function() {
+        var _j, _len1, _results;
+        _results = [];
+        for (_j = 0, _len1 = Projects.length; _j < _len1; _j++) {
+          project = Projects[_j];
+          _results.push(project.id);
+        }
+        return _results;
+      })());
+      console.log('Creating task with id : ', id);
+      Projects.push({
+        name: name,
+        id: id,
+        folder: DB.folder + (slug(name)) + '/',
+        slug: slug(name),
+        users: [],
+        tasks: [],
+        deletedTasks: [],
+        comments: [],
+        deletedComments: []
+      });
+      return factory.cache();
+    }
   };
   factory.readProject = function(slug) {
     var project, _i, _len;
