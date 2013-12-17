@@ -558,14 +558,33 @@ synappseApp.factory('Projects', function() {
       return factory.cache();
     }
   };
-  factory.readProject = function(slug) {
-    var project, _i, _len;
-    for (_i = 0, _len = Projects.length; _i < _len; _i++) {
-      project = Projects[_i];
-      if (project.slug === slug) {
-        return project;
+  factory.readProject = function(id) {
+    var project;
+    return ((function() {
+      var _i, _len, _results;
+      _results = [];
+      for (_i = 0, _len = Projects.length; _i < _len; _i++) {
+        project = Projects[_i];
+        if (project.id === id) {
+          _results.push(project);
+        }
       }
-    }
+      return _results;
+    })())[0] || {};
+  };
+  factory.findProject = function(slug) {
+    var project;
+    return ((function() {
+      var _i, _len, _results;
+      _results = [];
+      for (_i = 0, _len = Projects.length; _i < _len; _i++) {
+        project = Projects[_i];
+        if (project.slug === slug) {
+          _results.push(project);
+        }
+      }
+      return _results;
+    })())[0] || {};
   };
   factory.createTask = function(projectID, task) {
     var project, t, _i, _len;

@@ -39,9 +39,11 @@ synappseApp.factory 'Projects', ->
 				deletedComments: []
 			do factory.cache
 	
-	factory.readProject = ( slug ) ->
-		for project in Projects when project.slug is slug
-			return project
+	factory.readProject = ( id ) -> 
+		( project for project in Projects when project.id is id )[0] || {}
+		
+	factory.findProject = ( slug ) -> 
+		( project for project in Projects when project.slug is slug )[0] || {}
 		
 	# TASKS
 	factory.createTask = ( projectID, task ) ->
