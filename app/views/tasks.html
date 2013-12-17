@@ -50,11 +50,11 @@
 		
 					<label for="taskStatus">Task status :</label>
 					<select name="taskStatus" ng-Model="taskEdit.status">
-						<option>Pending ...</option>
-						<option>25 %</option>
-						<option>50 %</option>
-						<option>75 %</option>
-						<option>Finished</option>
+						<option ng-selected="true">To do</option>
+						<option>Started</option>
+						<option>Advanced</option>
+						<option>Done</option>
+						<option>Verified (archived)</option>
 					</select>
 		
 					<label for="taskPriority">Is this task a priority ?</label>
@@ -98,11 +98,11 @@
 
 			<label for="taskStatus">Task status :</label>
 			<select name="taskStatus" ng-Model="newTask.status">
-				<option ng-selected="true">Pending ...</option>
-				<option>25 %</option>
-				<option>50 %</option>
-				<option>75 %</option>
-				<option>Finished</option>
+				<option ng-selected="true">To do</option>
+				<option>Started</option>
+				<option>Advanced</option>
+				<option>Done</option>
+				<option>Verified (archived)</option>
 			</select>
 
 			<label for="taskPriority">Is this task a priority ?</label>

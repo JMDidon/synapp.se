@@ -697,47 +697,6 @@ splitTags = function(str) {
     });
   }
 };
-smartDate = function(date) {
-  var days, diffDays, months, now;
-  months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-  days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-  date = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-  now = new Date;
-  now = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  diffDays = Math.round((date - now) / (1000 * 60 * 60 * 24));
-  switch (false) {
-    case date.getFullYear() === now.getFullYear():
-      return months[date.getMonth()] + ' ' + date.getDate() + ', ' + date.getFullYear();
-    case diffDays !== 0:
-      return 'Today';
-    case diffDays !== 1:
-      return 'Tomorrow';
-    case !((0 < diffDays && diffDays < 7)):
-      return days[(now.getDay() + diffDays - 1) % 7];
-    default:
-      return months[date.getMonth()] + ' ' + date.getDate();
-  }
-};
-relativeDate = function(date) {
-  var delta;
-  delta = Math.floor((new Date - date) / 1000);
-  switch (false) {
-    case !(delta < 120):
-      return 'about one minute ago';
-    case !(delta >= 120 && delta < 60 * 60):
-      return (Math.floor(delta / 60)) + ' minutes ago';
-    case !(delta >= 60 * 60 && delta < 60 * 60 * 2):
-      return (Math.floor(delta / (60 * 60))) + ' hour ago';
-    case !(delta >= 60 * 60 * 2 && delta < 60 * 60 * 24):
-      return (Math.floor(delta / (60 * 60))) + ' hours ago';
-    case !(delta >= 60 * 60 * 24 && delta < 60 * 60 * 24 * 2):
-      return 'yesterday';
-    case !(delta >= 60 * 60 * 24 && delta < 60 * 60 * 24 * 30):
-      return (Math.floor(delta / (60 * 60 * 24))) + ' days ago';
-    default:
-      return smartDate(date);
-  }
-};
 /*
 console.log relativeDate new Date 'December 17, 2013 9:50:00'
 console.log relativeDate new Date 'December 17, 2013 9:46:00'
@@ -788,9 +747,49 @@ synappseApp.filter('DropboxUIDToUsername', [
     };
   }
 ]);
-synappseApp.filter('DateToRelativeDate', function() {
+synappseApp.filter('relativeDate', function() {
   return function(date) {
-    return relativeDate(date);
+    var delta;
+    delta = Math.floor((new Date - date) / 1000);
+    switch (false) {
+      case !(delta < 120):
+        return 'about one minute ago';
+      case !(delta >= 120 && delta < 60 * 60):
+        return (Math.floor(delta / 60)) + ' minutes ago';
+      case !(delta >= 60 * 60 && delta < 60 * 60 * 2):
+        return (Math.floor(delta / (60 * 60))) + ' hour ago';
+      case !(delta >= 60 * 60 * 2 && delta < 60 * 60 * 24):
+        return (Math.floor(delta / (60 * 60))) + ' hours ago';
+      case !(delta >= 60 * 60 * 24 && delta < 60 * 60 * 24 * 2):
+        return 'yesterday';
+      case !(delta >= 60 * 60 * 24 && delta < 60 * 60 * 24 * 30):
+        return (Math.floor(delta / (60 * 60 * 24))) + ' days ago';
+      default:
+        return smartDate(date);
+    }
+  };
+});
+synappseApp.filter('smartDate', function() {
+  return function(date) {
+    var days, diffDays, months, now;
+    months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    date = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    now = new Date;
+    now = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    diffDays = Math.round((date - now) / (1000 * 60 * 60 * 24));
+    switch (false) {
+      case date.getFullYear() === now.getFullYear():
+        return months[date.getMonth()] + ' ' + date.getDate() + ', ' + date.getFullYear();
+      case diffDays !== 0:
+        return 'Today';
+      case diffDays !== 1:
+        return 'Tomorrow';
+      case !((0 < diffDays && diffDays < 7)):
+        return days[(now.getDay() + diffDays - 1) % 7];
+      default:
+        return months[date.getMonth()] + ' ' + date.getDate();
+    }
   };
 });
 console.log('Filters module loaded');
