@@ -11,7 +11,7 @@
 				<option value="">All tasks</option>
 				<option ng-repeat="user in project.users" value="{{ user.uid }}">{{ user.uid | DropboxUIDToUsername: project.slug }}</option>
 			</select>
-			
+
 			<li class="task-item" ng-repeat="task in project.tasks | filter:{users:tasksFilter}" ng-controller="TaskCtrl" >
 				
 
@@ -71,7 +71,7 @@
 		
 					<label for="taskUsers">Who to assign this task to ?</label>
 					<select multiple ng-Model="taskEdit.users">
-						<option ng-repeat="user in project.users" value="{{ user.uid }}">{{ user.name | DropboxUIDToUsername: project.slug }}</option>
+						<option ng-repeat="user in project.users" value="{{ user.uid }}">{{ user.uid | DropboxUIDToUsername: project.slug }}</option>
 					</select>
 					<ul>
 						<li ng-if="taskEdit.users" ng-repeat="user in taskEdit.users">

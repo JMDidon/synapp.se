@@ -16,4 +16,11 @@ synappseApp.filter 'DropboxUIDToUsername', ['Projects', ( Projects ) ->
 ]
 
 
+# Comments dates to relative date
+# ------------------------------
+
+synappseApp.filter 'DateToRelativeDate', ->
+	( date ) ->
+		relativeDate date
+
 console.log 'Filters module loaded'

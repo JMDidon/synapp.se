@@ -398,7 +398,7 @@ synappseApp.controller('ProjectCtrl', function($scope, $routeParams, Projects) {
   $scope.createTask = function() {
     Projects.createTask($scope.project.id, {
       name: $scope.newTask.name,
-      author: 0,
+      author: DB.user.uid,
       status: $scope.newTask.status,
       priority: $scope.newTask.priority,
       start: $scope.newTask.start,
@@ -435,7 +435,7 @@ synappseApp.controller('TaskCtrl', function($scope, $routeParams, Projects) {
 synappseApp.controller('CommentCtrl', function($scope, $routeParams, Projects) {
   $scope.createComment = function() {
     Projects.createComment($scope.project.id, {
-      author: 0,
+      author: DB.user.uid,
       taskID: $scope.selectedTask.id,
       parentID: 0,
       text: $scope.newComment.text
@@ -608,9 +608,6 @@ synappseApp.factory('Projects', function() {
       })());
     }
     return factory.cache();
-  };
-  factory.createCommentsModule = function(projectID, taskID) {
-    return console.log('Comments Module created', projectID, taskID);
   };
   factory.createComment = function(projectID, comment) {
     var c, project, _i, _len;
@@ -791,4 +788,9 @@ synappseApp.filter('DropboxUIDToUsername', [
     };
   }
 ]);
+synappseApp.filter('DateToRelativeDate', function() {
+  return function(date) {
+    return relativeDate(date);
+  };
+});
 console.log('Filters module loaded');

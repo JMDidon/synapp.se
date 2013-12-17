@@ -78,9 +78,6 @@ synappseApp.factory 'Projects', ->
 	
 
 	# DISCUSSIONS
-	factory.createCommentsModule = ( projectID, taskID ) ->
-		console.log 'Comments Module created', projectID, taskID
-
 	factory.createComment = ( projectID, comment ) ->
 		console.log projectID, comment
 		for project in Projects when project.id is projectID

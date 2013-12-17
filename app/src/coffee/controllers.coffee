@@ -49,7 +49,7 @@ synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, Projects ) ->
 	$scope.createTask = ->
 		Projects.createTask $scope.project.id, 
 			name: $scope.newTask.name
-			author: 0
+			author: DB.user.uid
 			status: $scope.newTask.status
 			priority: $scope.newTask.priority
 			start: $scope.newTask.start
@@ -91,7 +91,7 @@ synappseApp.controller 'TaskCtrl', ( $scope, $routeParams, Projects ) ->
 synappseApp.controller 'CommentCtrl', ( $scope, $routeParams, Projects ) ->
 	$scope.createComment = ->
 		Projects.createComment $scope.project.id,
-			author: 0
+			author: DB.user.uid
 			taskID: $scope.selectedTask.id
 			parentID: 0
 			text: $scope.newComment.text
