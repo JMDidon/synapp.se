@@ -12,7 +12,7 @@
 		</form>
 		<ul class="comments-list">
 			<li ng-if="project.comments" ng-repeat="comment in project.comments" ng-controller="CommentCtrl">
-				<p><span class="bold">{{ comment.author }}</span> said at {{ comment.date }}:</p>
+				<p><span class="bold">{{ comment.author | DropboxUIDToUsername: project.slug }}</span> said at {{ comment.date }}:</p>
 				<p>{{ comment.text }}</p>
 				<a class="action-link" href="" ng-click="deleteComment()">Delete comment</a>
 			</li>

@@ -2,6 +2,7 @@
 #@prepros-append controllers.coffee
 #@prepros-append services.coffee
 #@prepros-append helpers.coffee
+#@prepros-append filters.coffee
 
 
 # App initialisation : get the various modules and include them
@@ -12,13 +13,14 @@ synappseApp = angular.module 'synappseApp', [
 	'synappseControllers'
 	'synappseServices'
 	'synappseHelpers'
+	'synappseFilters'
 ]
 
 
 # Routes
 # ------------------------------
 synappseApp.config ['$routeProvider',
-	($routeProvider) ->
+	( $routeProvider ) ->
 		$routeProvider.when( '/',
 			templateUrl: 'views/home.html'
 			controller: 'HomeCtrl'

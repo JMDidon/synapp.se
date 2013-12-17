@@ -1,12 +1,18 @@
 <section class="main-project">
 	<div class="task-list">
-		<h2 class="part-title">Task list :</h2>
+		<h2 class="part-title">Task list:</h2>
 		<p class="sync-buttons" ng-show="auth">
 			<a href="" ng-click="sync()">Sync projects</a>
 		</p>
 		
 		<ul class="view-mode">
-			<li class="task-item" ng-repeat="task in project.tasks" ng-controller="TaskCtrl" >
+			Filter by:
+			<select id="searchByUser" multiple ng-model="tasksFilter">
+				<option value="">All tasks</option>
+				<option ng-repeat="user in project.users" value="{{ user.uid }}">{{ user.uid | DropboxUIDToUsername: project.slug }}</option>
+			</select>
+			
+			<li class="task-item" ng-repeat="task in project.tasks | filter:{users:tasksFilter}" ng-controller="TaskCtrl" >
 				
 
 				<!-- Task display -->
@@ -29,7 +35,7 @@
 					</ul>
 					<ul>
 						<li>Assigned to :</li>
-						<li ng-repeat="user in task.users">{{ user }}</li>
+						<li ng-repeat="user in task.users">{{ user | DropboxUIDToUsername: project.slug }}</li>
 					</ul>
 					<a class="action-link" href="" ng-click="openCommentsFromTask()">Open a comment on this task</a>
 					<a class="action-link" href="" ng-click="toggleEditMode()">Edit task</a>
@@ -65,11 +71,11 @@
 		
 					<label for="taskUsers">Who to assign this task to ?</label>
 					<select multiple ng-Model="taskEdit.users">
-						<option ng-repeat="user in project.users" value="{{ user.name }}">{{ user.name }}</option>
+						<option ng-repeat="user in project.users" value="{{ user.uid }}">{{ user.name | DropboxUIDToUsername: project.slug }}</option>
 					</select>
 					<ul>
 						<li ng-if="taskEdit.users" ng-repeat="user in taskEdit.users">
-							[ <a href="" ng-click="removeUserToTask()">X</a> ] - {{ user }}
+							[ <a href="" ng-click="taskEdit.users.splice($index, 1)">X</a> ] - {{ user | DropboxUIDToUsername: project.slug }}
 						</li>
 					</ul>
 
@@ -121,11 +127,11 @@
 
 			<label for="taskUsers">Who to assign this task to ?</label>
 			<select multiple ng-Model="newTask.users">
-				<option ng-repeat="user in project.users" value="{{ user.name }}">{{ user.name }}</option>
+				<option ng-repeat="user in project.users" value="{{ user.uid }}">{{ user.uid | DropboxUIDToUsername: project.slug }}</option>
 			</select>
 			<ul>
 				<li ng-if="newTask.users" ng-repeat="user in newTask.users">
-					[ <a href="" ng-click="removeUserToTask()">X</a> ] - {{ user }}
+					[ <a href="" ng-click="newTask.users.splice($index, 1)">X</a> ] - {{ user | DropboxUIDToUsername: project.slug }}
 				</li>
 			</ul>
 

@@ -44,6 +44,12 @@ synappseApp.factory 'Projects', ->
 		
 	factory.findProject = ( slug ) -> 
 		( project for project in Projects when project.slug is slug )[0] || {}
+
+	# USERS
+	factory.getUserByUID = ( projectID, uid ) ->
+		for project in Projects when project.id is projectID
+			for user in project when user.uid is uid
+				return user
 		
 	# TASKS
 	factory.createTask = ( projectID, task ) ->

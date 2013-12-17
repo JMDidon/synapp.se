@@ -37,7 +37,7 @@ synappseApp.controller 'HomeCtrl', ( $scope, $routeParams, Projects ) ->
 # Project Controller
 # ------------------------------	
 synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, Projects ) ->
-	$scope.project = Projects.readProject $routeParams.params
+	$scope.project = Projects.findProject $routeParams.params
 	$scope.newTask = {}
 	$scope.newComment = {}
 	$scope.selectedTask = {}
@@ -61,12 +61,7 @@ synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, Projects ) ->
 	$scope.openComments = ( task ) ->
 		$scope.opened = true
 		$scope.selectedTask = task
-		Projects.createCommentsModule $scope.project.id, task.id
 		
-	$scope.getUserName = ( uid ) ->
-		result = ( user for user in $scope.project.users when user.uid is uid )[0]
-		return "Unnamed" if not result
-		if ~( user.name for user in $scope.project.users ).indexOf result then (result.substring 0, 2+result.indexOf ' ' )+'.' else result.substring 0, result.indexOf ' '
 		
 
 # Task Controller
