@@ -36,6 +36,7 @@ synappseApp.filter 'smartDate', ->
 	( date ) ->
 		months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 		days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+		date = new Date date
 		date = new Date date.getFullYear(), date.getMonth(), date.getDate()
 		now = new Date
 		now = new Date now.getFullYear(), now.getMonth(), now.getDate()

@@ -54,9 +54,9 @@ synappseApp.factory 'Projects', ->
 	# TASKS
 	factory.createTask = ( projectID, task ) ->
 		for project in Projects when project.id is projectID
-			task.id = generateID 2, ( t.id for t in project.tasks )
-			task.date = ( new Date ).getTime()
-			task.edit = ( new Date ).getTime()
+			task.id 	= generateID 2, ( t.id for t in project.tasks )
+			task.date 	= ( new Date ).getTime()
+			task.edit 	= ( new Date ).getTime()
 			project.tasks.push task
 		do factory.cache
 

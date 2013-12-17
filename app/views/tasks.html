@@ -22,8 +22,8 @@
 					<p class="task-id italic"># {{ task.id }}</p>
 					
 					<div class="task-dates">
-						Begin : {{ task.start }} <br/>
-						End : {{ task.end }}
+						Begin : {{ task.start | smartDate }} <br/>
+						End : {{ task.end | smartDate }}
 					</div>
 					
 					<p>Status : {{ task.status }}</p>
@@ -61,10 +61,10 @@
 					<input name="taskPriority" ng-Model="taskEdit.priority" type="checkbox">
 		
 					<label for="taskstart">Begin date :</label>
-					<input name="taskstart" ng-Model="taskEdit.start" type="text" value="{{ task.start }}">
+					<input name="taskstart" ng-Model="taskEdit.start" type="text" value="{{ task.start }}" placeholder="yyyy-mm-dd" pattern="^[0-9]{4}-(?:[0]?[0-9]{1}|10|11|12)-(?:[012]?[0-9]{1}|30|31)$">
 		
 					<label for="taskend">End date :</label>
-					<input name="taskend" ng-Model="taskEdit.end" type="text" value="{{ task.end }}">
+					<input name="taskend" ng-Model="taskEdit.end" type="text" value="{{ task.end }}" placeholder="yyyy-mm-dd" pattern="^[0-9]{4}-(?:[0]?[0-9]{1}|10|11|12)-(?:[012]?[0-9]{1}|30|31)$">
 					
 					<label for="taskTags">Tags (separate the differents tags with a coma (,) ):</label>
 					<input name="taskTags" ng-Model="taskEdit.tags" type="text" value="{{ task.tags }}">
@@ -109,10 +109,10 @@
 			<input name="taskPriority" ng-Model="newTask.priority" type="checkbox">
 
 			<label for="taskstart">Begin date :</label>
-			<input name="taskstart" ng-Model="newTask.start" type="text">
+			<input name="taskstart" ng-Model="newTask.start" type="text" placeholder="yyyy-mm-dd" pattern="^[0-9]{4}-(?:[0]?[0-9]{1}|10|11|12)-(?:[012]?[0-9]{1}|30|31)$">
 
 			<label for="taskend">End date :</label>
-			<input name="taskend" ng-Model="newTask.end" type="text">
+			<input name="taskend" ng-Model="newTask.end" type="text" placeholder="yyyy-mm-dd" pattern="^[0-9]{4}-(?:[0]?[0-9]{1}|10|11|12)-(?:[012]?[0-9]{1}|30|31)$">
 
 			<!--<div class="calendar-container">
 				<div class="calendar-header">
