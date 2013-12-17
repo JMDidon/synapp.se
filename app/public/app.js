@@ -458,9 +458,10 @@ synappseApp.controller('ProjectCtrl', function($scope, $routeParams, Projects) {
       }
       return _results;
     })()).indexOf(result)) {
-      result = (result.substring(0, 2 + result.indexOf(' '))) + '.';
+      return (result.substring(0, 2 + result.indexOf(' '))) + '.';
+    } else {
+      return result.substring(0, result.indexOf(' '));
     }
-    return result;
   };
 });
 

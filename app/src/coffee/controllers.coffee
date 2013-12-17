@@ -66,8 +66,7 @@ synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, Projects ) ->
 	$scope.getUserName = ( uid ) ->
 		result = ( user for user in $scope.project.users when user.uid is uid )[0]
 		return "Unnamed" if not result
-		result = (result.substring 0, 2+result.indexOf ' ' )+'.' if ~( user.name for user in $scope.project.users ).indexOf result
-		result
+		if ~( user.name for user in $scope.project.users ).indexOf result then (result.substring 0, 2+result.indexOf ' ' )+'.' else result.substring 0, result.indexOf ' '
 		
 
 # Task Controller
