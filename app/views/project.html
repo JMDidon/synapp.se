@@ -1,15 +1,4 @@
-<section class="main-project">
-	<h1 class="section-title">{{ project.name }}</h1>
-	<nav class="navbar">
-		<ul>
-			<li><a href="#/projects/{{ project.id }}/dashboard">Dashboard</a></li>
-			<li><a href="#/projects/{{ project.id }}/tasks">Tasks</a></li>
-			<li><a href="#/projects/{{ project.id }}/planning">Planning</a></li>
-			<li><a href="#/projects/{{ project.id }}/files">Files</a></li>
-			<li><a href="#/projects/{{ project.id }}/research">Research</a></li>
-		</ul>
-	</nav>
-	
-	<div ng-include src="'views/tasks.html'" class="main-section"></div>
-	<div ng-include src="'views/comments.html'" class="comments-section"></div>
+<section class="main-project">	
+	<div ng-include src="'views/tasks.html'" class="main-section"></div><!-- @Whitespace Fix
+	--><div ng-include src="'views/comments.html'" class="comments-section"></div>
 </section>

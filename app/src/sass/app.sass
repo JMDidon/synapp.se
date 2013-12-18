@@ -32,12 +32,21 @@ body
 /* -------------------- SASS Variables -------------------- */
 /* ------------------------------------------------------------------------------ */
 
+/* Grid units */
+$base: 1em
+$unit: 1.538em
+
+/* Colors */
 $white : #FFFFFF
 $black : #000000
 $grey  : #262626
-$violet: rgb(137, 30, 137)
-$lightgrey: #CCC
-$lightblue: #0AF
+$violet: #5C4975
+$lightviolet: rgba(168,138,198,0.4)
+$lightgrey	: rgba(160,158,162,0.35)
+$lightblue	: #0AF
+$darkgrey	: #020202
+$backgroundgrey: #F8F6F6
+$commentsBackground: #2F2F2F
 
 @mixin transitions($attribute, $duration)
 	-webkit-transition: $attribute $duration
@@ -76,15 +85,12 @@ $lightblue: #0AF
 /* ------------------------------------------------------------------------------ */
 
 body
-	// height: 100%
 	font-family: "Lato", sans-serif
 	color: $grey
 
-input, textarea, select 
-	@include borders(3px, $lightgrey)
-	display: block
-	max-width: 300px
+input, textarea, select
 	padding: 0.5em
+	border: 1px solid $lightgrey
 	font-family: "Lato", sans-serif
 
 ul
@@ -102,18 +108,23 @@ a
 		@include transitions(all, 0.5s)
 
 h1
-	display: inline
 	font-size: 2em
 	font-weight: 700
 
 h2
-	display: inline
+	display: inline-block
+	margin-bottom: $base
 	font-size: 1.66em
 	font-weight: 300
 
 h3
 	font-size: 1.5em
 	font-weight: 700
+
+.navbar
+	display: inline-block
+	ul li
+		display: inline
 
 .bold
 	font-weight: 700
@@ -128,32 +139,25 @@ h3
 /* -------------------- Wrappers -------------------- */
 /* ------------------------------------------------------------------------------ */
 
-.main-project
-	display: inline-block
-	width: 100%
-	vertical-align: top
-
-.comments-module-wrapper
-	display: inline-block
-	float: right
-	width: 100%
-	background: $violet
-	color: $white
-	text-align: right
-	vertical-align: top
-
-.wrapper
-	padding: 2% 5%
-
+.home-wrapper
+	margin: 0 auto
+	text-align: center
+	
 .main-section
-	display: inline-block
-	width: (99%*2/3)
-	vertical-align: top
-
+	width: 60%
+	height: 100%
+	
 .comments-section
-	display: inline-block
-	width: (99%/3)
-	vertical-align: top
+	position: absolute
+	top: 4*$unit
+	bottom: 0
+	right: 0
+	width: 40%	
+	background: $commentsBackground
+	color: $white
+	
+.wrapper
+	padding: $base $unit
 
 
 /* -------------------- Header -------------------- */
@@ -161,91 +165,175 @@ h3
 
 .header
 	width: 100%
-	padding: 2% 5%
-	background: $grey
-	h2
-		color: $white
+	height: 4*$unit
+	background: $violet
+	color: $white
+	line-height: 4*$unit
+.header-main
+	float: left
+	width: (3/5)*100%
+	height: 100%
+.header-profile
+	float: right
+	width: (2/5)*100%
+	height: 100%
+	background: $lightviolet
+.logo
+	display: inline-block
+	padding: 0 $unit
+	color: white
+	font-size: 2em
+	font-weight: 700
+.main-title
+	display: inline-block
+	margin-right: 3*$unit
 	a
 		color: $white
+		font-weight: 100
+		opacity: 0.37
 		@include transitions(all, 0.3s)
 		&:hover
-			color: red
+			opacity: 1
 			@include transitions(all, 0.5s)
-
-.navbar
+.profile-avatar
+	padding: 0 $unit
+.profile-link
+	color: $white
+	padding: 0 $unit
+	@include transitions(all, 0.3s)
+	&:hover
+		opacity: 0.57
+		@include transitions(all, 0.5s)
+.profile-username
+	color: $white
+	font-size: 1.2em
+	text-shadow: 0 2px 1px $violet
+	@include transitions(all, 0.3s)
+	&:hover
+		opacity: 0.57
+		@include transitions(all, 0.5s)
+.main-nav
 	ul li
-		display: inline-block
 		&::after
 			content: "   -   "
 		&:last-child::after
 			content: ""
+	a
+		color: white
+			
 
+
+/* -------------------- Home page -------------------- */
+/* ------------------------------------------------------------------------------ */
+
+.home-title
+	margin: $unit 0
+	font-size: 3*$unit
+	text-align: center
+	
+.home-creation
+	display: block
+	margin: $unit auto 2*$unit auto
+	width: 10*$unit
+	input
+		display: inline-block
+		width: 100%
+		text-align: center
+
+	
+	
 
 /* -------------------- Project page -------------------- */
 /* ------------------------------------------------------------------------------ */
-
-.main-project
-	.section-title
-		display: block
-		margin: 1em 0
-		font-weight: 300
-
-	.part-title
-		display: block
-		margin: 0.6em 0
-		font-size: 1.2em
-		font-weight: 700
-
-	.sync-buttons
-		margin: 1em 0
+	
+.project-nav
+	width: 100%
+	padding-top: 0
+	padding-bottom: 0
+	ul
+		height: 4*$base
+	li
+		display: inline-block
+		margin-right: 2*$unit
+		line-height: 4*$base
+		&:last-child
+			margin-right: 0
 		a
-			color: red
+			position: relative
+			display: block
+			height: 100%
+			color: rgba(168,138,198,1)
+			text-transform: uppercase
 			&:hover
-				color: $black
+				color: $violet
+		&.active a
+			color: $violet
+		&.active a:after
+			content: ""
+			position: absolute
+			bottom: 0
+			left: 0
+			right: 0
+			height: 2px
+			background: $violet
+	
+.task-create
+	border-top: 1px solid $lightgrey
+	border-bottom: 1px solid $lightgrey
+	background: $backgroundgrey
 
-	.task-list
-		display: inline-block
-		width: 49.9%
-		padding: 0 1em
-		.task-title
-			display: inline-block
-		.task-description
-			margin: 1em
-		.task-dateCreation
-			display: block
-			float: right
-		.task-item
-			padding: 1em
-			border-bottom: 1px solid $black
-		.task-tag-list
-			padding: 1em 2em
-			list-style-type: katakana
-			li
-				display: inline-block
-				margin-right: 2em
-				&:last-child
-					margin: 0
-		.action-link
-			display: block
-			&:before
-				content: "× - "
+.task-item
+	border-bottom: 1px solid $lightgrey
+	&:last-child
+		border-bottom: none
 
-	.task-create
+.task-title
+	display: inline-block
+	margin-right: $unit
+	font-size: 1.2em
+	font-weight: 400
+
+.task-tag-list
+	display: inline
+	li
 		display: inline-block
-		max-width: 49.9%
-		padding: 0 1em
-		vertical-align: top
+		margin-right: $base
+		padding: 0.2em
+		background: $lightgrey
+		@include borders(2px, $lightgrey)
+		a
+			color: white
+			font-size: 0.8em
+			font-weight: 300
+	&:last-child
+		margin: 0
+
+.task-second-line
+	color: $lightgrey
+	font-size: 0.8em
+
+.action-link
+	display: block
+	&:before
+		content: "X - "
 
 
 /* -------------------- Comments module -------------------- */
 /* ------------------------------------------------------------------------------ */
 
-.comments-module
-	width: 100%
+.comments-title
+	height: 4*$base
+	padding-top: 0
+	padding-bottom: 0
+	h3
+		display: inline
+		line-height: 4*$base
+		font-size: 1em
+		font-weight: 400
+		text-shadow: 0 2px 1px $black
 
-.title-wrapper
-	width: 100%
-	border-bottom: solid white 1px
+.comments-module
+	height: 100%
 	
 .input-comments
 	display: block
@@ -254,10 +342,8 @@ h3
 
 .comments-list
 	display: block
-	margin: 1em 0
+	background: $darkgrey
 	li
-		margin: 0 0 1em 0
-		padding: 1em 0
 		border-bottom: 1px solid $white
 		.action-link
 			color: white

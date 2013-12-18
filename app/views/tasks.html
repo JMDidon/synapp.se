@@ -1,141 +1,132 @@
-<section class="main-project">
-	<div class="task-list">
-		<h2 class="part-title">Task list:</h2>
-		<p class="sync-buttons" ng-show="auth">
-			<a href="" ng-click="sync()">Sync projects</a>
-		</p>
-		
-		<ul class="view-mode">
-			Filter by:
-			<select id="searchByUser" multiple ng-model="tasksFilter">
-				<option value="">All tasks</option>
-				<option ng-repeat="user in project.users" value="{{ user.uid }}">{{ user.uid | DropboxUIDToUsername: project.slug }}</option>
-			</select>
+<!-- Project nav -->
+<nav class="wrapper project-nav">
+	<ul>
+		<li><a href="#/projects/{{ project.id }}/dashboard">Dashboard</a></li>
+		<li class="active"><a href="#/projects/{{ project.id }}/tasks">Tasks</a></li>
+		<li><a href="#/projects/{{ project.id }}/planning">Planning</a></li>
+		<li><a href="#/projects/{{ project.id }}/files">Files</a></li>
+		<li><a href="#/projects/{{ project.id }}/research">Research</a></li>
+	</ul>
+</nav>
 
-			<li class="task-item" ng-repeat="task in project.tasks | filter:{users:tasksFilter}" ng-controller="TaskCtrl" >
-				
+<!-- Create task : form -->
+<div class="wrapper task-create">
+	<h2>Add a task :</h2>
+	<form ng-submit="createTask()" class="input-text">
+		<label for="taskName">Task name :</label>
+		<input name="taskName" ng-Model="newTask.name" type="text"><br/>
 
-				<!-- Task display -->
-				<div ng-hide="edit_mode">
+		<label for="taskStatus">Task status :</label>
+		<select name="taskStatus" ng-Model="newTask.status">
+			<option ng-selected="true">To do</option>
+			<option>Started</option>
+			<option>Advanced</option>
+			<option>Done</option>
+			<option>Verified (archived)</option>
+		</select><br/>
+
+		<label for="taskPriority">Is this task a priority ?</label>
+		<input name="taskPriority" ng-Model="newTask.priority" type="checkbox"><br/>
+
+		<label for="taskstart">Begin date :</label>
+		<input name="taskstart" ng-Model="newTask.start" type="text" placeholder="yyyy-mm-dd" pattern="^[0-9]{4}-(?:[0]?[0-9]{1}|10|11|12)-(?:[012]?[0-9]{1}|30|31)$"><br/>
+
+		<label for="taskend">End date :</label>
+		<input name="taskend" ng-Model="newTask.end" type="text" placeholder="yyyy-mm-dd" pattern="^[0-9]{4}-(?:[0]?[0-9]{1}|10|11|12)-(?:[012]?[0-9]{1}|30|31)$"><br/>
+			
+		<label for="taskTags">Tags (separate the differents tags with a coma (,) ):</label>
+		<input name="taskTags" ng-Model="newTask.tags" type="text"><br/>
+
+		<label for="taskUsers">Who to assign this task to ?</label>
+		<select multiple ng-Model="newTask.users">
+			<option ng-repeat="user in project.users" value="{{ user.uid }}">{{ user.uid | DropboxUIDToUsername: project.slug }}</option>
+		</select><br/>
+		<ul>
+			<li ng-if="newTask.users" ng-repeat="user in newTask.users">
+				[ <a href="" ng-click="newTask.users.splice($index, 1)">X</a> ] - {{ user | DropboxUIDToUsername: project.slug }}
+			</li>
+		</ul>
+
+		<input type="submit" value="Add the new task">
+	</form>
+	
+	<span>Filter by :</span>
+	<select id="searchByUser" multiple ng-model="tasksFilter">
+		<option value="">All tasks</option>
+		<option ng-repeat="user in project.users" value="{{ user.uid }}">{{ user.uid | DropboxUIDToUsername: project.slug }}</option>
+	</select>
+</div>
+
+<!-- Task display -->
+<div class="wrapper task-display">
+	<ul class="view-mode">
+		<li class="wrapper task-item" ng-repeat="task in project.tasks | filter:{users:tasksFilter} | orderBy: 'task.priority':true" ng-controller="TaskCtrl" >
+			<!-- Task display (Hide on edit) -->
+			<div ng-show="!edit_mode">	
+				<!-- First line -->
+				<div class="task-left">
 					<h3 class="task-title">{{ task.name }}</h3>
-					<time class="task-dateCreation italic">{{ task.dateCreation }}</time>
-					<p class="task-id italic"># {{ task.id }}</p>
-					
-					<div class="task-dates">
-						Begin : {{ task.start | smartDate }} <br/>
-						End : {{ task.end | smartDate }}
-					</div>
-					
-					<p>Status : {{ task.status }}</p>
-					<p class="red" ng-show="{{ task.priority }}">This task is a priority !</p>
 					<ul class="task-tag-list">
 						<li ng-repeat="tag in task.tags">
 							<a href="">{{ tag }}</a>
 						</li>
 					</ul>
-					<ul>
-						<li>Assigned to :</li>
-						<li ng-repeat="user in task.users">{{ user | DropboxUIDToUsername: project.slug }}</li>
-					</ul>
-					<a class="action-link" href="" ng-click="openCommentsFromTask()">Open a comment on this task</a>
-					<a class="action-link" href="" ng-click="toggleEditMode()">Edit task</a>
-					<a class="action-link" href="" ng-click="deleteTask()">Delete task</a>
+					<time class="task-dateCreation italic">{{ task.dateCreation }}</time>
 				</div>
-			
 				
-				<!-- Edit display -->
-				<div ng-show="edit_mode">
-					<label for="taskName">Task name : ({{ task.name }})</label>
-					<input name="taskName" ng-Model="taskEdit.name" type="text">
-		
-					<label for="taskStatus">Task status :</label>
-					<select name="taskStatus" ng-Model="taskEdit.status">
-						<option ng-selected="true">To do</option>
-						<option>Started</option>
-						<option>Advanced</option>
-						<option>Done</option>
-						<option>Verified (archived)</option>
-					</select>
-		
-					<label for="taskPriority">Is this task a priority ?</label>
-					<input name="taskPriority" ng-Model="taskEdit.priority" type="checkbox">
-		
-					<label for="taskstart">Begin date :</label>
-					<input name="taskstart" ng-Model="taskEdit.start" type="text" value="{{ task.start }}" placeholder="yyyy-mm-dd" pattern="^[0-9]{4}-(?:[0]?[0-9]{1}|10|11|12)-(?:[012]?[0-9]{1}|30|31)$">
-		
-					<label for="taskend">End date :</label>
-					<input name="taskend" ng-Model="taskEdit.end" type="text" value="{{ task.end }}" placeholder="yyyy-mm-dd" pattern="^[0-9]{4}-(?:[0]?[0-9]{1}|10|11|12)-(?:[012]?[0-9]{1}|30|31)$">
-					
-					<label for="taskTags">Tags (separate the differents tags with a coma (,) ):</label>
-					<input name="taskTags" ng-Model="taskEdit.tags" type="text" value="{{ task.tags }}">
-		
-					<label for="taskUsers">Who to assign this task to ?</label>
-					<select multiple ng-Model="taskEdit.users">
-						<option ng-repeat="user in project.users" value="{{ user.uid }}">{{ user.uid | DropboxUIDToUsername: project.slug }}</option>
-					</select>
-					<ul>
-						<li ng-if="taskEdit.users" ng-repeat="user in taskEdit.users">
-							[ <a href="" ng-click="taskEdit.users.splice($index, 1)">X</a> ] - {{ user | DropboxUIDToUsername: project.slug }}
-						</li>
-					</ul>
-
-					<a class="action-link" href="" ng-click="toggleEditMode()">Cancel edit</a>
-					<a class="action-link" href="" ng-click="deleteTask()">Delete task</a>
-					
-					<input type="submit" value="Update task" ng-click="editTask()">
+				<!-- Second line -->
+				<div class="task-second-line">
+					Assigned to <span ng-repeat="user in task.users" class="task-users bold">{{ user | DropboxUIDToUsername: project.slug }}, </span> due to <span class="bold">{{ task.end | smartDate }}</span>
 				</div>
-			</li>
-		</ul>
-
-	</div>
-
-	<div class="task-create">
-		<h2 class="part-title">Add a task :</h2>
-
-		<form ng-submit="createTask()">
-			<label for="taskName">Task name :</label>
-			<input name="taskName" ng-Model="newTask.name" type="text">
-
-			<label for="taskStatus">Task status :</label>
-			<select name="taskStatus" ng-Model="newTask.status">
-				<option ng-selected="true">To do</option>
-				<option>Started</option>
-				<option>Advanced</option>
-				<option>Done</option>
-				<option>Verified (archived)</option>
-			</select>
-
-			<label for="taskPriority">Is this task a priority ?</label>
-			<input name="taskPriority" ng-Model="newTask.priority" type="checkbox">
-
-			<label for="taskstart">Begin date :</label>
-			<input name="taskstart" ng-Model="newTask.start" type="text" placeholder="yyyy-mm-dd" pattern="^[0-9]{4}-(?:[0]?[0-9]{1}|10|11|12)-(?:[012]?[0-9]{1}|30|31)$">
-
-			<label for="taskend">End date :</label>
-			<input name="taskend" ng-Model="newTask.end" type="text" placeholder="yyyy-mm-dd" pattern="^[0-9]{4}-(?:[0]?[0-9]{1}|10|11|12)-(?:[012]?[0-9]{1}|30|31)$">
-
-			<!--<div class="calendar-container">
-				<div class="calendar-header">
-					<a class="calendar-arrow">< </a>
-					<h3 class="calendar-month" >November</h3>
-					<a class="calendar-arrow"> ></a>
-				</div>
-			</div>-->
+					
+				<p>Status : {{ task.status }}</p>
+				<p class="red" ng-show="{{ task.priority }}">This task is a priority !</p>
+				<a class="action-link" href="" ng-click="openCommentsFromTask()">Open a comment on this task</a>
+				<a class="action-link" href="" ng-click="toggleEditMode()">Edit task</a>
+				<a class="action-link" href="" ng-click="deleteTask()">Delete task</a>
+			</div>
 			
-			<label for="taskTags">Tags (separate the differents tags with a coma (,) ):</label>
-			<input name="taskTags" ng-Model="newTask.tags" type="text">
-
-			<label for="taskUsers">Who to assign this task to ?</label>
-			<select multiple ng-Model="newTask.users">
-				<option ng-repeat="user in project.users" value="{{ user.uid }}">{{ user.uid | DropboxUIDToUsername: project.slug }}</option>
-			</select>
-			<ul>
-				<li ng-if="newTask.users" ng-repeat="user in newTask.users">
-					[ <a href="" ng-click="newTask.users.splice($index, 1)">X</a> ] - {{ user | DropboxUIDToUsername: project.slug }}
-				</li>
-			</ul>
-
-			<input type="submit" value="Add the new task">
-		</form>
-	</div>
-</section>
+			<!-- Task Edit -->
+			<div ng-show="edit_mode">
+				<label for="taskName">Task name : ({{ task.name }})</label><br/>
+				<input name="taskName" ng-Model="taskEdit.name" type="text"><br/><br/>
+					
+				<label for="taskStatus">Task status :</label><br/>
+				<select name="taskStatus" ng-Model="taskEdit.status">
+					<option ng-selected="true">To do</option>
+					<option>Started</option>
+					<option>Advanced</option>
+					<option>Done</option>
+					<option>Verified (archived)</option>
+				</select><br/><br/>
+					
+				<label for="taskPriority">Is this task a priority ?</label>
+				<input name="taskPriority" ng-Model="taskEdit.priority" type="checkbox"><br/><br/>
+					
+				<label for="taskstart">Begin date :</label><br/>
+				<input name="taskstart" ng-Model="taskEdit.start" type="text" value="{{ task.start }}" placeholder="yyyy-mm-dd" pattern="^[0-9]{4}-(?:[0]?[0-9]{1}|10|11|12)-(?:[012]?[0-9]{1}|30|31)$"><br/><br/>
+					
+				<label for="taskend">End date :</label><br/>
+				<input name="taskend" ng-Model="taskEdit.end" type="text" value="{{ task.end }}" placeholder="yyyy-mm-dd" pattern="^[0-9]{4}-(?:[0]?[0-9]{1}|10|11|12)-(?:[012]?[0-9]{1}|30|31)$"><br/><br/>
+								
+				<label for="taskTags">Tags (separate the differents tags with a coma (,) ):</label><br/>
+				<input name="taskTags" ng-Model="taskEdit.tags" type="text" value="{{ task.tags }}"><br/><br/>
+					
+				<label for="taskUsers">Who to assign this task to ?</label><br/>
+				<select multiple ng-Model="taskEdit.users">
+					<option ng-repeat="user in project.users" value="{{ user.uid }}">{{ user.uid | DropboxUIDToUsername: project.slug }}</option>
+				</select><br/>
+				<ul>
+					<li ng-if="taskEdit.users" ng-repeat="user in taskEdit.users">
+						[ <a href="" ng-click="taskEdit.users.splice($index, 1)">X</a> ] - {{ user | DropboxUIDToUsername: project.slug }}
+					</li>
+				</ul><br/>
+			
+				<a class="action-link" href="" ng-click="toggleEditMode()">Cancel edit</a>
+				<a class="action-link" href="" ng-click="deleteTask()">Delete task</a>
+								
+				<input type="submit" value="Update task" ng-click="editTask()">
+			</div>
+		</li>
+	</ul>
+</div>
