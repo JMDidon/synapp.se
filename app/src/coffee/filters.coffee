@@ -28,7 +28,7 @@ synappseApp.filter 'relativeDate', ->
 			when delta >= 60*60*2 and delta < 60*60*24 then ( Math.floor delta/(60*60) )+' hours ago'
 			when delta >= 60*60*24 and delta < 60*60*24*2 then 'yesterday'
 			when delta >= 60*60*24 and delta < 60*60*24*30 then ( Math.floor delta/(60*60*24) )+' days ago'
-			else smartDate date
+			else 'on '+smartDate date
 
 
 synappseApp.filter 'smartDate', ->

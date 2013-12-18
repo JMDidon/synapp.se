@@ -224,7 +224,7 @@ DB = {
     });
   },
   updateProject: function(local, distant) {
-    var comment, item, task, u, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _m, _n, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6;
+    var comment, task, u, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2, _ref3, _ref4;
     local.folder = distant.folder;
     local.users = (function() {
       var _i, _len, _ref, _results;
@@ -256,60 +256,54 @@ DB = {
     } else {
       local.users.push(this.user);
     }
-    _ref2 = this.solveConflicts(local.tasks, distant.tasks, local.deletedTasks);
-    for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
-      item = _ref2[_j];
-      local.tasks.push(item);
-    }
-    _ref3 = this.solveConflicts(local.comments, distant.comments, local.deletedComments);
-    for (_k = 0, _len2 = _ref3.length; _k < _len2; _k++) {
-      item = _ref3[_k];
-      local.comments.push(item);
-    }
+    local.tasks = this.solveConflicts(local.tasks, distant.tasks, local.deletedTasks);
+    local.comments = this.solveConflicts(local.comments, distant.comments, local.deletedComments);
     local.deletedTasks = [];
     local.deletedComments = [];
-    _ref4 = local.comments;
-    for (_l = 0, _len3 = _ref4.length; _l < _len3; _l++) {
-      comment = _ref4[_l];
-      _ref5 = local.tasks;
-      for (_m = 0, _len4 = _ref5.length; _m < _len4; _m++) {
-        task = _ref5[_m];
+    _ref2 = local.comments;
+    for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
+      comment = _ref2[_j];
+      _ref3 = local.tasks;
+      for (_k = 0, _len2 = _ref3.length; _k < _len2; _k++) {
+        task = _ref3[_k];
         if (task.oldID === comment.taskID) {
           comment.taskID = task.id;
         }
       }
     }
-    _ref6 = local.tasks;
-    for (_n = 0, _len5 = _ref6.length; _n < _len5; _n++) {
-      task = _ref6[_n];
+    _ref4 = local.tasks;
+    for (_l = 0, _len3 = _ref4.length; _l < _len3; _l++) {
+      task = _ref4[_l];
       delete task.oldID;
     }
     return this.saveProject(local);
   },
   solveConflicts: function(localItems, distantItems, deletedItems) {
-    var distantIDs, distantItem, item, k, localIDs, localItem, v, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2, _results;
+    var distant, distantIDs, distants, i, item, k, local, localIDs, locals, v, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2;
+    locals = angular.copy(localItems);
+    distants = angular.copy(distantItems);
     distantIDs = (function() {
       var _i, _len, _results;
       _results = [];
-      for (_i = 0, _len = distantItems.length; _i < _len; _i++) {
-        item = distantItems[_i];
+      for (_i = 0, _len = distants.length; _i < _len; _i++) {
+        item = distants[_i];
         _results.push(item.id);
       }
       return _results;
     })();
-    localItems = (function() {
+    locals = (function() {
       var _i, _len, _ref, _results;
       _results = [];
-      for (_i = 0, _len = localItems.length; _i < _len; _i++) {
-        item = localItems[_i];
-        if ((item.id.length === 2) || (_ref = item.id, __indexOf.call(distantIDs, _ref) >= 0)) {
+      for (i = _i = 0, _len = locals.length; _i < _len; i = ++_i) {
+        item = locals[i];
+        if (item.id.length === 2 || (_ref = item.id, __indexOf.call(distantIDs, _ref) >= 0)) {
           _results.push(item);
         }
       }
       return _results;
     })();
-    for (_i = 0, _len = localItems.length; _i < _len; _i++) {
-      item = localItems[_i];
+    for (_i = 0, _len = locals.length; _i < _len; _i++) {
+      item = locals[_i];
       if (!(item.id.length === 2)) {
         continue;
       }
@@ -317,16 +311,16 @@ DB = {
       item.author = DB.user.uid;
       item.id = generateID(3, distantIDs);
     }
-    for (_j = 0, _len1 = localItems.length; _j < _len1; _j++) {
-      localItem = localItems[_j];
+    for (_j = 0, _len1 = locals.length; _j < _len1; _j++) {
+      local = locals[_j];
       if (item.id.length === 3 && (_ref = item.id, __indexOf.call(distantIDs, _ref) >= 0)) {
-        for (_k = 0, _len2 = distantItems.length; _k < _len2; _k++) {
-          distantItem = distantItems[_k];
-          if (localItem.id === distantItem.id) {
-            if (localItem.edit <= distantItem.edit) {
-              for (k in distantItem) {
-                v = distantItem[k];
-                localItem[k] = v;
+        for (_k = 0, _len2 = distants.length; _k < _len2; _k++) {
+          distant = distants[_k];
+          if (local.id === distant.id) {
+            if (local.edit <= distant.edit) {
+              for (k in distant) {
+                v = distant[k];
+                local[k] = v;
               }
             }
           }
@@ -336,20 +330,19 @@ DB = {
     localIDs = (function() {
       var _l, _len3, _results;
       _results = [];
-      for (_l = 0, _len3 = localItems.length; _l < _len3; _l++) {
-        item = localItems[_l];
+      for (_l = 0, _len3 = locals.length; _l < _len3; _l++) {
+        item = locals[_l];
         _results.push(item.id);
       }
       return _results;
     })();
-    _results = [];
-    for (_l = 0, _len3 = distantItems.length; _l < _len3; _l++) {
-      item = distantItems[_l];
+    for (_l = 0, _len3 = distants.length; _l < _len3; _l++) {
+      item = distants[_l];
       if ((_ref1 = item.id, __indexOf.call(localIDs, _ref1) < 0) && (_ref2 = item.id, __indexOf.call(deletedItems, _ref2) < 0)) {
-        _results.push(item);
+        locals.push(item);
       }
     }
-    return _results;
+    return locals;
   }
 };
 console.log('Dropbox module loaded');
@@ -755,7 +748,7 @@ synappseApp.filter('relativeDate', function() {
       case !(delta >= 60 * 60 * 24 && delta < 60 * 60 * 24 * 30):
         return (Math.floor(delta / (60 * 60 * 24))) + ' days ago';
       default:
-        return smartDate(date);
+        return 'on ' + smartDate(date);
     }
   };
 });
