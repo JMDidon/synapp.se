@@ -144,7 +144,7 @@ DB =
 		distantIDs = ( item.id for item in distantItems )
 		
 		# delete local items missing in distant
-		localItems = ( item for item in localItems when item.id.length is 2 or item.id in distantIDs )
+		localItems = ( item for item, i in localItems when item.id.length is 2 or item.id in distantIDs )
 		
 		# add local items missing in distant
 		for item in localItems when item.id.length is 2
