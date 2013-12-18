@@ -11,6 +11,7 @@ synappseApp.controller 'MainCtrl', ( $scope, Projects ) ->
 	
 	$scope.login = -> 
 		$scope.auth = true
+		$scope.connectedUser = DB.user.name
 		do $scope.$apply
 		
 	DB.auth $scope.login
