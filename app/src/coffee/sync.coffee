@@ -121,8 +121,8 @@ DB =
 		else local.users.push @user
 
 		# tasks & comments
-		@solveConflicts local.tasks, distant.tasks, local.deletedTasks
-		@solveConflicts local.comments, distant.comments, local.deletedComments
+		local.tasks.push item for item in @solveConflicts local.tasks, distant.tasks, local.deletedTasks
+		local.comments.push item for item in @solveConflicts local.comments, distant.comments, local.deletedComments
 		local.deletedTasks = []
 		local.deletedComments = []
 		
@@ -144,7 +144,7 @@ DB =
 		distantIDs = ( item.id for item in distantItems )
 		
 		# delete local items missing in distant
-		localItems = ( item for item, i in localItems when item.id.length is 2 or item.id in distantIDs )
+		localItems = ( item for item in localItems when ( item.id.length is 2 ) or ( item.id in distantIDs ) )
 		
 		# add local items missing in distant
 		for item in localItems when item.id.length is 2
@@ -152,15 +152,14 @@ DB =
 			item.author = DB.user.uid
 			item.id = generateID 3, distantIDs
 		
-		# add distant items missing in local
-		localIDs = ( item.id for item in localItems )
-		localItems.push item for item in distantItems when item.id not in localIDs and item.id not in deletedItems
-		
 		# edit local items from distant
 		for localItem in localItems when item.id.length is 3 and item.id in distantIDs
 			for distantItem in distantItems when localItem.id is distantItem.id
 				( localItem[k] = v for k, v of distantItem ) if localItem.edit <= distantItem.edit
 		
+		# return distant items missing in local
+		localIDs = ( item.id for item in localItems )
+		item for item in distantItems when item.id not in localIDs and item.id not in deletedItems
 		
 		
 

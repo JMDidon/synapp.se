@@ -231,7 +231,7 @@ DB = {
     });
   },
   updateProject: function(local, distant) {
-    var comment, task, u, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2, _ref3, _ref4;
+    var comment, item, task, u, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _m, _n, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6;
     local.folder = distant.folder;
     local.users = (function() {
       var _i, _len, _ref, _results;
@@ -263,30 +263,38 @@ DB = {
     } else {
       local.users.push(this.user);
     }
-    this.solveConflicts(local.tasks, distant.tasks, local.deletedTasks);
-    this.solveConflicts(local.comments, distant.comments, local.deletedComments);
+    _ref2 = this.solveConflicts(local.tasks, distant.tasks, local.deletedTasks);
+    for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
+      item = _ref2[_j];
+      local.tasks.push(item);
+    }
+    _ref3 = this.solveConflicts(local.comments, distant.comments, local.deletedComments);
+    for (_k = 0, _len2 = _ref3.length; _k < _len2; _k++) {
+      item = _ref3[_k];
+      local.comments.push(item);
+    }
     local.deletedTasks = [];
     local.deletedComments = [];
-    _ref2 = local.comments;
-    for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
-      comment = _ref2[_j];
-      _ref3 = local.tasks;
-      for (_k = 0, _len2 = _ref3.length; _k < _len2; _k++) {
-        task = _ref3[_k];
+    _ref4 = local.comments;
+    for (_l = 0, _len3 = _ref4.length; _l < _len3; _l++) {
+      comment = _ref4[_l];
+      _ref5 = local.tasks;
+      for (_m = 0, _len4 = _ref5.length; _m < _len4; _m++) {
+        task = _ref5[_m];
         if (task.oldID === comment.taskID) {
           comment.taskID = task.id;
         }
       }
     }
-    _ref4 = local.tasks;
-    for (_l = 0, _len3 = _ref4.length; _l < _len3; _l++) {
-      task = _ref4[_l];
+    _ref6 = local.tasks;
+    for (_n = 0, _len5 = _ref6.length; _n < _len5; _n++) {
+      task = _ref6[_n];
       delete task.oldID;
     }
     return this.saveProject(local);
   },
   solveConflicts: function(localItems, distantItems, deletedItems) {
-    var distantIDs, distantItem, i, item, k, localIDs, localItem, v, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _results;
+    var distantIDs, distantItem, item, k, localIDs, localItem, v, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2, _results;
     distantIDs = (function() {
       var _i, _len, _results;
       _results = [];
@@ -299,9 +307,9 @@ DB = {
     localItems = (function() {
       var _i, _len, _ref, _results;
       _results = [];
-      for (i = _i = 0, _len = localItems.length; _i < _len; i = ++_i) {
-        item = localItems[i];
-        if (item.id.length === 2 || (_ref = item.id, __indexOf.call(distantIDs, _ref) >= 0)) {
+      for (_i = 0, _len = localItems.length; _i < _len; _i++) {
+        item = localItems[_i];
+        if ((item.id.length === 2) || (_ref = item.id, __indexOf.call(distantIDs, _ref) >= 0)) {
           _results.push(item);
         }
       }
@@ -316,48 +324,36 @@ DB = {
       item.author = DB.user.uid;
       item.id = generateID(3, distantIDs);
     }
+    for (_j = 0, _len1 = localItems.length; _j < _len1; _j++) {
+      localItem = localItems[_j];
+      if (item.id.length === 3 && (_ref = item.id, __indexOf.call(distantIDs, _ref) >= 0)) {
+        for (_k = 0, _len2 = distantItems.length; _k < _len2; _k++) {
+          distantItem = distantItems[_k];
+          if (localItem.id === distantItem.id) {
+            if (localItem.edit <= distantItem.edit) {
+              for (k in distantItem) {
+                v = distantItem[k];
+                localItem[k] = v;
+              }
+            }
+          }
+        }
+      }
+    }
     localIDs = (function() {
-      var _j, _len1, _results;
+      var _l, _len3, _results;
       _results = [];
-      for (_j = 0, _len1 = localItems.length; _j < _len1; _j++) {
-        item = localItems[_j];
+      for (_l = 0, _len3 = localItems.length; _l < _len3; _l++) {
+        item = localItems[_l];
         _results.push(item.id);
       }
       return _results;
     })();
-    for (_j = 0, _len1 = distantItems.length; _j < _len1; _j++) {
-      item = distantItems[_j];
-      if ((_ref = item.id, __indexOf.call(localIDs, _ref) < 0) && (_ref1 = item.id, __indexOf.call(deletedItems, _ref1) < 0)) {
-        localItems.push(item);
-      }
-    }
     _results = [];
-    for (_k = 0, _len2 = localItems.length; _k < _len2; _k++) {
-      localItem = localItems[_k];
-      if (item.id.length === 3 && (_ref2 = item.id, __indexOf.call(distantIDs, _ref2) >= 0)) {
-        _results.push((function() {
-          var _l, _len3, _results1;
-          _results1 = [];
-          for (_l = 0, _len3 = distantItems.length; _l < _len3; _l++) {
-            distantItem = distantItems[_l];
-            if (localItem.id === distantItem.id) {
-              if (localItem.edit <= distantItem.edit) {
-                _results1.push((function() {
-                  var _results2;
-                  _results2 = [];
-                  for (k in distantItem) {
-                    v = distantItem[k];
-                    _results2.push(localItem[k] = v);
-                  }
-                  return _results2;
-                })());
-              } else {
-                _results1.push(void 0);
-              }
-            }
-          }
-          return _results1;
-        })());
+    for (_l = 0, _len3 = distantItems.length; _l < _len3; _l++) {
+      item = distantItems[_l];
+      if ((_ref1 = item.id, __indexOf.call(localIDs, _ref1) < 0) && (_ref2 = item.id, __indexOf.call(deletedItems, _ref2) < 0)) {
+        _results.push(item);
       }
     }
     return _results;
