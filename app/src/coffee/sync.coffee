@@ -141,28 +141,26 @@ DB =
 	# Solve conflicts (add, edit, delete)
 	# ---
 	solveConflicts: ( localItems, distantItems, deletedItems ) ->	
-		locals = angular.copy localItems
-		distants = angular.copy distantItems
-		distantIDs = ( item.id for item in distants )
+		distantIDs = ( item.id for item in distantItems )
 		
 		# delete local items missing in distant
-		locals = ( item for item, i in locals when item.id.length is 2 or item.id in distantIDs )
+		localItems = angular.copy ( item for item, i in localItems when item.id.length is 2 or item.id in distantIDs )
 		
 		# add local items missing in distant
-		for item in locals when item.id.length is 2
+		for item in localItems when item.id.length is 2
 			item.oldID = item.id
 			item.author = DB.user.uid
 			item.id = generateID 3, distantIDs
 		
 		# edit local items from distant
-		for local in locals when item.id.length is 3 and item.id in distantIDs
-			for distant in distants when local.id is distant.id
-				( local[k] = v for k, v of distant ) if local.edit <= distant.edit
+		for localItem in localItems when localItem.id.length is 3 and localItem.id in distantIDs
+			for distantItem in distantItems when localItem.id is distantItem.id
+				( localItem[k] = v for k, v of distantItem ) if localItem.edit <= distantItem.edit
 		
 		# return distant items missing in local
-		localIDs = ( item.id for item in locals )
-		locals.push item for item in distants when item.id not in localIDs and item.id not in deletedItems
-		locals
+		localIDs = ( item.id for item in localItems )
+		localItems.push item for item in distantItems when item.id not in localIDs and item.id not in deletedItems
+		localItems
 		
 		
 
