@@ -1,0 +1,72 @@
+/* -------------------- Project page -------------------- */
+/* ------------------------------------------------------------------------------ */
+	
+.project-nav
+	width: 100%
+	padding-top: 0
+	padding-bottom: 0
+	ul
+		height: 4*$base
+	li
+		display: inline-block
+		margin-right: 2*$unit
+		line-height: 4*$base
+		&:last-child
+			margin-right: 0
+		a
+			position: relative
+			display: block
+			height: 100%
+			color: rgba(168,138,198,1)
+			text-transform: uppercase
+			&:hover
+				color: $violet
+		&.active a
+			color: $violet
+		&.active a:after
+			content: ""
+			position: absolute
+			bottom: 0
+			left: 0
+			right: 0
+			height: 2px
+			background: $violet
+	
+.task-create
+	border-top: 1px solid $lightgrey
+	border-bottom: 1px solid $lightgrey
+	background: $backgroundgrey
+
+.task-item
+	border-bottom: 1px solid $lightgrey
+	&:last-child
+		border-bottom: none
+
+.task-title
+	display: inline-block
+	margin-right: $unit
+	font-size: 1.2em
+	font-weight: 400
+
+.task-tag-list
+	display: inline
+	li
+		display: inline-block
+		margin-right: $base
+		padding: 0.2em
+		background: $lightgrey
+		@include borders(2px, $lightgrey)
+		a
+			color: white
+			font-size: 0.8em
+			font-weight: 300
+	&:last-child
+		margin: 0
+
+.task-second-line
+	color: $lightgrey
+	font-size: 0.8em
+
+.action-link
+	display: inline-block
+	margin-right: 1em

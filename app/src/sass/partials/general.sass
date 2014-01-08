@@ -1,0 +1,53 @@
+/* -------------------- General styles -------------------- */
+/* ------------------------------------------------------------------------------ */
+
+body
+	font-family: "Lato", sans-serif
+	color: $grey
+
+input, textarea, select
+	padding: 0.5em
+	border: 1px solid $lightgrey
+	font-family: "Lato", sans-serif
+
+ul
+	list-style-type: none
+
+a
+	font-size: inherit
+	color: $lightblue
+	cursor: pointer
+	text-decoration: none
+	@include transitions(all, 0.3s)
+	&:hover
+		color: blue
+		text-decoration: none
+		@include transitions(all, 0.5s)
+
+h1
+	font-size: 2em
+	font-weight: 700
+
+h2
+	display: inline-block
+	margin-bottom: $base
+	font-size: 1.66em
+	font-weight: 300
+
+h3
+	font-size: 1.5em
+	font-weight: 700
+
+.navbar
+	display: inline-block
+	ul li
+		display: inline
+
+.bold
+	font-weight: 700
+
+.italic
+	font-style: italic
+	
+.red
+	color: red

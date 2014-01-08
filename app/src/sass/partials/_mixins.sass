@@ -1,0 +1,17 @@
+/* -------------------- Mixins -------------------- */
+/* ------------------------------------------------------------------------------ */
+
+@mixin transitions($attribute, $duration)
+	-webkit-transition: $attribute $duration
+	-moz-transition: $attribute $duration
+	-ms-transition: $attribute $duration
+	-o-transition: $attribute $duration
+	transition: $attribute $duration
+
+@mixin borders($radius, $color)
+	-webkit-border-radius: $radius
+	-moz-border-radius: $radius
+	-ms-border-radius: $radius
+	-o-border-radius: $radius
+	border-radius: $radius
+	border: solid 1px $color
