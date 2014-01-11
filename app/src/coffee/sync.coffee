@@ -5,7 +5,6 @@ DB =
 	folder: 'Synappse/'
 	file: '_project.json'
 	user: {}
-	projects: []
 	client: {}
 
 
@@ -52,7 +51,7 @@ DB =
 					deletedComments: []
 				$this.saveProject project, -> callback project
 			else # restore project
-				project = angular.fromJson data
+				project = angular.fromJson decodeURIComponent escape data
 				project.folder = folder
 				callback project
 
@@ -60,7 +59,7 @@ DB =
 	# Save project file
 	# ---
 	saveProject: ( project, callback = false ) ->
-		@client.writeFile project.folder+@file, ( angular.toJson project ), ( error, stat ) ->
+		@client.writeFile project.folder+@file, ( unescape encodeURIComponent angular.toJson project ), ( error, stat ) ->
 			console.log error if error
 			do callback if callback
 

@@ -36,7 +36,6 @@ DB = {
   folder: 'Synappse/',
   file: '_project.json',
   user: {},
-  projects: [],
   client: {},
   auth: function(callback) {
     var $this;
@@ -96,7 +95,7 @@ DB = {
           return callback(project);
         });
       } else {
-        project = angular.fromJson(data);
+        project = angular.fromJson(decodeURIComponent(escape(data)));
         project.folder = folder;
         return callback(project);
       }
@@ -106,7 +105,7 @@ DB = {
     if (callback == null) {
       callback = false;
     }
-    return this.client.writeFile(project.folder + this.file, angular.toJson(project), function(error, stat) {
+    return this.client.writeFile(project.folder + this.file, unescape(encodeURIComponent(angular.toJson(project))), function(error, stat) {
       if (error) {
         console.log(error);
       }
