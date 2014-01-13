@@ -231,7 +231,7 @@ DB = {
     });
   },
   updateProject: function(local, distant) {
-    var a, comment, distantAlert, localAlert, task, u, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _m, _n, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8;
+    var a, comment, distantAlert, localAlert, task, u, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6;
     local.folder = distant.folder;
     local.users = (function() {
       var _i, _len, _ref, _results;
@@ -283,12 +283,12 @@ DB = {
       task = _ref4[_l];
       delete task.oldID;
     }
-    _ref5 = local.alerts;
+    _ref5 = distant.alerts;
     for (_m = 0, _len4 = _ref5.length; _m < _len4; _m++) {
-      localAlert = _ref5[_m];
-      if (_ref6 = localAlert.id, __indexOf.call((function() {
+      distantAlert = _ref5[_m];
+      if (_ref6 = distantAlert.id, __indexOf.call((function() {
         var _len5, _n, _ref7, _results;
-        _ref7 = distant.alerts;
+        _ref7 = local.alerts;
         _results = [];
         for (_n = 0, _len5 = _ref7.length; _n < _len5; _n++) {
           a = _ref7[_n];
@@ -296,24 +296,17 @@ DB = {
         }
         return _results;
       })(), _ref6) < 0) {
-        distant.alerts.push(localAlert);
-      }
-    }
-    _ref7 = distant.alerts;
-    for (_n = 0, _len5 = _ref7.length; _n < _len5; _n++) {
-      distantAlert = _ref7[_n];
-      if (_ref8 = DB.user.uid, __indexOf.call(distantAlert.seen, _ref8) < 0) {
-        distantAlert.seen.push(DB.user.uid);
+        local.alerts.push(distantAlert);
       }
     }
     local.alerts = angular.copy((function() {
-      var _len6, _o, _ref9, _results;
-      _ref9 = distant.alerts;
+      var _len5, _n, _ref7, _results;
+      _ref7 = local.alerts;
       _results = [];
-      for (_o = 0, _len6 = _ref9.length; _o < _len6; _o++) {
-        distantAlert = _ref9[_o];
-        if (distantAlert.seen.length < local.users.length) {
-          _results.push(distantAlert);
+      for (_n = 0, _len5 = _ref7.length; _n < _len5; _n++) {
+        localAlert = _ref7[_n];
+        if (localAlert.seen.length < local.users.length) {
+          _results.push(localAlert);
         }
       }
       return _results;
@@ -427,6 +420,9 @@ synappseApp.controller('HomeCtrl', function($scope, $routeParams, Projects) {
 
 synappseApp.controller('ProjectCtrl', function($scope, $routeParams, Projects) {
   $scope.project = Projects.findProject($routeParams.params);
+  if ($scope.project.alerts == null) {
+    $scope.project.alerts = [];
+  }
   $scope.newTask = {};
   $scope.newComment = {};
   $scope.selectedTask = {};

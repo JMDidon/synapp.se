@@ -39,6 +39,7 @@ synappseApp.controller 'HomeCtrl', ( $scope, $routeParams, Projects ) ->
 # ------------------------------	
 synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, Projects ) ->
 	$scope.project = Projects.findProject $routeParams.params
+	$scope.project.alerts = [] if not $scope.project.alerts?
 	$scope.newTask = {}
 	$scope.newComment = {}
 	$scope.selectedTask = {}
