@@ -18,7 +18,7 @@
 		<li ng-repeat="alert in project.alerts | unseen"><b>{{ alert.id }}</b>: {{ alert.text }} <a ng-click="seen(alert.id)">Mark as read</a></li>
 	</ul>
 	<p>
-		<a ng-click="alert('test'+(new Date()).getTime())">Test</a>
+		<a ng-click="alert('test')">Test</a>
 	</p>
 	<br>
 	<hr>

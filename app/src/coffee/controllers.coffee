@@ -65,6 +65,7 @@ synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, Projects ) ->
 		
 	$scope.alert = ( text ) ->
 		Projects.alert $scope.project.id, text, DB.user.uid
+		console.log $scope.project.alerts
 	
 	$scope.seen = ( alertID ) ->
 		Projects.seen $scope.project.id, alertID, DB.user.uid

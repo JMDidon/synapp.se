@@ -45,6 +45,7 @@ DB =
 					folder: folder
 					slug: slug name
 					users: [$this.user]
+					alerts: []
 					tasks: []
 					deletedTasks: []
 					comments: []
@@ -135,7 +136,7 @@ DB =
 		# update alerts
 		distant.alerts.push localAlert for localAlert in local.alerts when localAlert.id not in ( a.id for a in distant.alerts )
 		( distantAlert.seen.push DB.user.uid if DB.user.uid not in distantAlert.seen ) for distantAlert in distant.alerts
-		local.alerts = distantAlert for distantAlert in distant.alerts when distantAlert.seen.length < local.users.length
+		local.alerts = angular.copy ( distantAlert for distantAlert in distant.alerts when distantAlert.seen.length < local.users.length )
 
 		# save file
 		@saveProject local

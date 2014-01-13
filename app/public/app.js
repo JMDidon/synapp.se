@@ -86,6 +86,7 @@ DB = {
           folder: folder,
           slug: slug(name),
           users: [$this.user],
+          alerts: [],
           tasks: [],
           deletedTasks: [],
           comments: [],
@@ -230,7 +231,7 @@ DB = {
     });
   },
   updateProject: function(local, distant) {
-    var a, comment, distantAlert, localAlert, task, u, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _m, _n, _o, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
+    var a, comment, distantAlert, localAlert, task, u, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _m, _n, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8;
     local.folder = distant.folder;
     local.users = (function() {
       var _i, _len, _ref, _results;
@@ -305,13 +306,18 @@ DB = {
         distantAlert.seen.push(DB.user.uid);
       }
     }
-    _ref9 = distant.alerts;
-    for (_o = 0, _len6 = _ref9.length; _o < _len6; _o++) {
-      distantAlert = _ref9[_o];
-      if (distantAlert.seen.length < local.users.length) {
-        local.alerts = distantAlert;
+    local.alerts = angular.copy((function() {
+      var _len6, _o, _ref9, _results;
+      _ref9 = distant.alerts;
+      _results = [];
+      for (_o = 0, _len6 = _ref9.length; _o < _len6; _o++) {
+        distantAlert = _ref9[_o];
+        if (distantAlert.seen.length < local.users.length) {
+          _results.push(distantAlert);
+        }
       }
-    }
+      return _results;
+    })());
     return this.saveProject(local);
   },
   solveConflicts: function(localItems, distantItems, deletedItems) {
@@ -448,7 +454,8 @@ synappseApp.controller('ProjectCtrl', function($scope, $routeParams, Projects) {
     return $scope.selectedTask = task;
   };
   $scope.alert = function(text) {
-    return Projects.alert($scope.project.id, text, DB.user.uid);
+    Projects.alert($scope.project.id, text, DB.user.uid);
+    return console.log($scope.project.alerts);
   };
   return $scope.seen = function(alertID) {
     return Projects.seen($scope.project.id, alertID, DB.user.uid);
@@ -860,11 +867,12 @@ synappseApp.filter('DropboxUIDToUsername', [
 
 synappseApp.filter('unseen', function() {
   return function(alerts) {
-    var alert, _i, _len, _ref, _results;
+    var alert, _i, _len, _ref, _ref1, _results;
+    _ref = alerts || [];
     _results = [];
-    for (_i = 0, _len = alerts.length; _i < _len; _i++) {
-      alert = alerts[_i];
-      if (_ref = DB.user.uid, __indexOf.call(alert.seen, _ref) < 0) {
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      alert = _ref[_i];
+      if (_ref1 = DB.user.uid, __indexOf.call(alert.seen, _ref1) < 0) {
         _results.push(alert);
       }
     }
