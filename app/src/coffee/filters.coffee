@@ -16,6 +16,13 @@ synappseApp.filter 'DropboxUIDToUsername', ['Projects', ( Projects ) ->
 ]
 
 
+# Alerts
+# ------------------------------
+synappseApp.filter 'unseen', ->
+	( alerts ) ->
+		alert for alert in alerts when DB.user.uid not in alert.seen
+
+
 # Date filters
 # ------------------------------
 synappseApp.filter 'relativeDate', ->

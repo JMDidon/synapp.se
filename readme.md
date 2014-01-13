@@ -24,6 +24,14 @@ Original documentation: https://www.dropbox.com/developers/core
       },
       …
     ]
+    alerts: [
+      {
+        id: (int) generated
+        text: (string)
+        seen: [ (int), … ] storing UIDs
+      },
+      …
+    ]
     tasks: [
       {
         id: (int) generated

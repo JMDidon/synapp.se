@@ -230,7 +230,7 @@ DB = {
     });
   },
   updateProject: function(local, distant) {
-    var comment, task, u, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2, _ref3, _ref4;
+    var a, comment, distantAlert, localAlert, task, u, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _m, _n, _o, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
     local.folder = distant.folder;
     local.users = (function() {
       var _i, _len, _ref, _results;
@@ -281,6 +281,36 @@ DB = {
     for (_l = 0, _len3 = _ref4.length; _l < _len3; _l++) {
       task = _ref4[_l];
       delete task.oldID;
+    }
+    _ref5 = local.alerts;
+    for (_m = 0, _len4 = _ref5.length; _m < _len4; _m++) {
+      localAlert = _ref5[_m];
+      if (_ref6 = localAlert.id, __indexOf.call((function() {
+        var _len5, _n, _ref7, _results;
+        _ref7 = distant.alerts;
+        _results = [];
+        for (_n = 0, _len5 = _ref7.length; _n < _len5; _n++) {
+          a = _ref7[_n];
+          _results.push(a.id);
+        }
+        return _results;
+      })(), _ref6) < 0) {
+        distant.alerts.push(localAlert);
+      }
+    }
+    _ref7 = distant.alerts;
+    for (_n = 0, _len5 = _ref7.length; _n < _len5; _n++) {
+      distantAlert = _ref7[_n];
+      if (_ref8 = DB.user.uid, __indexOf.call(distantAlert.seen, _ref8) < 0) {
+        distantAlert.seen.push(DB.user.uid);
+      }
+    }
+    _ref9 = distant.alerts;
+    for (_o = 0, _len6 = _ref9.length; _o < _len6; _o++) {
+      distantAlert = _ref9[_o];
+      if (distantAlert.seen.length < local.users.length) {
+        local.alerts = distantAlert;
+      }
     }
     return this.saveProject(local);
   },
@@ -413,9 +443,15 @@ synappseApp.controller('ProjectCtrl', function($scope, $routeParams, Projects) {
     });
     return $scope.newTask = {};
   };
-  return $scope.openComments = function(task) {
+  $scope.openComments = function(task) {
     $scope.opened = true;
     return $scope.selectedTask = task;
+  };
+  $scope.alert = function(text) {
+    return Projects.alert($scope.project.id, text, DB.user.uid);
+  };
+  return $scope.seen = function(alertID) {
+    return Projects.seen($scope.project.id, alertID, DB.user.uid);
   };
 });
 
@@ -504,6 +540,7 @@ synappseApp.factory('Projects', function() {
         folder: DB.folder + (slug(name)) + '/',
         slug: slug(name),
         users: [],
+        alerts: [],
         tasks: [],
         deletedTasks: [],
         comments: [],
@@ -674,6 +711,51 @@ synappseApp.factory('Projects', function() {
     }
     return factory.cache();
   };
+  factory.alert = function(projectID, text, userID) {
+    var a, project, _i, _len;
+    for (_i = 0, _len = Projects.length; _i < _len; _i++) {
+      project = Projects[_i];
+      if (!(project.id === projectID)) {
+        continue;
+      }
+      if (project.alerts == null) {
+        project.alerts = [];
+      }
+      project.alerts.push({
+        id: generateID(2, (function() {
+          var _j, _len1, _ref, _results;
+          _ref = project.alerts;
+          _results = [];
+          for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+            a = _ref[_j];
+            _results.push(a.id);
+          }
+          return _results;
+        })()),
+        text: text,
+        seen: [userID]
+      });
+    }
+    return factory.cache();
+  };
+  factory.seen = function(projectID, alertID, userID) {
+    var alert, project, _i, _j, _len, _len1, _ref;
+    for (_i = 0, _len = Projects.length; _i < _len; _i++) {
+      project = Projects[_i];
+      if (project.id === projectID) {
+        _ref = project.alerts;
+        for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+          alert = _ref[_j];
+          if (alert.id === alertID) {
+            if (__indexOf.call(alert.seen, userID) < 0) {
+              alert.seen.push(userID);
+            }
+          }
+        }
+      }
+    }
+    return factory.cache();
+  };
   return factory;
 });
 
@@ -775,6 +857,20 @@ synappseApp.filter('DropboxUIDToUsername', [
     };
   }
 ]);
+
+synappseApp.filter('unseen', function() {
+  return function(alerts) {
+    var alert, _i, _len, _ref, _results;
+    _results = [];
+    for (_i = 0, _len = alerts.length; _i < _len; _i++) {
+      alert = alerts[_i];
+      if (_ref = DB.user.uid, __indexOf.call(alert.seen, _ref) < 0) {
+        _results.push(alert);
+      }
+    }
+    return _results;
+  };
+});
 
 synappseApp.filter('relativeDate', function() {
   return function(date) {

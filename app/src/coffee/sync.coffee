@@ -131,6 +131,11 @@ DB =
 		# update replies parentIDs
 		# ( reply.parentID = comment.id for comment in local.comments when comment.oldID is reply.parentID ) for reply in local.comments 
 		# delete comment.oldID for comment in local.comments
+		
+		# update alerts
+		distant.alerts.push localAlert for localAlert in local.alerts when localAlert.id not in ( a.id for a in distant.alerts )
+		( distantAlert.seen.push DB.user.uid if DB.user.uid not in distantAlert.seen ) for distantAlert in distant.alerts
+		local.alerts = distantAlert for distantAlert in distant.alerts when distantAlert.seen.length < local.users.length
 
 		# save file
 		@saveProject local

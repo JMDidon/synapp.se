@@ -33,6 +33,7 @@ synappseApp.factory 'Projects', ->
 				folder: DB.folder+( slug name )+'/'
 				slug: slug name
 				users: []
+				alerts: []
 				tasks: []
 				deletedTasks: []
 				comments: []
@@ -91,6 +92,23 @@ synappseApp.factory 'Projects', ->
 		for project in Projects when project.id is projectID
 			project.deletedComments.push commentID if commentID not in project.deletedComments
 			project.comments = angular.copy ( comment for comment in project.comments when comment.id not in project.deletedComments )
+		do factory.cache
+		
+		
+	# ALERTS
+	factory.alert = ( projectID, text, userID ) ->
+		for project in Projects when project.id is projectID
+			project.alerts = [] if not project.alerts?
+			project.alerts.push 
+				id: generateID 2, ( a.id for a in project.alerts )
+				text: text
+				seen: [ userID ]
+		do factory.cache
+			
+	factory.seen = ( projectID, alertID, userID ) ->
+		for project in Projects when project.id is projectID
+			for alert in project.alerts when alert.id is alertID
+				alert.seen.push userID if userID not in alert.seen
 		do factory.cache
 
 

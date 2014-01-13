@@ -11,6 +11,19 @@
 
 <!-- Create task : form -->
 <div class="wrapper task-create">
+	
+	<hr>
+	<br>
+	<ul>
+		<li ng-repeat="alert in project.alerts | unseen"><b>{{ alert.id }}</b>: {{ alert.text }} <a ng-click="seen(alert.id)">Mark as read</a></li>
+	</ul>
+	<p>
+		<a ng-click="alert('test'+(new Date()).getTime())">Test</a>
+	</p>
+	<br>
+	<hr>
+	
+	
 	<h2>Add a task :</h2>
 	<form ng-submit="createTask()" class="input-text">
 		<label for="taskName">Task name :</label>

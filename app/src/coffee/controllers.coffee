@@ -63,6 +63,12 @@ synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, Projects ) ->
 		$scope.opened = true
 		$scope.selectedTask = task
 		
+	$scope.alert = ( text ) ->
+		Projects.alert $scope.project.id, text, DB.user.uid
+	
+	$scope.seen = ( alertID ) ->
+		Projects.seen $scope.project.id, alertID, DB.user.uid
+		
 		
 
 # Task Controller
