@@ -23,16 +23,13 @@
 	</p>
 	<br>
 	<hr>
+	<br>
+	<br>
 
 
 	<form ng-submit="createTask()" class="task-form">
 		<textarea ng-Model="newTask.name"class="task-text" placeholder="Enter your task here with some #hastags"></textarea>
 		<div class="form-element task-assignment-wrapper">
-			<!--<ul class="task-assignment">
-				<li ng-repeat="user in project.users">
-					<a href="">{{ user.uid | DropboxUIDToUsername: project.slug }}</a>
-				</li>
-			</ul>-->
 			<label ng-repeat="user in project.users" class="task-assignment">
 				<input
 					type="checkbox"
@@ -52,10 +49,8 @@
 		</div>
 		<div class="task-buttons">
 			<div class="task-button-priority">
-				<!--<input ng-Model="newTask.priority" type="checkbox" class="task-checkbox-priority">
-				<label></label>-->
 				<input ng-Model="newTask.priority" type="checkbox" name="priority" id="priority" class="task-checkbox-priority">
-        		<label for="priority" class="task-priority-label">⚠</label>
+				<label for="priority" class="task-priority-label">⚠</label>
 			</div>
 			<button type="submit" class="task-submit">ADD THE TASK</button>
 		</div>
@@ -148,7 +143,7 @@
 			</div>
 			
 			<!-- Task Edit -->
-			<div ng-show="edit_mode">
+			<!--<div ng-show="edit_mode">
 				<label for="taskName">Task name : ({{ task.name }})</label><br/>
 				<input name="taskName" ng-Model="taskEdit.name" type="text"><br/><br/>
 					
@@ -186,6 +181,39 @@
 				<a class="action-link" href="" ng-click="toggleEditMode()">Cancel edit</a>
 				<a class="action-link" href="" ng-click="deleteTask()">Delete task</a>
 								
+				<input type="submit" value="Update task" ng-click="editTask()">
+			</div>-->
+			<div ng-show="edit_mode">
+				<form ng-submit="createTask()" class="task-form">
+					<textarea ng-Model="taskEdit.name"class="task-text" placeholder="Enter your task here with some #hastags"></textarea>
+					<div class="form-element task-assignment-wrapper">
+						<label ng-repeat="user in project.users" class="task-assignment">
+							<input
+								type="checkbox"
+								name="taskUsers"
+								value="{{ user.uid }}"
+								class="task-assignment-checkbox"
+								ng-checked="userSelection.indexOf(user.uid) > -1"
+								ng-click="toggleSelection(user.uid)"
+							> <span>{{ user.uid | DropboxUIDToUsername: project.slug }}</span>
+						</label>
+					</div>
+					<div class="task-from form-element">
+						<input ng-Model="taskEdit.start" type="text" placeholder="yyyy-mm-dd" pattern="^[0-9]{4}-(?:[0]?[0-9]{1}|10|11|12)-(?:[012]?[0-9]{1}|30|31)$">
+					</div>
+					<div class="task-to form-element">
+						<input ng-Model="taskEdit.end" type="text" placeholder="yyyy-mm-dd" pattern="^[0-9]{4}-(?:[0]?[0-9]{1}|10|11|12)-(?:[012]?[0-9]{1}|30|31)$">
+					</div>
+					<div class="task-buttons">
+						<div class="task-button-priority">
+							<input ng-Model="taskEdit.priority" type="checkbox" name="priority" id="priority" class="task-checkbox-priority">
+							<label for="priority" class="task-priority-label">⚠</label>
+						</div>
+						<button type="submit" class="task-submit">ADD THE TASK</button>
+					</div>
+				</form>
+				<a class="action-link" href="" ng-click="toggleEditMode()">Cancel edit</a>
+				<a class="action-link" href="" ng-click="deleteTask()">Delete task</a>
 				<input type="submit" value="Update task" ng-click="editTask()">
 			</div>
 		</li>
