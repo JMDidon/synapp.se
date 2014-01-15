@@ -59,7 +59,7 @@ synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, Projects ) ->
 			tags: splitTags $scope.newTask.tags
 			users: $scope.newTask.users
 		$scope.newTask = {}
-
+		
 	$scope.openComments = ( task ) ->
 		$scope.opened = true
 		$scope.selectedTask = task

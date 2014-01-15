@@ -134,8 +134,8 @@ DB =
 		# delete comment.oldID for comment in local.comments
 		
 		# update alerts
-		local.alerts.push distantAlert for distantAlert in distant.alerts when distantAlert.id not in ( a.id for a in local.alerts )
-		local.alerts = angular.copy ( localAlert for localAlert in local.alerts when localAlert.seen.length < local.users.length )
+		# local.alerts.push distantAlert for distantAlert in distant.alerts when distantAlert.id not in ( a.id for a in local.alerts )
+		# local.alerts = angular.copy ( localAlert for localAlert in local.alerts when localAlert.seen.length < local.users.length )
 
 		# save file
 		@saveProject local
