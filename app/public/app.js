@@ -400,6 +400,24 @@ synappseApp.controller('ProjectCtrl', function($scope, $routeParams, $location, 
   }
   $scope.task = {};
   $scope.taskEditMode = false;
+  $scope.statuses = [
+    {
+      k: 0,
+      v: 'Todo'
+    }, {
+      k: 1,
+      v: 'In progress'
+    }, {
+      k: 2,
+      v: 'Advanced'
+    }, {
+      k: 3,
+      v: 'Done'
+    }, {
+      k: 4,
+      v: 'Archived'
+    }
+  ];
   $scope.$watch('selectProject', function() {
     return $location.path('/' + $scope.selectProject);
   });
@@ -413,6 +431,9 @@ synappseApp.controller('TaskCtrl', function($scope, $routeParams, Projects) {
   $scope.editMode = false;
   $scope.$watch('taskEditMode', function() {
     return $scope.editMode = $scope.taskEditMode === $scope.task.id;
+  });
+  $scope.$watch('task.status', function() {
+    return Projects.editTask($scope.project.id, $scope.task.id, $scope.task);
   });
   $scope.toggleEditMode = function() {
     return $scope.setTaskEditMode($scope.task.id);
@@ -885,7 +906,7 @@ synappseApp.directive('taskForm', [
             Projects.createTask(scope.project.id, {
               name: scope.tmpTask.name,
               author: DB.user.uid,
-              status: scope.tmpTask.status,
+              status: 0,
               priority: scope.tmpTask.priority,
               start: scope.tmpTask.start,
               end: scope.tmpTask.end,

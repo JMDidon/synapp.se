@@ -18,7 +18,7 @@ synappseApp.directive 'taskForm', ['Projects', ( Projects ) ->
         Projects.createTask scope.project.id, 
           name: scope.tmpTask.name
           author: DB.user.uid
-          status: scope.tmpTask.status
+          status: 0
           priority: scope.tmpTask.priority
           start: scope.tmpTask.start
           end: scope.tmpTask.end

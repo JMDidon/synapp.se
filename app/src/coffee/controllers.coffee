@@ -42,6 +42,13 @@ synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, $location, Project
 	$scope.project.alerts = [] if not $scope.project.alerts?
 	$scope.task = {}
 	$scope.taskEditMode = false
+	$scope.statuses = [
+		{ k:0, v:'Todo' },
+		{ k:1, v:'In progress' },
+		{ k:2, v:'Advanced' },
+		{ k:3, v:'Done' },
+		{ k:4, v:'Archived' }
+	]
 
 	$scope.$watch 'selectProject', ->
 		$location.path '/'+$scope.selectProject
@@ -66,6 +73,9 @@ synappseApp.controller 'TaskCtrl', ( $scope, $routeParams, Projects ) ->
 	
 	$scope.$watch 'taskEditMode', ->
 		$scope.editMode = $scope.taskEditMode is $scope.task.id
+		
+	$scope.$watch 'task.status', ->
+		Projects.editTask $scope.project.id, $scope.task.id, $scope.task
 	
 	$scope.toggleEditMode = -> 
 		$scope.setTaskEditMode $scope.task.id
