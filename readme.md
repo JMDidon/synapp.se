@@ -41,7 +41,6 @@ Original documentation: https://www.dropbox.com/developers/core
         name: (string)
         start: (timestamp) start date
         end: (timestamp) end date
-        tags: [ (string), … ]
         users: [ (int), … ] assigned users UIDs
       },
       …
