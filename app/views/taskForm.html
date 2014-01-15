@@ -23,6 +23,6 @@
 			<label for="priority" class="task-priority-label">⚠</label>
 		</div>
 		<button type="submit" class="task-submit" ng-bind="tmpTask.id?'Edit task':'Create task'"></button>
-		<a href="" ng-click="cancel()">Cancel</a>
+		<a href="" ng-click="cancel()" ng-show="task.id">Cancel</a>
 	</div>
 </form>
