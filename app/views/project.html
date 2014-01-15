@@ -1,4 +1,17 @@
-<section class="main-project">	
-	<div ng-include src="'views/tasks.html'" class="main-section"></div><!-- @Whitespace Fix
-	--><div ng-include src="'views/comments.html'" class="comments-section"></div>
-</section>
+<header class="navbar navbar-default">
+	<div class="row">
+		<nav class="col-lg-8 col-lg-offset-2">
+			<select ng-model="selectProject" ng-init="selectProject = project.slug">
+				<option ng-repeat="p in projects" value="{{ p.slug }}" ng-selected="p.slug == selectProject">{{ p.name }}</option>
+			</select>
+			<button type="button"  class="btn btn-primary btn-xs" ng-click="sync()">Sync</button>
+			<ul class="nav navbar-nav navbar-right">
+				<li class="active"><a href="{{ project.slug }}">Tasks</a></li>
+				<li><a href="{{ project.slug }}/files">Files</a></li>
+				<li><a href="{{ project.slug }}/discussions">Discussions</a></li>
+			</ul>
+		</nav>
+	</div>
+</header>
+
+<section ng-include src="'views/tasks.html'"></section>

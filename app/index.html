@@ -1,45 +1,26 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="synappseApp">
-	<head>
-		<meta charset="utf-8">
-		<title>Synapp.se</title>
+<head>
+	<meta charset="utf-8">
+	<title>Synapp.se</title>
+	<meta name="robots" content="noindex, nofollow">
+	<meta name="viewport" content="initial-scale=1.0">
 
-		<meta name="HandheldFriendly" content="true" />
-		<meta name="viewport" content="initial-scale=1.0" />
-
-		<link href='http://fonts.googleapis.com/css?family=Lato:100,300,400,700' rel='stylesheet' type='text/css'>
-		<link rel="stylesheet" type="text/css" href="public/app.css">
-	</head>
-	<body ng-controller="MainCtrl">
-		
-		<header class="header">
-			<div class="header-main">
-				<p class="logo">S</p>
-				<h1 class="main-title"><a href="//synapp.se" title="Synapp.se">Synapp.se</a></h1>
-				<nav class="navbar main-nav">
-					<ul>
-						<li><a href="#/home">Home</a></li>
-						<li ng-show="auth"><a href="" ng-click="sync()">Sync</a></li>
-						<li ng-repeat="project in projects"><a href="#/projects/{{ project.slug }}">{{ project.name }}</a></li>
-					</ul>
-				</nav>
-			</div><!-- @whitespace Fix
-		 --><div class="header-profile" ng-show="auth">
-				<a class="profile-user" href="">
-					<img class="profile-avatar">
-					<span class="profile-username">{{ connectedUser }}</span>
-				</a>
-			</div>
-		</header>
-
-		<div ng-view class="main-view-frame"></div>
-				
-		<!-- Scripts -->
-		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular.min.js"></script>
-		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-route.min.js"></script>
-		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-resource.min.js"></script>
-		<script src="//cdnjs.cloudflare.com/ajax/libs/dropbox.js/0.10.1/dropbox.min.js"></script>
-		<script src="public/app.js"></script>
-
-	</body>
+	<!-- <link href='http://fonts.googleapis.com/css?family=Lato:100,300,400,700|Merriweather:400' rel='stylesheet' type='text/css'> -->
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="public/app.css">
+</head>
+<body ng-controller="MainCtrl">
+	
+	<main class="container" ng-view></main>
+			
+	<!-- Scripts -->
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-route.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-resource.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/dropbox.js/0.10.1/dropbox.min.js"></script>
+	<script src="public/app.js"></script>
+	
+	
+</body>
 </html>

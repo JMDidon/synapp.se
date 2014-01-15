@@ -1,14 +1,8 @@
-<section class="home-wrapper">
-	<h1 class="home-title">Welcome to Synapp.se !</h1>
+<h1>Choose a project</h1>
+<ul>
+  <li ng-repeat="p in projects"><a href="#/{{ p.slug }}">{{ p.name }}</a></li>
+</ul>
 
-	<h2>Want to create a new project ? Just type it here !</h2>
-	<form class="home-creation" ng-submit="createProject()">
-    	<input ng-model="name" type="text" placeholder="Choose a name for the new project !">
-    	<input type="submit" value="Create now !">
-    </form>
+<button type="button" class="btn btn-primary" ng-click="sync()">Sync</button>
 
-	<h2>Already have a project ? Download 'em all !</h2>
-    <p class="sync-buttons" ng-show="auth">
-		<a href="" ng-click="sync()">Get projects !</a>
-    </p>
-</section>
+<h1>Create a new project</h1>
