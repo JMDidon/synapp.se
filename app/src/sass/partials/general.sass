@@ -18,19 +18,17 @@ a
 	color: $lightblue
 	cursor: pointer
 	text-decoration: none
-	@include transitions(all, 0.3s)
+	@include transitions(all, 0.3s, ease, Os)
 	&:hover
 		color: blue
 		text-decoration: none
-		@include transitions(all, 0.5s)
+		@include transitions(all, 0.5s, ease, Os)
 
 h1
 	font-size: 2em
 	font-weight: 700
 
 h2
-	display: inline-block
-	margin-bottom: $base
 	font-size: 1.66em
 	font-weight: 300
 

@@ -1,17 +1,39 @@
 /* -------------------- Mixins -------------------- */
 /* ------------------------------------------------------------------------------ */
 
-@mixin transitions($attribute, $duration)
-	-webkit-transition: $attribute $duration
-	-moz-transition: $attribute $duration
-	-ms-transition: $attribute $duration
-	-o-transition: $attribute $duration
-	transition: $attribute $duration
+/*** Add prefix for transitions ***/
+// $property : on what property is applied the transition
+// $duration : the duration of the transition
+// $timing 	 : the acceleration used to animate the element
+// $delay 	 : the delay after which the animation start
+@mixin transitions($property, $duration, $timing, $delay)
+	-webkit-transition: $property $duration $timing $delay
+	-moz-transition: $property $duration $timing $delay
+	-ms-transition: $property $duration $timing $delay
+	-o-transition: $property $duration $timing $delay
+	transition: $property $duration $timing $delay
 
-@mixin borders($radius, $color)
+
+@mixin border-radius($radius, $color)
 	-webkit-border-radius: $radius
 	-moz-border-radius: $radius
 	-ms-border-radius: $radius
 	-o-border-radius: $radius
 	border-radius: $radius
 	border: solid 1px $color
+
+.noselect
+	-webkit-touch-callout: none
+	-webkit-user-select: none
+	-moz-user-select: -moz-none
+	-ms-user-select: none
+	user-select: none
+
+.clearfix:before, .clearfix:after
+	content: " " /* 1 */
+	display: table /* 2 */
+
+.clearfix:after
+	clear: both
+
+//@mixin box-shadow($shadowX, $shadowY, $blur, $size, $color, $inset)

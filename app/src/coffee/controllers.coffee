@@ -43,6 +43,14 @@ synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, Projects ) ->
 	$scope.newTask = {}
 	$scope.newComment = {}
 	$scope.selectedTask = {}
+	$scope.userSelection = []
+
+	$scope.toggleSelection = ( user ) ->
+		idx = $scope.userSelection.indexOf(user)
+		if idx > -1
+			$scope.userSelection.splice(idx, 1)
+		else
+			$scope.userSelection.push(user)
 
 	$scope.toggleCommentForm = ->
 		$scope.comment.text = '' if $scope.comment != undefined
@@ -57,13 +65,13 @@ synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, Projects ) ->
 			start: $scope.newTask.start
 			end: $scope.newTask.end
 			tags: splitTags $scope.newTask.tags
-			users: $scope.newTask.users
+			users: $scope.userSelection
 		$scope.newTask = {}
 
 	$scope.openComments = ( task ) ->
 		$scope.opened = true
 		$scope.selectedTask = task
-		
+
 	$scope.alert = ( text ) ->
 		Projects.alert $scope.project.id, text, DB.user.uid
 		console.log $scope.project.alerts
@@ -79,6 +87,9 @@ synappseApp.controller 'TaskCtrl', ( $scope, $routeParams, Projects ) ->
 	$scope.taskEdit = angular.copy $scope.task
 	$scope.taskEdit.tags = $scope.taskEdit.tags.join(', ')
 	$scope.edit_mode = false
+
+	$scope.toggleDropdownStatus = ->
+		
 
 	$scope.toggleEditMode = -> 
 		$scope.edit_mode = not $scope.edit_mode
