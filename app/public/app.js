@@ -775,9 +775,9 @@ synappseApp = angular.module('synappseFilters', []);
 
 synappseApp.filter('DropboxUIDToUsername', [
   'Projects', function(Projects) {
-    return function(uid, slug) {
+    return function(uid, projectID) {
       var firstName, project, result, user;
-      project = Projects.findProject(slug);
+      project = Projects.readProject(projectID);
       result = ((function() {
         var _i, _len, _ref, _results;
         _ref = project.users;
@@ -813,6 +813,12 @@ synappseApp.filter('DropboxUIDToUsername', [
     };
   }
 ]);
+
+synappseApp.filter('Assignee', function() {
+  return function(name) {
+    return name.substring(0, 1);
+  };
+});
 
 synappseApp.filter('unseen', function() {
   return function(alerts) {
@@ -899,6 +905,9 @@ synappseApp.directive('taskForm', [
           return scope.toggleEditMode();
         };
         return scope.submit = function() {
+          if (scope.tmpTask.name.match(/^\s*$/)) {
+            return false;
+          }
           if (scope.task.id != null) {
             scope.toggleEditMode();
             return Projects.editTask(scope.project.id, scope.task.id, scope.tmpTask);

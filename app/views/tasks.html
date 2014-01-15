@@ -6,10 +6,11 @@
 	<article class="row" ng-repeat="task in project.tasks" ng-controller="TaskCtrl">
 		<div task-form class="col-lg-8 col-lg-offset-2" ng-show="editMode"></div>
 		<time class="col-lg-2 text-right" ng-hide="editMode">{{ task.end }}</time>
-		<strong class="col-lg-6" ng-hide="editMode"><a href="" ng-click="toggleEditMode()">{{ task.name }}</a></strong>
-		<strong class="col-lg-2 text-right" ng-hide="editMode">
+		<strong class="col-lg-5" ng-hide="editMode"><a href="" ng-click="toggleEditMode()">{{ task.name }}</a></strong>
+		<span class="col-lg-3 text-right" ng-hide="editMode">
+			<span ng-repeat="user in task.users">{{ user | DropboxUIDToUsername: project.id | Assignee }}</span>
 			<select ng-model="task.status" ng-options="s.k as s.v for s in statuses"></select>
-		</strong>
+		</span>
 		<span class="col-lg-2"><a href="" class="glyphicon glyphicon-comment"></a></span>
 	</article>
 </section>

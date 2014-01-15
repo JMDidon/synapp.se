@@ -11,6 +11,7 @@ synappseApp.directive 'taskForm', ['Projects', ( Projects ) ->
       scope.tmpTask = angular.copy scope.task
       do scope.toggleEditMode
     scope.submit = ->
+      return false if scope.tmpTask.name.match /^\s*$/
       if scope.task.id?
         do scope.toggleEditMode
         Projects.editTask scope.project.id, scope.task.id, scope.tmpTask
