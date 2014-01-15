@@ -912,7 +912,7 @@ synappseApp.directive('taskForm', [
               end: scope.tmpTask.end,
               users: scope.tmpTask.users
             });
-            return scope.task = {};
+            return scope.tmpTask = {};
           }
         };
       }

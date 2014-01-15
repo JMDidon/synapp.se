@@ -23,7 +23,7 @@ synappseApp.directive 'taskForm', ['Projects', ( Projects ) ->
           start: scope.tmpTask.start
           end: scope.tmpTask.end
           users: scope.tmpTask.users
-        scope.task = {}
+        scope.tmpTask = {}
 ]
       
 console.log 'Directives loaded'
