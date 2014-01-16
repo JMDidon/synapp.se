@@ -29,6 +29,16 @@ synappseApp.filter 'unseen', ->
 
 # Date filters
 # ------------------------------
+synappseApp.filter 'miniDate', ->
+	( date ) ->
+		months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+		date = new Date date
+		date = new Date date.getFullYear(), date.getMonth(), date.getDate()
+		now = new Date
+		now = new Date now.getFullYear(), now.getMonth(), now.getDate()
+		diffDays = Math.round (date-now)/(1000*60*60*24)
+		if diffDays is 0 then 'Today' else months[date.getMonth()]+' '+date.getDate()
+	
 synappseApp.filter 'relativeDate', ->
 	( date ) ->
 		delta = Math.floor (new Date - date)/1000

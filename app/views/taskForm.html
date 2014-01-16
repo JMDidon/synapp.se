@@ -6,23 +6,20 @@
 				type="checkbox"
 				value="{{ user.uid }}"
 				class="task-assignment-checkbox"
-				ng-checked="userSelection.indexOf(user.uid) > -1"
-				ng-click="toggleSelection(user.uid)"
+				ng-checked="tmpTask.users.indexOf(user.uid) > -1"
+				ng-click="toggleUser(user.uid)"
 			> <span>{{ user.uid | DropboxUIDToUsername: project.id }}</span>
 		</label>
 	</div>
-	<div class="task-from form-element">
-		<input ng-Model="tmpTask.start" type="text" placeholder="yyyy-mm-dd" pattern="^[0-9]{4}-(?:[0]?[0-9]{1}|10|11|12)-(?:[012]?[0-9]{1}|30|31)$">
-	</div>
 	<div class="task-to form-element">
-		<input ng-Model="tmpTask.end" type="text" placeholder="yyyy-mm-dd" pattern="^[0-9]{4}-(?:[0]?[0-9]{1}|10|11|12)-(?:[012]?[0-9]{1}|30|31)$">
+		<input ng-Model="tmpTask.due" type="text" placeholder="yyyy-mm-dd" pattern="^[0-9]{4}-(?:[0]?[0-9]{1}|10|11|12)-(?:[012]?[0-9]{1}|30|31)$">
 	</div>
 	<div class="task-buttons">
 		<div class="task-button-priority">
 			<input ng-Model="tmpTask.priority" type="checkbox" name="priority" id="priority" class="task-checkbox-priority">
 			<label for="priority" class="task-priority-label">⚠</label>
 		</div>
-		<button type="submit" class="task-submit" ng-bind="tmpTask.id?'Edit task':'Create task'"></button>
+		<input type="submit" class="task-submit" value="{{ tmpTask.id?'Edit task':'Create task' }}">
 		<a href="" ng-click="cancel()" ng-show="task.id">Cancel</a>
 	</div>
 </form>

@@ -1,19 +1,24 @@
-<header class="container navbar navbar-default">
-	<div class="row">
-		<nav class="col-lg-8 col-lg-offset-2">
-			<div class="navbar-left">
-				<select ng-model="selectProject" ng-init="selectProject = project.slug">
-					<option ng-repeat="p in projects" value="{{ p.slug }}" ng-selected="p.slug == selectProject">{{ p.name }}</option>
-				</select>
-				<button type="button"  class="btn btn-primary btn-xs" ng-click="sync()">Sync</button>
-			</div>
-			<ul class="nav navbar-nav navbar-right">
-				<li class="active"><a href="{{ project.slug }}">Tasks</a></li>
-				<li><a href="{{ project.slug }}/files">Files</a></li>
-				<li><a href="{{ project.slug }}/discussions">Discussions</a></li>
-			</ul>
-		</nav>
-	</div>
-</header>
+<aside class="insights">
+</aside>
 
-<section ng-include src="'views/tasks.html'" class="container"></section>
+<main class="wrapper">
+	<header>
+		<div class="row">
+			<nav class="col-lg-8 col-lg-offset-2">
+				<div class="navbar-left">
+					<select ng-model="selectProject" ng-init="selectProject = project.slug">
+						<option ng-repeat="p in projects" value="{{ p.slug }}" ng-selected="p.slug == selectProject">{{ p.name }}</option>
+					</select>
+					<button type="button"  class="btn btn-primary btn-xs" ng-click="sync()">Sync</button>
+				</div>
+				<ul class="nav navbar-nav navbar-right">
+					<li class="active"><a href="{{ project.slug }}">Tasks</a></li>
+					<li><a href="{{ project.slug }}/files">Files</a></li>
+					<li><a href="{{ project.slug }}/discussions">Discussions</a></li>
+				</ul>
+			</nav>
+		</div>
+	</header>
+	
+	<section ng-include src="'views/tasks.html'" class="container"></section>
+</main>

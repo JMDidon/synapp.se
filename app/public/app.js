@@ -835,6 +835,23 @@ synappseApp.filter('unseen', function() {
   };
 });
 
+synappseApp.filter('miniDate', function() {
+  return function(date) {
+    var diffDays, months, now;
+    months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    date = new Date(date);
+    date = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    now = new Date;
+    now = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    diffDays = Math.round((date - now) / (1000 * 60 * 60 * 24));
+    if (diffDays === 0) {
+      return 'Today';
+    } else {
+      return months[date.getMonth()] + ' ' + date.getDate();
+    }
+  };
+});
+
 synappseApp.filter('relativeDate', function() {
   return function(date) {
     var delta;
@@ -884,49 +901,3 @@ synappseApp.filter('smartDate', function() {
 });
 
 console.log('Filters module loaded');
-
-/* --------------------------------------------
-     Begin directives.coffee
---------------------------------------------
-*/
-
-
-synappseApp = angular.module('synappseDirectives', []);
-
-synappseApp.directive('taskForm', [
-  'Projects', function(Projects) {
-    return {
-      templateUrl: 'views/taskForm.html',
-      scope: true,
-      link: function(scope) {
-        scope.tmpTask = angular.copy(scope.task);
-        scope.cancel = function() {
-          scope.tmpTask = angular.copy(scope.task);
-          return scope.toggleEditMode();
-        };
-        return scope.submit = function() {
-          if (scope.tmpTask.name.match(/^\s*$/)) {
-            return false;
-          }
-          if (scope.task.id != null) {
-            scope.toggleEditMode();
-            return Projects.editTask(scope.project.id, scope.task.id, scope.tmpTask);
-          } else {
-            Projects.createTask(scope.project.id, {
-              name: scope.tmpTask.name,
-              author: DB.user.uid,
-              status: 0,
-              priority: scope.tmpTask.priority,
-              start: scope.tmpTask.start,
-              end: scope.tmpTask.end,
-              users: scope.tmpTask.users
-            });
-            return scope.tmpTask = {};
-          }
-        };
-      }
-    };
-  }
-]);
-
-console.log('Directives loaded');

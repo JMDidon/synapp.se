@@ -1,16 +1,20 @@
 <section>
-	<section class="row">
-		<div task-form class="col-lg-8 col-lg-offset-2"></div>
+	<section>
+		<div task-form></div>
 	</section>
 	
-	<article class="row" ng-repeat="task in project.tasks" ng-controller="TaskCtrl">
-		<div task-form class="col-lg-8 col-lg-offset-2" ng-show="editMode"></div>
-		<time class="col-lg-2 text-right" ng-hide="editMode">{{ task.end }}</time>
-		<strong class="col-lg-5" ng-hide="editMode"><a href="" ng-click="toggleEditMode()">{{ task.name }}</a></strong>
-		<span class="col-lg-3 text-right" ng-hide="editMode">
-			<span ng-repeat="user in task.users">{{ user | DropboxUIDToUsername: project.id | Assignee }}</span>
-			<select ng-model="task.status" ng-options="s.k as s.v for s in statuses"></select>
-		</span>
-		<span class="col-lg-2"><a href="" class="glyphicon glyphicon-comment"></a></span>
+	<article class="task" ng-repeat="task in project.tasks" ng-controller="TaskCtrl">
+		<div task-form ng-show="editMode"></div>
+		<p ng-hide="editMode">
+			<time class="task-date" ng-hide="editMode">{{ task.due | miniDate }}</time>
+			<span class="task-content">
+				<a class="task-name" href="" ng-click="toggleEditMode()">{{ task.name }}</a>
+				<span class="task-info">
+					<span ng-repeat="user in task.users">{{ user | DropboxUIDToUsername: project.id | Assignee }}</span>
+					<select ng-model="task.status" ng-options="s.k as s.v for s in statuses"></select>
+				</span>
+			</span>
+			<span class="task-comments-nb"><a href="">0</a></span>
+		</p>
 	</article>
 </section>

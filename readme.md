@@ -39,8 +39,7 @@ Original documentation: https://www.dropbox.com/developers/core
         edit: (timestamp) systematically updated using ( new Date ).getTime()
         author: (int) user UID
         name: (string)
-        start: (timestamp) start date
-        end: (timestamp) end date
+        due: (timestamp) due date
         users: [ (int), … ] assigned users UIDs
       },
       …

@@ -21,10 +21,12 @@ synappseApp.directive 'taskForm', ['Projects', ( Projects ) ->
           author: DB.user.uid
           status: 0
           priority: scope.tmpTask.priority
-          start: scope.tmpTask.start
-          end: scope.tmpTask.end
+          due: scope.tmpTask.due
           users: scope.tmpTask.users
         scope.tmpTask = {}
+    scope.toggleUser = ( uid ) ->
+      index = scope.tmpTask.users.indexOf uid
+      if index > -1 then scope.tmpTask.users.splice index, 1 else scope.tmpTask.users.push uid 
 ]
       
 console.log 'Directives loaded'
