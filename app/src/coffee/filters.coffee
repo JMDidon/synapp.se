@@ -15,7 +15,7 @@ synappseApp.filter 'DropboxUIDToUsername', ['Projects', ( Projects ) ->
 		if ~( user.name.substring 0, user.name.indexOf ' ' for user in project.users when user.uid isnt uid ).indexOf firstName then (result.substring 0, 2+result.indexOf ' ' )+'.' else firstName
 ]
 
-synappseApp.filter 'Assignee', ->
+synappseApp.filter 'assignee', ->
 	( name ) ->
 		name.substring 0, 1
 

@@ -11,6 +11,8 @@ synappseApp.config([
     $routeProvider.when('/', {
       templateUrl: 'views/home.html',
       controller: 'HomeCtrl'
+    }).when('/home', {
+      redirectTo: '/'
     }).when('/:project', {
       templateUrl: 'views/project.html',
       controller: 'ProjectCtrl'
@@ -367,9 +369,10 @@ synappseApp = angular.module('synappseControllers', []);
 synappseApp.controller('MainCtrl', function($scope, Projects) {
   $scope.projects = Projects.getProjects();
   $scope.auth = false;
+  $scope.me = {};
   $scope.login = function() {
     $scope.auth = true;
-    $scope.connectedUser = DB.user.name;
+    $scope.me = DB.me;
     return $scope.$apply();
   };
   DB.auth($scope.login);
@@ -428,9 +431,15 @@ synappseApp.controller('ProjectCtrl', function($scope, $routeParams, $location, 
   $scope.toggleForm = function() {
     return $scope.setTaskOpen(0);
   };
-  return $scope.setTaskOpen = function(taskID) {
+  $scope.setTaskOpen = function(taskID) {
     return $scope.taskOpen = taskID === $scope.taskOpen ? false : taskID;
   };
+  return window.addEventListener('keydown', function(e) {
+    if (e.which === 27) {
+      $scope.setTaskOpen(false);
+      return $scope.$apply();
+    }
+  });
 });
 
 synappseApp.controller('TaskCtrl', function($scope, $routeParams, Projects) {
@@ -826,7 +835,7 @@ synappseApp.filter('DropboxUIDToUsername', [
   }
 ]);
 
-synappseApp.filter('Assignee', function() {
+synappseApp.filter('assignee', function() {
   return function(name) {
     return name.substring(0, 1);
   };

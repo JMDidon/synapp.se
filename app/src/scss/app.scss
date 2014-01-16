@@ -61,7 +61,7 @@ a { color: $color; text-decoration: none;  }
   font-size: $base; line-height: 1.2; 
   resize: none; 
 }
-.form-fake { @extend .form-text; color: #C0C0C0; cursor: text; }
+.form-fake { @extend .form-text; color: #7A7A7A; cursor: text; }
 .form-toggle { 
   input { display: none; }
   

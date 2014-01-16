@@ -86,6 +86,7 @@ DB =
 	sync: ( local, callback ) ->
 		return do callback if not @client
 		$this = @
+		
 		@readFolder @folder, ( children ) ->
 			# get projects (children folders)
 			projects = ( child for child in children when child.isFolder )

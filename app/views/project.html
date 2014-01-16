@@ -9,7 +9,7 @@
 					<select ng-model="selectProject" ng-init="selectProject = project.slug">
 						<option ng-repeat="p in projects" value="{{ p.slug }}" ng-selected="p.slug == selectProject">{{ p.name }}</option>
 					</select>
-					<button type="button"  class="btn btn-primary btn-xs" ng-click="sync()">Sync</button>
+					<button type="button" class="btn btn-primary btn-xs" ng-click="sync()">Sync</button>
 				</div>
 				<ul class="nav navbar-nav navbar-right">
 					<li class="active"><a href="{{ project.slug }}">Tasks</a></li>

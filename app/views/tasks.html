@@ -1,7 +1,7 @@
 <section>
 	<section>
 		<div ng-hide="editMode">
-			<span class="form-fake" ng-click="toggleForm()">Enter your task here with some #hastags</span>
+			<input class="form-fake" value="{{ task.name }}" ng-click="toggleForm()" placeholder="Enter your task here with some #hastags"></input>
 		</div>
 		<div task-form ng-if="editMode"></div>
 	</section>
@@ -13,7 +13,7 @@
 			<span class="task-content">
 				<a class="task-name" href="" ng-click="toggleForm()">{{ task.name }}</a>
 				<span class="task-info">
-					<span ng-repeat="user in task.users">{{ user | DropboxUIDToUsername: project.id | Assignee }}</span>
+					<span ng-repeat="user in task.users">{{ user | DropboxUIDToUsername: project.id | assignee }}</span>
 					<select ng-model="task.status" ng-options="s.k as s.v for s in statuses"></select>
 				</span>
 			</span>

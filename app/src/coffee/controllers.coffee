@@ -8,10 +8,11 @@ synappseApp = angular.module 'synappseControllers', []
 synappseApp.controller 'MainCtrl', ( $scope, Projects ) ->
 	$scope.projects = do Projects.getProjects
 	$scope.auth = false
+	$scope.me = {}
 
 	$scope.login = -> 
 		$scope.auth = true
-		$scope.connectedUser = DB.user.name
+		$scope.me = DB.me
 		do $scope.$apply
 
 	DB.auth $scope.login
@@ -39,6 +40,7 @@ synappseApp.controller 'HomeCtrl', ( $scope, $routeParams, Projects ) ->
 # ------------------------------	
 synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, $location, Projects ) ->
 	$scope.project = Projects.findProject $routeParams.project
+	# $location.path '/home' if not $scope.project
 	$scope.project.alerts = [] if not $scope.project.alerts?
 	$scope.task = {}
 	$scope.statuses = [
@@ -58,6 +60,11 @@ synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, $location, Project
 	$scope.$watch 'taskOpen', -> $scope.editMode = $scope.taskOpen is 0
 	$scope.toggleForm = -> $scope.setTaskOpen 0
 	$scope.setTaskOpen = ( taskID ) -> $scope.taskOpen = if taskID is $scope.taskOpen then false else taskID
+	
+	window.addEventListener 'keydown', ( e ) ->
+		if e.which is 27
+			$scope.setTaskOpen false
+			do $scope.$apply
 
 	# alerts
 	# $scope.alert = ( text ) ->
