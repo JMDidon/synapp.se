@@ -41,8 +41,6 @@ synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, $location, Project
 	$scope.project = Projects.findProject $routeParams.project
 	$scope.project.alerts = [] if not $scope.project.alerts?
 	$scope.task = {}
-	$scope.taskOpen = false
-	$scope.editMode = false
 	$scope.statuses = [
 		{ k:0, v:'Todo' },
 		{ k:1, v:'In progress' },
@@ -54,15 +52,14 @@ synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, $location, Project
 	$scope.$watch 'selectProject', ->
 		$location.path '/'+$scope.selectProject
 		
-		
-	$scope.$watch 'taskOpen', ->
-		$scope.editMode = $scope.taskOpen is 0
-		
+	# edit mode
+	$scope.taskOpen = false
+	$scope.editMode = false
+	$scope.$watch 'taskOpen', -> $scope.editMode = $scope.taskOpen is 0
 	$scope.toggleForm = -> $scope.setTaskOpen 0
-		
-	$scope.setTaskOpen = ( taskID ) -> 
-		$scope.taskOpen = if taskID is $scope.taskOpen then false else taskID
+	$scope.setTaskOpen = ( taskID ) -> $scope.taskOpen = if taskID is $scope.taskOpen then false else taskID
 
+	# alerts
 	# $scope.alert = ( text ) ->
 	# 	Projects.alert $scope.project.id, text, DB.user.uid
 	# 	console.log $scope.project.alerts
@@ -75,18 +72,16 @@ synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, $location, Project
 # Task Controller
 # ------------------------------		
 synappseApp.controller 'TaskCtrl', ( $scope, $routeParams, Projects ) ->
-	$scope.taskEdit = angular.copy $scope.task
+	# edit mode
 	$scope.editMode = false
-	
-	$scope.$watch 'taskOpen', ->
-		$scope.editMode = $scope.taskOpen is $scope.task.id
+	$scope.$watch 'taskOpen', -> $scope.editMode = $scope.taskOpen is $scope.task.id
+	$scope.toggleForm = -> $scope.setTaskOpen $scope.task.id
 		
+	# statuses
 	$scope.$watch 'task.status', ->
-		Projects.editTask $scope.project.id, $scope.task.id, $scope.task
-	
-	$scope.toggleForm = -> 
-		$scope.setTaskOpen $scope.task.id
+		Projects.editTask $scope.project.id, $scope.task.id, $scope.task	
 
+	# delete
 	$scope.deleteTask = ->
 		Projects.deleteTask $scope.project.id, $scope.task.id
 

@@ -399,8 +399,6 @@ synappseApp.controller('ProjectCtrl', function($scope, $routeParams, $location, 
     $scope.project.alerts = [];
   }
   $scope.task = {};
-  $scope.taskOpen = false;
-  $scope.editMode = false;
   $scope.statuses = [
     {
       k: 0,
@@ -422,6 +420,8 @@ synappseApp.controller('ProjectCtrl', function($scope, $routeParams, $location, 
   $scope.$watch('selectProject', function() {
     return $location.path('/' + $scope.selectProject);
   });
+  $scope.taskOpen = false;
+  $scope.editMode = false;
   $scope.$watch('taskOpen', function() {
     return $scope.editMode = $scope.taskOpen === 0;
   });
@@ -434,17 +434,16 @@ synappseApp.controller('ProjectCtrl', function($scope, $routeParams, $location, 
 });
 
 synappseApp.controller('TaskCtrl', function($scope, $routeParams, Projects) {
-  $scope.taskEdit = angular.copy($scope.task);
   $scope.editMode = false;
   $scope.$watch('taskOpen', function() {
     return $scope.editMode = $scope.taskOpen === $scope.task.id;
   });
-  $scope.$watch('task.status', function() {
-    return Projects.editTask($scope.project.id, $scope.task.id, $scope.task);
-  });
   $scope.toggleForm = function() {
     return $scope.setTaskOpen($scope.task.id);
   };
+  $scope.$watch('task.status', function() {
+    return Projects.editTask($scope.project.id, $scope.task.id, $scope.task);
+  });
   return $scope.deleteTask = function() {
     return Projects.deleteTask($scope.project.id, $scope.task.id);
   };

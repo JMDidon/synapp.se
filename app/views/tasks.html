@@ -9,7 +9,7 @@
 	<article class="task" ng-repeat="task in project.tasks" ng-controller="TaskCtrl">
 		<div task-form ng-if="editMode"></div>
 		<p ng-hide="editMode">
-			<time class="task-date" ng-hide="editMode">{{ task.due | miniDate }}</time>
+			<time class="task-date">{{ task.due | miniDate }}</time>
 			<span class="task-content">
 				<a class="task-name" href="" ng-click="toggleForm()">{{ task.name }}</a>
 				<span class="task-info">
