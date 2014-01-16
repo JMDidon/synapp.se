@@ -901,3 +901,57 @@ synappseApp.filter('smartDate', function() {
 });
 
 console.log('Filters module loaded');
+
+/* --------------------------------------------
+     Begin directives.coffee
+--------------------------------------------
+*/
+
+
+synappseApp = angular.module('synappseDirectives', []);
+
+synappseApp.directive('taskForm', [
+  'Projects', function(Projects) {
+    return {
+      templateUrl: 'views/taskForm.html',
+      scope: true,
+      link: function(scope) {
+        scope.tmpTask = angular.copy(scope.task);
+        scope.cancel = function() {
+          scope.tmpTask = angular.copy(scope.task);
+          return scope.toggleEditMode();
+        };
+        scope.submit = function() {
+          if (scope.tmpTask.name.match(/^\s*$/)) {
+            return false;
+          }
+          if (scope.task.id != null) {
+            scope.toggleEditMode();
+            return Projects.editTask(scope.project.id, scope.task.id, scope.tmpTask);
+          } else {
+            Projects.createTask(scope.project.id, {
+              name: scope.tmpTask.name,
+              author: DB.user.uid,
+              status: 0,
+              priority: scope.tmpTask.priority,
+              due: scope.tmpTask.due,
+              users: scope.tmpTask.users
+            });
+            return scope.tmpTask = {};
+          }
+        };
+        return scope.toggleUser = function(uid) {
+          var index;
+          index = scope.tmpTask.users.indexOf(uid);
+          if (index > -1) {
+            return scope.tmpTask.users.splice(index, 1);
+          } else {
+            return scope.tmpTask.users.push(uid);
+          }
+        };
+      }
+    };
+  }
+]);
+
+console.log('Directives loaded');

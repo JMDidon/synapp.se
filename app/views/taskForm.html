@@ -2,13 +2,8 @@
 	<textarea ng-Model="tmpTask.name" class="task-text" placeholder="Enter your task here with some #hastags"></textarea>
 	<div class="form-element task-assignment-wrapper">
 		<label ng-repeat="user in project.users" class="task-assignment">
-			<input
-				type="checkbox"
-				value="{{ user.uid }}"
-				class="task-assignment-checkbox"
-				ng-checked="tmpTask.users.indexOf(user.uid) > -1"
-				ng-click="toggleUser(user.uid)"
-			> <span>{{ user.uid | DropboxUIDToUsername: project.id }}</span>
+			<input type="checkbox" value="{{ user.uid }}" class="task-assignment-checkbox" ng-checked="tmpTask.users.indexOf(user.uid) > -1" ng-click="toggleUser(user.uid)">
+			<span>{{ user.uid | DropboxUIDToUsername: project.id }}</span>
 		</label>
 	</div>
 	<div class="task-to form-element">
