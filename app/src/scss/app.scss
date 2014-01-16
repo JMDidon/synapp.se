@@ -18,6 +18,11 @@ h1, h2, h3, h4, h5, h6 { font-size: 1em; font-weight: normal; }
 ul, ol { list-style: none; }
 a { color: $color; text-decoration: none;  }
 
+.antialiased { -webkit-font-smoothing: antialiased; }
+.noselect { -webkit-touch-callout: none; -webkit-user-select: none; -moz-user-select: -moz-none; -ms-user-select: none; user-select: none; }
+.cursor { cursor: pointer; }
+
+.txt-center { text-align: center; }
 .txt-right { text-align: right; }
 .small { font-size: $base*.675; line-height: $unit; }
 .serif { font-family: $serif; }
@@ -41,3 +46,16 @@ a { color: $color; text-decoration: none;  }
 .task-content { display: table; table-layout: fixed; width: 100%; }
 .task-name { display: table-cell; vertical-align: top; }
 .task-info { @extend .task-name, .txt-right; width: $unit*8; }
+
+
+.cal { border-collapse: collapse; }
+.cal-td { @extend .txt-center, .sans; padding: $base/4; line-height: 1; border: 1px solid #E0E0E0; }
+.cal-month { @extend .cal-td; }
+.cal-btn { @extend .cal-td, .cursor, .noselect; &:hover { background: #E0E0E0; }}
+.cal-switch { @extend .cal-btn, .bold; }
+.cal-th { @extend .cal-td, .uppercase, .x-bold, .small; }
+.cal-cell { @extend .cal-btn; }
+.cal-today { font-weight: bold; }
+.cal-disabled { opacity: .2; }
+.cal-weekend { background: #F0F0F0; color: #7A7A7A; }
+.cal-current { background: $color; color: #fff; &:hover { background: $color; }}

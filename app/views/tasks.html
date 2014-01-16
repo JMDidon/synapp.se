@@ -4,7 +4,7 @@
 	</section>
 	
 	<article class="task" ng-repeat="task in project.tasks" ng-controller="TaskCtrl">
-		<div task-form ng-show="editMode"></div>
+		<div task-form ng-if="editMode"></div>
 		<p ng-hide="editMode">
 			<time class="task-date" ng-hide="editMode">{{ task.due | miniDate }}</time>
 			<span class="task-content">

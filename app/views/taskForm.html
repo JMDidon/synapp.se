@@ -6,9 +6,7 @@
 			<span>{{ user.uid | DropboxUIDToUsername: project.id }}</span>
 		</label>
 	</div>
-	<div class="task-to form-element">
-		<input ng-Model="tmpTask.due" type="text" placeholder="yyyy-mm-dd" pattern="^[0-9]{4}-(?:[0]?[0-9]{1}|10|11|12)-(?:[012]?[0-9]{1}|30|31)$">
-	</div>
+	<div calendar></div>
 	<div class="task-buttons">
 		<div class="task-button-priority">
 			<input ng-Model="tmpTask.priority" type="checkbox" name="priority" id="priority" class="task-checkbox-priority">

@@ -23,26 +23,42 @@ a {
   color: #5c4975;
   text-decoration: none; }
 
+.antialiased {
+  -webkit-font-smoothing: antialiased; }
+
+.noselect, .cal-btn, .cal-switch, .cal-cell {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: -moz-none;
+  -ms-user-select: none;
+  user-select: none; }
+
+.cursor, .cal-btn, .cal-switch, .cal-cell {
+  cursor: pointer; }
+
+.txt-center, .cal-td, .cal-month, .cal-btn, .cal-switch, .cal-cell, .cal-th {
+  text-align: center; }
+
 .txt-right, .task-date, .task-info {
   text-align: right; }
 
-.small, .task-date {
+.small, .task-date, .cal-th {
   font-size: 9.45px;
   line-height: 21px; }
 
 .serif, body {
   font-family: "Merriweather" Georgia, Times, "Times New Roman", "Droid Serif", serif; }
 
-.sans, .task-date {
+.sans, .task-date, .cal-td, .cal-month, .cal-btn, .cal-switch, .cal-cell, .cal-th {
   font-family: "Lato", "Helvetica Neue", Helvetica, "Segoe UI", Verdana, Arial, sans-serif; }
 
-.uppercase, .task-date {
+.uppercase, .task-date, .cal-th {
   text-transform: uppercase; }
 
-.bold {
+.bold, .cal-switch {
   font-weight: bold; }
 
-.x-bold, .task-date {
+.x-bold, .task-date, .cal-th {
   font-weight: 900; }
 
 .wrapper {
@@ -77,3 +93,30 @@ a {
 
 .task-info {
   width: 168px; }
+
+.cal {
+  border-collapse: collapse; }
+
+.cal-td, .cal-month, .cal-btn, .cal-switch, .cal-cell, .cal-th {
+  padding: 3.5px;
+  line-height: 1;
+  border: 1px solid #E0E0E0; }
+
+.cal-btn:hover, .cal-switch:hover, .cal-cell:hover {
+  background: #E0E0E0; }
+
+.cal-today {
+  font-weight: bold; }
+
+.cal-disabled {
+  opacity: .2; }
+
+.cal-weekend {
+  background: #F0F0F0;
+  color: #7A7A7A; }
+
+.cal-current {
+  background: #5c4975;
+  color: #fff; }
+  .cal-current:hover {
+    background: #5c4975; }

@@ -32,12 +32,18 @@ synappseApp.filter 'unseen', ->
 synappseApp.filter 'miniDate', ->
 	( date ) ->
 		months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-		date = new Date date
-		date = new Date date.getFullYear(), date.getMonth(), date.getDate()
-		now = new Date
-		now = new Date now.getFullYear(), now.getMonth(), now.getDate()
+		date = getCleanDate date
+		return "" if isNaN date.getTime()
+		now = getCleanDate()
 		diffDays = Math.round (date-now)/(1000*60*60*24)
 		if diffDays is 0 then 'Today' else months[date.getMonth()]+' '+date.getDate()
+		
+synappseApp.filter 'month', ->
+	( date ) ->
+		months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+		date = getCleanDate date
+		months[date.getMonth()]+' '+date.getFullYear()
+	
 	
 synappseApp.filter 'relativeDate', ->
 	( date ) ->
@@ -56,10 +62,8 @@ synappseApp.filter 'smartDate', ->
 	( date ) ->
 		months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 		days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-		date = new Date date
-		date = new Date date.getFullYear(), date.getMonth(), date.getDate()
-		now = new Date
-		now = new Date now.getFullYear(), now.getMonth(), now.getDate()
+		date = getCleanDate date
+		now = getCleanDate()
 		diffDays = Math.round (date-now)/(1000*60*60*24)
 		switch
 			when date.getFullYear() isnt now.getFullYear() then months[date.getMonth()]+' '+date.getDate()+', '+date.getFullYear()
