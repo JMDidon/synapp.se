@@ -41,7 +41,8 @@ synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, $location, Project
 	$scope.project = Projects.findProject $routeParams.project
 	$scope.project.alerts = [] if not $scope.project.alerts?
 	$scope.task = {}
-	$scope.taskEditMode = false
+	$scope.taskOpen = false
+	$scope.editMode = false
 	$scope.statuses = [
 		{ k:0, v:'Todo' },
 		{ k:1, v:'In progress' },
@@ -53,8 +54,14 @@ synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, $location, Project
 	$scope.$watch 'selectProject', ->
 		$location.path '/'+$scope.selectProject
 		
-	$scope.setTaskEditMode = ( taskID ) -> 
-		$scope.taskEditMode = if taskID is $scope.taskEditMode then false else taskID
+		
+	$scope.$watch 'taskOpen', ->
+		$scope.editMode = $scope.taskOpen is 0
+		
+	$scope.toggleForm = -> $scope.setTaskOpen 0
+		
+	$scope.setTaskOpen = ( taskID ) -> 
+		$scope.taskOpen = if taskID is $scope.taskOpen then false else taskID
 
 	# $scope.alert = ( text ) ->
 	# 	Projects.alert $scope.project.id, text, DB.user.uid
@@ -71,14 +78,14 @@ synappseApp.controller 'TaskCtrl', ( $scope, $routeParams, Projects ) ->
 	$scope.taskEdit = angular.copy $scope.task
 	$scope.editMode = false
 	
-	$scope.$watch 'taskEditMode', ->
-		$scope.editMode = $scope.taskEditMode is $scope.task.id
+	$scope.$watch 'taskOpen', ->
+		$scope.editMode = $scope.taskOpen is $scope.task.id
 		
 	$scope.$watch 'task.status', ->
 		Projects.editTask $scope.project.id, $scope.task.id, $scope.task
 	
-	$scope.toggleEditMode = -> 
-		$scope.setTaskEditMode $scope.task.id
+	$scope.toggleForm = -> 
+		$scope.setTaskOpen $scope.task.id
 
 	$scope.deleteTask = ->
 		Projects.deleteTask $scope.project.id, $scope.task.id

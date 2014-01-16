@@ -8,17 +8,16 @@ synappseApp = angular.module 'synappseDirectives', []
 synappseApp.directive 'taskForm', ['Projects', ( Projects ) ->
   templateUrl: 'views/taskForm.html'
   scope: true      
-  controller: ( $scope ) ->
-    $scope.tmpTask = angular.copy $scope.task
+  controller: ( $scope, $element ) ->
+    $element[0].querySelector( 'textarea' ).focus()
+    $scope.tmpTask = if $scope.task.id then angular.copy $scope.task else $scope.task
     $scope.tmpTask.users = [] if not $scope.tmpTask.users?
-    $scope.cancel = ->
-      $scope.tmpTask = angular.copy $scope.task
-      do $scope.toggleEditMode
+    
     $scope.submit = ->
       return false if $scope.tmpTask.name.match /^\s*$/
       $scope.tmpTask.due = false if isNaN ( new Date $scope.tmpTask.due ).getTime()
       if $scope.task.id?
-        do $scope.toggleEditMode
+        do $scope.toggleForm
         Projects.editTask $scope.project.id, $scope.task.id, $scope.tmpTask
       else
         Projects.createTask $scope.project.id, 
@@ -79,7 +78,7 @@ synappseApp.directive 'calendar', ->
     scope.setDate = ( cell ) ->
       do scope.prev if cell.isPrev
       do scope.next if cell.isNext
-      scope.tmpTask.due = cell.date
+      scope.tmpTask.due = if cell.date isnt scope.tmpTask.due then cell.date else false
       
     scope.remove = ->
       scope.tmpTask.due = false

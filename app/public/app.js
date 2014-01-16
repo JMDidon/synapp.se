@@ -399,7 +399,8 @@ synappseApp.controller('ProjectCtrl', function($scope, $routeParams, $location, 
     $scope.project.alerts = [];
   }
   $scope.task = {};
-  $scope.taskEditMode = false;
+  $scope.taskOpen = false;
+  $scope.editMode = false;
   $scope.statuses = [
     {
       k: 0,
@@ -421,22 +422,28 @@ synappseApp.controller('ProjectCtrl', function($scope, $routeParams, $location, 
   $scope.$watch('selectProject', function() {
     return $location.path('/' + $scope.selectProject);
   });
-  return $scope.setTaskEditMode = function(taskID) {
-    return $scope.taskEditMode = taskID === $scope.taskEditMode ? false : taskID;
+  $scope.$watch('taskOpen', function() {
+    return $scope.editMode = $scope.taskOpen === 0;
+  });
+  $scope.toggleForm = function() {
+    return $scope.setTaskOpen(0);
+  };
+  return $scope.setTaskOpen = function(taskID) {
+    return $scope.taskOpen = taskID === $scope.taskOpen ? false : taskID;
   };
 });
 
 synappseApp.controller('TaskCtrl', function($scope, $routeParams, Projects) {
   $scope.taskEdit = angular.copy($scope.task);
   $scope.editMode = false;
-  $scope.$watch('taskEditMode', function() {
-    return $scope.editMode = $scope.taskEditMode === $scope.task.id;
+  $scope.$watch('taskOpen', function() {
+    return $scope.editMode = $scope.taskOpen === $scope.task.id;
   });
   $scope.$watch('task.status', function() {
     return Projects.editTask($scope.project.id, $scope.task.id, $scope.task);
   });
-  $scope.toggleEditMode = function() {
-    return $scope.setTaskEditMode($scope.task.id);
+  $scope.toggleForm = function() {
+    return $scope.setTaskOpen($scope.task.id);
   };
   return $scope.deleteTask = function() {
     return Projects.deleteTask($scope.project.id, $scope.task.id);
@@ -929,15 +936,12 @@ synappseApp.directive('taskForm', [
     return {
       templateUrl: 'views/taskForm.html',
       scope: true,
-      controller: function($scope) {
-        $scope.tmpTask = angular.copy($scope.task);
+      controller: function($scope, $element) {
+        $element[0].querySelector('textarea').focus();
+        $scope.tmpTask = $scope.task.id ? angular.copy($scope.task) : $scope.task;
         if ($scope.tmpTask.users == null) {
           $scope.tmpTask.users = [];
         }
-        $scope.cancel = function() {
-          $scope.tmpTask = angular.copy($scope.task);
-          return $scope.toggleEditMode();
-        };
         $scope.submit = function() {
           if ($scope.tmpTask.name.match(/^\s*$/)) {
             return false;
@@ -946,7 +950,7 @@ synappseApp.directive('taskForm', [
             $scope.tmpTask.due = false;
           }
           if ($scope.task.id != null) {
-            $scope.toggleEditMode();
+            $scope.toggleForm();
             return Projects.editTask($scope.project.id, $scope.task.id, $scope.tmpTask);
           } else {
             Projects.createTask($scope.project.id, {
@@ -1031,7 +1035,7 @@ synappseApp.directive('calendar', function() {
         if (cell.isNext) {
           scope.next();
         }
-        return scope.tmpTask.due = cell.date;
+        return scope.tmpTask.due = cell.date !== scope.tmpTask.due ? cell.date : false;
       };
       scope.remove = function() {
         return scope.tmpTask.due = false;

@@ -1,14 +1,13 @@
 <table class="cal">
-	<thead class="cal-head">
+	<thead>
 		<tr>
 			<td class="cal-switch" ng-click="prev()">&lsaquo;</td>
 			<td colspan="5" class="cal-month">{{ current | month }}</td>
 			<td class="cal-switch" ng-click="next()">&rsaquo;</td>
 		</tr>
 	</thead>
-	<tr><th class="cal-th" ng-repeat="day in ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']">{{ day }}</th></tr>
+	<tr><th class="cal-th" ng-repeat="day in ['M', 'T', 'W', 'T', 'F', 'S', 'S'] track by $index">{{ day }}</th></tr>
 	<tr ng-repeat="row in rows">
 		<td class="cal-cell" ng-repeat="cell in row.cells" ng-click="setDate(cell)" ng-class="{'cal-current': cell.date == tmpTask.due, 'cal-today': cell.isToday, 'cal-disabled': cell.isPrev || cell.isNext, 'cal-weekend': cell.isWeekEnd }">{{ cell.day }}</td>
 	</tr>
 </table>
-Current date: {{ tmpTask.due | miniDate }} <a href="" ng-click="remove()">Remove due</a>

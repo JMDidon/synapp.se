@@ -1,18 +1,15 @@
-<form ng-submit="submit()" class="task-form">
-	<textarea ng-Model="tmpTask.name" class="task-text" placeholder="Enter your task here with some #hastags"></textarea>
-	<div class="form-element task-assignment-wrapper">
-		<label ng-repeat="user in project.users" class="task-assignment">
-			<input type="checkbox" value="{{ user.uid }}" class="task-assignment-checkbox" ng-checked="tmpTask.users.indexOf(user.uid) > -1" ng-click="toggleUser(user.uid)">
-			<span>{{ user.uid | DropboxUIDToUsername: project.id }}</span>
-		</label>
-	</div>
-	<div calendar></div>
-	<div class="task-buttons">
-		<div class="task-button-priority">
-			<input ng-Model="tmpTask.priority" type="checkbox" name="priority" id="priority" class="task-checkbox-priority">
-			<label for="priority" class="task-priority-label">⚠</label>
+<a href="" ng-click="toggleForm()">Cancel</a>
+<form class="form" ng-submit="submit()">
+	<div calendar class="form-cal"></div>
+	<div class="form-fields">
+		<textarea class="form-text" ng-Model="tmpTask.name" placeholder="Enter your task here with some #hastags"></textarea>
+		<div class="form-btns">
+			<label class="form-toggle"><input type="checkbox" ng-Model="tmpTask.priority">⚠</label>
+			<label class="form-toggle" ng-repeat="user in project.users">
+				<input type="checkbox" ng-click="toggleUser(user.uid)" ng-checked="tmpTask.users.indexOf(user.uid) > -1">
+				{{ user.uid | DropboxUIDToUsername: project.id }}
+			</label>
+			<input class="form-btn" type="submit" value="{{ tmpTask.id?'Edit task':'Create task' }}">
 		</div>
-		<input type="submit" class="task-submit" value="{{ tmpTask.id?'Edit task':'Create task' }}">
-		<a href="" ng-click="cancel()" ng-show="task.id">Cancel</a>
 	</div>
 </form>
