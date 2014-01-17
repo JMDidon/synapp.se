@@ -18,7 +18,7 @@ DB =
 	folder: 'Synappse/'
 	file: '_project.json'
 	user: {}
-	client: new Dropbox.Client key: '8437zcdkz4nvggb'
+	client: new Dropbox.Client key: 'd1y1wxe9ow97xx0'
 
 
 	# Authenticate to Dropbox account

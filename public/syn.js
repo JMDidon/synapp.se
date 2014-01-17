@@ -31,7 +31,7 @@ DB = {
   file: '_project.json',
   user: {},
   client: new Dropbox.Client({
-    key: '8437zcdkz4nvggb'
+    key: 'd1y1wxe9ow97xx0'
   }),
   checkAuth: function() {
     var $this;
