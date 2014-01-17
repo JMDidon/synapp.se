@@ -511,7 +511,7 @@ synappseApp.filter('tasksDue', function() {
     _results = [];
     for (_i = 0, _len = tasks.length; _i < _len; _i++) {
       task = tasks[_i];
-      if (task.due !== false && Math.round((task.due - getCleanDate()) / (1000 * 60 * 60 * 24) <= 30 && task.status < 4)) {
+      if (task.due !== false && task.status < 4) {
         _results.push(task);
       }
     }
@@ -526,20 +526,6 @@ synappseApp.filter('tasksNoDue', function() {
     for (_i = 0, _len = tasks.length; _i < _len; _i++) {
       task = tasks[_i];
       if (task.due === false && task.status < 4) {
-        _results.push(task);
-      }
-    }
-    return _results;
-  };
-});
-
-synappseApp.filter('tasksFuture', function() {
-  return function(tasks) {
-    var task, _i, _len, _results;
-    _results = [];
-    for (_i = 0, _len = tasks.length; _i < _len; _i++) {
-      task = tasks[_i];
-      if (Math.round((task.due - getCleanDate()) / (1000 * 60 * 60 * 24) > 30 && task.status < 4)) {
         _results.push(task);
       }
     }
@@ -647,7 +633,6 @@ synappseApp.directive('task', [
       templateUrl: 'views/task.html',
       scope: true,
       controller: function($scope) {
-        $scope.late = $scope.task.due <= $scope.now && $scope.task.status < 3;
         $scope.editMode = false;
         $scope.$watch('taskOpen', function() {
           return $scope.editMode = $scope.taskOpen === $scope.task.id;
@@ -655,6 +640,7 @@ synappseApp.directive('task', [
         $scope.toggleForm = function() {
           return $scope.setTaskOpen($scope.task.id);
         };
+        $scope.late = $scope.task.due <= $scope.now && $scope.task.status < 3;
         $scope.$watch('task.status', function() {
           $scope.late = $scope.task.due <= $scope.now && $scope.task.status < 3;
           return Projects.editTask($scope.project.id, $scope.task.id, $scope.task);
@@ -689,8 +675,6 @@ synappseApp.directive('taskForm', [
             $scope.toggleForm();
             return Projects.editTask($scope.project.id, $scope.task.id, $scope.tmpTask);
           } else {
-            console.log($scope.tmpTask.due);
-            console.log($scope.tmpTask.priority);
             Projects.createTask($scope.project.id, {
               name: $scope.tmpTask.name,
               author: DB.user.uid,

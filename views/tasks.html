@@ -6,15 +6,12 @@
 		<div task-form ng-if="editMode"></div>
 	</section>
 
-	<h1>This week</h1>
+	<h1>Scheduled</h1>
 	<article task class="task" ng-repeat="task in project.tasks | tasksDue | orderBy:['-priority', 'due']"></article>
-
-	<h1>No due</h1>
+	
+	<h1>Unscheduled</h1>
 	<article task class="task" ng-repeat="task in project.tasks | tasksNoDue | orderBy:['edit']:true"></article>
-
-	<h1>Future</h1>
-	<article task class="task" ng-repeat="task in project.tasks | tasksFuture | orderBy:['-priority', 'due']"></article>
-
+	
 	<h1>Archived</h1>
 	<article task class="task" ng-repeat="task in project.tasks | tasksArchived | orderBy:['-priority', 'due']"></article>
 </section>

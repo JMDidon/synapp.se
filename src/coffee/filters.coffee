@@ -30,9 +30,8 @@ synappseApp.filter 'unseen', ->
 
 # Tasks
 # ------------------------------
-synappseApp.filter 'tasksDue', -> ( tasks ) -> task for task in tasks when task.due isnt false and Math.round (task.due-getCleanDate())/(1000*60*60*24) <= 30 and task.status < 4
+synappseApp.filter 'tasksDue', -> ( tasks ) -> task for task in tasks when task.due isnt false and task.status < 4
 synappseApp.filter 'tasksNoDue', -> ( tasks ) -> task for task in tasks when task.due is false and task.status < 4
-synappseApp.filter 'tasksFuture', -> ( tasks ) -> task for task in tasks when Math.round (task.due-getCleanDate())/(1000*60*60*24) > 30 and task.status < 4
 synappseApp.filter 'tasksArchived', -> ( tasks ) -> task for task in tasks when task.status is 4
 
 
