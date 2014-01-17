@@ -7,15 +7,11 @@ synappseApp = angular.module 'synappseControllers', []
 # ------------------------------
 synappseApp.controller 'MainCtrl', ( $scope, Projects ) ->
 	$scope.projects = do Projects.getProjects
-	$scope.auth = false
 	$scope.me = {}
 
 	$scope.login = -> 
-		$scope.auth = true
-		$scope.me = DB.me
+		$scope.me = DB.user
 		do $scope.$apply
-
-	DB.auth $scope.login
 
 	$scope.sync = -> 
 		localStorage['projects'] = [] # Reinitialize cache

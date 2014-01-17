@@ -1,24 +1,53 @@
-# Dropbox authentification
+# Dropbox auth & sync
 # ------------------------------
+css = ( href ) ->
+	link = document.createElement 'link'
+	link.type = 'text/css'
+	link.rel = 'stylesheet'
+	link.href = href
+	document.head.appendChild link
+	
+async = ( src, callback = false ) ->
+	script = document.createElement 'script'
+	script.src = src
+	script.addEventListener 'load', ( e ) -> callback null, e if callback
+	document.body.appendChild script
+
+
 DB = 
-	key: '8437zcdkz4nvggb'
 	folder: 'Synappse/'
 	file: '_project.json'
 	user: {}
-	client: {}
+	client: new Dropbox.Client key: '8437zcdkz4nvggb'
 
 
 	# Authenticate to Dropbox account
 	# ---
-	auth: ( callback ) ->
+	checkAuth: ->
 		$this = @
-		@client = new Dropbox.Client key:@key
+		@client.authenticate { interactive: false }, ( error, client ) -> 
+			console.log error if error
+			do $this.init if client.isAuthenticated()
+			
+	auth: ->
+		$this = @
 		@client.authenticate ( error, client ) -> 
 			console.log error if error
-			$this.client.getAccountInfo ( error, info ) ->
-				$this.user = name: info.name, email: info.email, uid: info.uid
-				do callback
-
+			do $this.init if client.isAuthenticated()
+		
+		
+	# Initialize app
+	# ---
+	init: ->
+		$this = @
+		@client.getAccountInfo ( error, info ) ->
+			$this.user = name: info.name, email: info.email, uid: info.uid
+		
+		css 'public/app.css'
+		async '//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.min.js', ->
+			async '//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular-route.min.js', ->
+				async 'public/app.js', ->
+					angular.element(document).ready -> angular.bootstrap document, ['synappseApp']
 
 	# Check if Synappse folder exists, else create it
 	# ---
@@ -86,7 +115,7 @@ DB =
 	sync: ( local, callback ) ->
 		return do callback if not @client
 		$this = @
-		
+
 		@readFolder @folder, ( children ) ->
 			# get projects (children folders)
 			projects = ( child for child in children when child.isFolder )
@@ -126,47 +155,51 @@ DB =
 		local.comments = @solveConflicts local.comments, distant.comments, local.deletedComments
 		local.deletedTasks = []
 		local.deletedComments = []
-		
+
 		# update comments taskIDs
 		( comment.taskID = task.id for task in local.tasks when task.oldID is comment.taskID ) for comment in local.comments
 		delete task.oldID for task in local.tasks
 		# update replies parentIDs
 		# ( reply.parentID = comment.id for comment in local.comments when comment.oldID is reply.parentID ) for reply in local.comments 
 		# delete comment.oldID for comment in local.comments
-		
+
 		# update alerts
 		# local.alerts.push distantAlert for distantAlert in distant.alerts when distantAlert.id not in ( a.id for a in local.alerts )
 		# local.alerts = angular.copy ( localAlert for localAlert in local.alerts when localAlert.seen.length < local.users.length )
 
 		# save file
 		@saveProject local
-		
-		
-		
+
+
+
 	# Solve conflicts (add, edit, delete)
 	# ---
 	solveConflicts: ( localItems, distantItems, deletedItems ) ->	
 		distantIDs = ( item.id for item in distantItems )
-		
+
 		# delete local items missing in distant
 		localItems = angular.copy ( item for item, i in localItems when item.id.length is 2 or item.id in distantIDs )
-		
+
 		# add local items missing in distant
 		for item in localItems when item.id.length is 2
 			item.oldID = item.id
 			item.author = DB.user.uid
 			item.id = generateID 3, distantIDs
-		
+
 		# edit local items from distant
 		for localItem in localItems when localItem.id.length is 3 and localItem.id in distantIDs
 			for distantItem in distantItems when localItem.id is distantItem.id
 				( localItem[k] = v for k, v of distantItem ) if localItem.edit <= distantItem.edit
-		
+
 		# return distant items missing in local
 		localIDs = ( item.id for item in localItems )
 		localItems.push item for item in distantItems when item.id not in localIDs and item.id not in deletedItems
 		localItems
-		
-		
 
-console.log 'Dropbox module loaded'
+
+
+# Check auth & bind button
+# ------------------------------
+do -> 
+	do DB.checkAuth
+	( document.getElementById 'dbauth' ).addEventListener 'click', -> do DB.auth

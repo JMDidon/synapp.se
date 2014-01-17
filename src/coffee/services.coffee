@@ -1,6 +1,6 @@
 # Services module
 # ------------------------------
-synappseApp = angular.module 'synappseServices', ['ngResource']
+synappseApp = angular.module 'synappseServices', []
 
 
 # Projects factory
