@@ -1,7 +1,8 @@
 # Dropbox auth & sync
 # ------------------------------
 async = ( url, callback = false ) ->
-	css = ( url.substr -3 ) is 'css'
+	css = url.match /\.css(\?.*)?$/
+	url += '?t='+( new Date ).getTime() # avoid cache
 	item = document.createElement if css then 'link' else 'script'
 	if css then [ item.type, item.rel, item.href ] = [ 'text/css', 'stylesheet', url ] else item.src = url
 	item.addEventListener 'load', ( e ) -> callback null, e if callback

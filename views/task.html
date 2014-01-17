@@ -1,5 +1,5 @@
 <div task-form ng-if="editMode"></div>
-<p ng-hide="editMode" ng-class="{'task-priority':true}">
+<p ng-hide="editMode" ng-class="{'task-priority':task.priority, 'task-late':task.due <= now}">
   <time class="task-date">{{ task.due | miniDate }}</time>
   <span class="task-content">
     <a class="task-name" href="" ng-click="toggleForm()">{{ task.name }}</a>

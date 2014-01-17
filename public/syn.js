@@ -7,7 +7,8 @@ async = function(url, callback) {
   if (callback == null) {
     callback = false;
   }
-  css = (url.substr(-3)) === 'css';
+  css = url.match(/\.css(\?.*)?$/);
+  url += '?t=' + (new Date).getTime();
   item = document.createElement(css ? 'link' : 'script');
   if (css) {
     _ref = ['text/css', 'stylesheet', url], item.type = _ref[0], item.rel = _ref[1], item.href = _ref[2];
