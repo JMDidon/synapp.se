@@ -6,7 +6,6 @@ JavaScript SDK: https://github.com/dropbox/dropbox-js
 Original documentation: https://www.dropbox.com/developers/core
 
 ### actions available
-- `DB.auth( callback )`
 - `DB.sync( [ (project), … ], callback )`
 
 ### project object structure
