@@ -647,6 +647,7 @@ synappseApp.directive('task', [
       templateUrl: 'views/task.html',
       scope: true,
       controller: function($scope) {
+        $scope.late = $scope.task.due <= $scope.now && $scope.task.status < 3;
         $scope.editMode = false;
         $scope.$watch('taskOpen', function() {
           return $scope.editMode = $scope.taskOpen === $scope.task.id;
@@ -655,6 +656,7 @@ synappseApp.directive('task', [
           return $scope.setTaskOpen($scope.task.id);
         };
         $scope.$watch('task.status', function() {
+          $scope.late = $scope.task.due <= $scope.now && $scope.task.status < 3;
           return Projects.editTask($scope.project.id, $scope.task.id, $scope.task);
         });
         return $scope.deleteTask = function() {

@@ -10,12 +10,14 @@ synappseApp.directive 'task', ['Projects', ( Projects ) ->
   scope: true      
   controller: ( $scope ) ->
     # edit mode
+    $scope.late = ( $scope.task.due <= $scope.now and $scope.task.status < 3 )
     $scope.editMode = false
     $scope.$watch 'taskOpen', -> $scope.editMode = $scope.taskOpen is $scope.task.id
     $scope.toggleForm = -> $scope.setTaskOpen $scope.task.id
       
     # statuses
     $scope.$watch 'task.status', ->
+      $scope.late = ( $scope.task.due <= $scope.now and $scope.task.status < 3 )
       Projects.editTask $scope.project.id, $scope.task.id, $scope.task	
     
     # delete
