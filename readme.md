@@ -5,10 +5,6 @@ Internal documentation.
 JavaScript SDK: https://github.com/dropbox/dropbox-js  
 Original documentation: https://www.dropbox.com/developers/core
 
-### actions available
-- `DB.auth( callback )`
-- `DB.sync( [ (project), … ], callback )`
-
 ### project object structure
 
 
@@ -40,6 +36,8 @@ Original documentation: https://www.dropbox.com/developers/core
         author: (int) user UID
         name: (string)
         due: (timestamp) due date
+        status: (int) from 0 to 4
+        priority: (bool)
         users: [ (int), … ] assigned users UIDs
       },
       …

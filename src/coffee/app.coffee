@@ -42,5 +42,3 @@ synappseApp.config ['$routeProvider',
 			redirectTo: '/'
 		undefined
 ]
-
-console.log 'App loaded'

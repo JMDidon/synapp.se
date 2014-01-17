@@ -36,9 +36,10 @@ synappseApp.controller 'HomeCtrl', ( $scope, $routeParams, Projects ) ->
 # ------------------------------	
 synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, $location, Projects ) ->
 	$scope.project = Projects.findProject $routeParams.project
+	$scope.now = getCleanDate()
+	
 	# $location.path '/home' if not $scope.project
 	$scope.project.alerts = [] if not $scope.project.alerts?
-	$scope.task = {}
 	$scope.statuses = [
 		{ k:0, v:'Todo' },
 		{ k:1, v:'In progress' },
@@ -49,6 +50,11 @@ synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, $location, Project
 
 	$scope.$watch 'selectProject', ->
 		$location.path '/'+$scope.selectProject
+		
+	# add task
+	$scope.task = {}
+	$scope.emptyTask = ->
+		$scope.task = {}
 		
 	# edit mode
 	$scope.taskOpen = false
@@ -71,24 +77,6 @@ synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, $location, Project
 	# 	Projects.seen $scope.project.id, alertID, DB.user.uid
 
 
-
-# Task Controller
-# ------------------------------		
-synappseApp.controller 'TaskCtrl', ( $scope, $routeParams, Projects ) ->
-	# edit mode
-	$scope.editMode = false
-	$scope.$watch 'taskOpen', -> $scope.editMode = $scope.taskOpen is $scope.task.id
-	$scope.toggleForm = -> $scope.setTaskOpen $scope.task.id
-		
-	# statuses
-	$scope.$watch 'task.status', ->
-		Projects.editTask $scope.project.id, $scope.task.id, $scope.task	
-
-	# delete
-	$scope.deleteTask = ->
-		Projects.deleteTask $scope.project.id, $scope.task.id
-
-
 # Comment Controller
 # ------------------------------		
 synappseApp.controller 'CommentCtrl', ( $scope, $routeParams, Projects ) ->
@@ -103,7 +91,3 @@ synappseApp.controller 'CommentCtrl', ( $scope, $routeParams, Projects ) ->
 
 	$scope.deleteComment = ->
 		Projects.deleteComment $scope.project.id, $scope.comment.id
-
-
-
-console.log 'Controllers loaded'

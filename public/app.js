@@ -28,8 +28,6 @@ synappseApp.config([
   }
 ]);
 
-console.log('App loaded');
-
 /* --------------------------------------------
      Begin controllers.coffee
 --------------------------------------------
@@ -67,10 +65,10 @@ synappseApp.controller('HomeCtrl', function($scope, $routeParams, Projects) {
 
 synappseApp.controller('ProjectCtrl', function($scope, $routeParams, $location, Projects) {
   $scope.project = Projects.findProject($routeParams.project);
+  $scope.now = getCleanDate();
   if ($scope.project.alerts == null) {
     $scope.project.alerts = [];
   }
-  $scope.task = {};
   $scope.statuses = [
     {
       k: 0,
@@ -92,6 +90,10 @@ synappseApp.controller('ProjectCtrl', function($scope, $routeParams, $location, 
   $scope.$watch('selectProject', function() {
     return $location.path('/' + $scope.selectProject);
   });
+  $scope.task = {};
+  $scope.emptyTask = function() {
+    return $scope.task = {};
+  };
   $scope.taskOpen = false;
   $scope.editMode = false;
   $scope.$watch('taskOpen', function() {
@@ -111,22 +113,6 @@ synappseApp.controller('ProjectCtrl', function($scope, $routeParams, $location, 
   });
 });
 
-synappseApp.controller('TaskCtrl', function($scope, $routeParams, Projects) {
-  $scope.editMode = false;
-  $scope.$watch('taskOpen', function() {
-    return $scope.editMode = $scope.taskOpen === $scope.task.id;
-  });
-  $scope.toggleForm = function() {
-    return $scope.setTaskOpen($scope.task.id);
-  };
-  $scope.$watch('task.status', function() {
-    return Projects.editTask($scope.project.id, $scope.task.id, $scope.task);
-  });
-  return $scope.deleteTask = function() {
-    return Projects.deleteTask($scope.project.id, $scope.task.id);
-  };
-});
-
 synappseApp.controller('CommentCtrl', function($scope, $routeParams, Projects) {
   $scope.createComment = function() {
     Projects.createComment($scope.project.id, {
@@ -142,8 +128,6 @@ synappseApp.controller('CommentCtrl', function($scope, $routeParams, Projects) {
     return Projects.deleteComment($scope.project.id, $scope.comment.id);
   };
 });
-
-console.log('Controllers loaded');
 
 /* --------------------------------------------
      Begin services.coffee
@@ -411,8 +395,6 @@ synappseApp.factory('Projects', function() {
   return factory;
 });
 
-console.log('Services loaded');
-
 /* --------------------------------------------
      Begin helpers.coffee
 --------------------------------------------
@@ -452,8 +434,6 @@ slug = function(str) {
   }
   return str.replace(/^\s+|\s+$/g, '').replace(/[^-a-zA-Z0-9\s]+/ig, '').replace(/\s/gi, "-");
 };
-
-console.log('Helpers module loaded');
 
 /* --------------------------------------------
      Begin filters.coffee
@@ -506,7 +486,7 @@ synappseApp.filter('DropboxUIDToUsername', [
 
 synappseApp.filter('assignee', function() {
   return function(name) {
-    return name.substring(0, 1);
+    return name.substr(0, 1);
   };
 });
 
@@ -525,16 +505,71 @@ synappseApp.filter('unseen', function() {
   };
 });
 
+synappseApp.filter('tasksDue', function() {
+  return function(tasks) {
+    var task, _i, _len, _results;
+    _results = [];
+    for (_i = 0, _len = tasks.length; _i < _len; _i++) {
+      task = tasks[_i];
+      if (task.due !== false && Math.round((task.due - getCleanDate()) / (1000 * 60 * 60 * 24) <= 30 && task.status < 4)) {
+        _results.push(task);
+      }
+    }
+    return _results;
+  };
+});
+
+synappseApp.filter('tasksNoDue', function() {
+  return function(tasks) {
+    var task, _i, _len, _results;
+    _results = [];
+    for (_i = 0, _len = tasks.length; _i < _len; _i++) {
+      task = tasks[_i];
+      if (task.due === false && task.status < 4) {
+        _results.push(task);
+      }
+    }
+    return _results;
+  };
+});
+
+synappseApp.filter('tasksFuture', function() {
+  return function(tasks) {
+    var task, _i, _len, _results;
+    _results = [];
+    for (_i = 0, _len = tasks.length; _i < _len; _i++) {
+      task = tasks[_i];
+      if (Math.round((task.due - getCleanDate()) / (1000 * 60 * 60 * 24) > 30 && task.status < 4)) {
+        _results.push(task);
+      }
+    }
+    return _results;
+  };
+});
+
+synappseApp.filter('tasksArchived', function() {
+  return function(tasks) {
+    var task, _i, _len, _results;
+    _results = [];
+    for (_i = 0, _len = tasks.length; _i < _len; _i++) {
+      task = tasks[_i];
+      if (task.status === 4) {
+        _results.push(task);
+      }
+    }
+    return _results;
+  };
+});
+
 synappseApp.filter('miniDate', function() {
   return function(date) {
-    var diffDays, months, now;
-    months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    date = getCleanDate(date);
-    if (isNaN(date.getTime())) {
+    var diffDays, months;
+    if (date === false) {
       return "";
     }
-    now = getCleanDate();
-    diffDays = Math.round((date - now) / (1000 * 60 * 60 * 24));
+    months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    date = getCleanDate(date);
+    diffDays = Math.round((date - getCleanDate()) / (1000 * 60 * 60 * 24));
     if (diffDays === 0) {
       return 'Today';
     } else {
@@ -598,8 +633,6 @@ synappseApp.filter('smartDate', function() {
   };
 });
 
-console.log('Filters module loaded');
-
 /* --------------------------------------------
      Begin directives.coffee
 --------------------------------------------
@@ -607,6 +640,30 @@ console.log('Filters module loaded');
 
 
 synappseApp = angular.module('synappseDirectives', []);
+
+synappseApp.directive('task', [
+  'Projects', function(Projects) {
+    return {
+      templateUrl: 'views/task.html',
+      scope: true,
+      controller: function($scope) {
+        $scope.editMode = false;
+        $scope.$watch('taskOpen', function() {
+          return $scope.editMode = $scope.taskOpen === $scope.task.id;
+        });
+        $scope.toggleForm = function() {
+          return $scope.setTaskOpen($scope.task.id);
+        };
+        $scope.$watch('task.status', function() {
+          return Projects.editTask($scope.project.id, $scope.task.id, $scope.task);
+        });
+        return $scope.deleteTask = function() {
+          return Projects.deleteTask($scope.project.id, $scope.task.id);
+        };
+      }
+    };
+  }
+]);
 
 synappseApp.directive('taskForm', [
   'Projects', function(Projects) {
@@ -630,15 +687,19 @@ synappseApp.directive('taskForm', [
             $scope.toggleForm();
             return Projects.editTask($scope.project.id, $scope.task.id, $scope.tmpTask);
           } else {
+            console.log($scope.tmpTask.due);
+            console.log($scope.tmpTask.priority);
             Projects.createTask($scope.project.id, {
               name: $scope.tmpTask.name,
               author: DB.user.uid,
               status: 0,
-              priority: $scope.tmpTask.priority,
+              priority: $scope.tmpTask.priority || false,
               due: $scope.tmpTask.due,
               users: $scope.tmpTask.users
             });
-            return $scope.tmpTask = {};
+            $scope.emptyTask();
+            $scope.tmpTask = $scope.task;
+            return $element[0].querySelector('textarea').focus();
           }
         };
         return $scope.toggleUser = function(uid) {
@@ -721,5 +782,3 @@ synappseApp.directive('calendar', function() {
     }
   };
 });
-
-console.log('Directives loaded');

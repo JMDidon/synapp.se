@@ -1,17 +1,11 @@
 # Dropbox auth & sync
 # ------------------------------
-css = ( href ) ->
-	link = document.createElement 'link'
-	link.type = 'text/css'
-	link.rel = 'stylesheet'
-	link.href = href
-	document.head.appendChild link
-	
-async = ( src, callback = false ) ->
-	script = document.createElement 'script'
-	script.src = src
-	script.addEventListener 'load', ( e ) -> callback null, e if callback
-	document.body.appendChild script
+async = ( url, callback = false ) ->
+	css = ( url.substr -3 ) is 'css'
+	item = document.createElement if css then 'link' else 'script'
+	if css then [ item.type, item.rel, item.href ] = [ 'text/css', 'stylesheet', url ] else item.src = url
+	item.addEventListener 'load', ( e ) -> callback null, e if callback
+	( if css then document.body else document.head ).appendChild item
 
 
 DB = 
@@ -25,7 +19,7 @@ DB =
 	# ---
 	checkAuth: ->
 		$this = @
-		@client.authenticate { interactive: false }, ( error, client ) -> 
+		@client.authenticate { interactive: false }, ( error, client ) -> 
 			console.log error if error
 			do $this.init if client.isAuthenticated()
 			
@@ -43,11 +37,11 @@ DB =
 		@client.getAccountInfo ( error, info ) ->
 			$this.user = name: info.name, email: info.email, uid: info.uid
 		
-		css 'public/app.css'
-		async '//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.min.js', ->
-			async '//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular-route.min.js', ->
-				async 'public/app.js', ->
-					angular.element(document).ready -> angular.bootstrap document, ['synappseApp']
+		async 'public/app.css', ->
+			async '//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.min.js', ->
+				async '//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular-route.min.js', ->
+					async 'public/app.js', ->
+						angular.element(document).ready -> angular.bootstrap document, ['synappseApp']
 
 	# Check if Synappse folder exists, else create it
 	# ---

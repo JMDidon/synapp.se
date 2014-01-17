@@ -80,6 +80,12 @@ a {
 .task {
   position: relative; }
 
+.task-priority {
+  background: red; }
+
+.task-late {
+  background: blue; }
+
 .task-date {
   position: absolute;
   top: 0;

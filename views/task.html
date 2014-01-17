@@ -1,0 +1,13 @@
+<div task-form ng-if="editMode"></div>
+<p ng-hide="editMode" ng-class="{'task-priority':true}">
+  <time class="task-date">{{ task.due | miniDate }}</time>
+  <span class="task-content">
+    <a class="task-name" href="" ng-click="toggleForm()">{{ task.name }}</a>
+    <span class="task-info">
+      {{ task.priority }} 
+      <span ng-repeat="user in task.users">{{ user | DropboxUIDToUsername: project.id | assignee }}</span>
+      <select ng-model="task.status" ng-options="s.k as s.v for s in statuses"></select>
+    </span>
+  </span>
+  <span class="task-comments-nb"><a href="">0</a></span>
+</p>

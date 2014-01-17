@@ -41,10 +41,10 @@ synappseApp.factory 'Projects', ->
 			do factory.cache
 	
 	factory.readProject = ( id ) -> 
-		( project for project in Projects when project.id is id )[0] || {}
+		( project for project in Projects when project.id is id )[0] or {}
 		
 	factory.findProject = ( slug ) -> 
-		( project for project in Projects when project.slug is slug )[0] || {}
+		( project for project in Projects when project.slug is slug )[0] or {}
 
 	# USERS
 	factory.getUserByUID = ( projectID, uid ) ->
@@ -113,5 +113,3 @@ synappseApp.factory 'Projects', ->
 
 
 	factory
-
-console.log 'Services loaded'
