@@ -1,4 +1,4 @@
-# Dropbox auth & sync
+# Load css/js
 # ------------------------------
 load = ( url, callback = false ) ->
 	if url instanceof Array then load url.shift(), ( if url.length then ( -> load url, callback ) else callback )
@@ -11,6 +11,9 @@ load = ( url, callback = false ) ->
 		( if css then document.body else document.head ).appendChild item
 
 
+
+# Dropbox auth & sync
+# ------------------------------
 DB = 
 	folder: 'Synappse/'
 	file: '_project.json'
