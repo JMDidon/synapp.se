@@ -17,8 +17,8 @@ load = ( url, callback = false ) ->
 DB = 
 	folder: 'Synappse/'
 	file: '_project.json'
-	user: {}
-	client: new Dropbox.Client key: 'd1y1wxe9ow97xx0'
+	user: if localStorage['user'] then JSON.parse localStorage['user'] else {}
+	client: if Dropbox? then new Dropbox.Client key: 'd1y1wxe9ow97xx0' else {}
 
 
 	# Authenticate to Dropbox account
@@ -42,6 +42,7 @@ DB =
 		$this = @
 		@client.getAccountInfo ( error, info ) ->
 			$this.user = name: info.name, email: info.email, uid: info.uid
+			localStorage['user'] = JSON.stringify $this.user
 		
 		load ['public/app.css', '//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.min.js', '//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular-route.min.js', 'public/app.js'], ->
 			angular.bootstrap document, ['synappseApp']
@@ -169,7 +170,6 @@ DB =
 		@saveProject local
 
 
-
 	# Solve conflicts (add, edit, delete)
 	# ---
 	solveConflicts: ( localItems, distantItems, deletedItems ) ->	
@@ -200,4 +200,4 @@ DB =
 # ------------------------------
 do -> 
 	do DB.checkAuth
-	( document.getElementById 'dbauth' ).addEventListener 'click', -> do DB.auth
+	( document.getElementById 'auth' ).addEventListener 'click', -> do DB.auth

@@ -3,6 +3,7 @@
 synappseApp = angular.module 'synappseControllers', []
 
 
+
 # Main Controller
 # ------------------------------
 synappseApp.controller 'MainCtrl', ['$scope', 'Projects', ( $scope, Projects ) ->
