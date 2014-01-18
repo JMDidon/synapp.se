@@ -44,7 +44,7 @@ DB =
 			$this.user = name: info.name, email: info.email, uid: info.uid
 		
 		load ['public/app.css', '//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.min.js', '//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular-route.min.js', 'public/app.js'], ->
-			angular.element(document).ready -> angular.bootstrap document, ['synappseApp']
+			angular.bootstrap document, ['synappseApp']
 
 
 	# Check if Synappse folder exists, else create it

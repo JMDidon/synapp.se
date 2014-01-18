@@ -5,7 +5,7 @@ synappseApp = angular.module 'synappseControllers', []
 
 # Main Controller
 # ------------------------------
-synappseApp.controller 'MainCtrl', ( $scope, Projects ) ->
+synappseApp.controller 'MainCtrl', ['$scope', 'Projects', ( $scope, Projects ) ->
 	$scope.projects = do Projects.getProjects
 	$scope.me = {}
 
@@ -23,18 +23,20 @@ synappseApp.controller 'MainCtrl', ( $scope, Projects ) ->
 		Projects.createProject $scope.projectName
 		$scope.projectName = ""
 		$scope.projectFolder = ""
+]
 
 
 # Home Controller
 # ------------------------------
-synappseApp.controller 'HomeCtrl', ( $scope, $routeParams, Projects ) ->
+synappseApp.controller 'HomeCtrl', ['$scope', 'Projects', ( $scope, Projects ) ->
 	$scope.createProject = ->
 		Projects.createProject $scope.name
+]
 
 
 # Project Controller
 # ------------------------------	
-synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, $location, Projects ) ->
+synappseApp.controller 'ProjectCtrl', ['$scope', '$routeParams', '$location', 'Projects', ( $scope, $routeParams, $location, Projects ) ->
 	$scope.project = Projects.findProject $routeParams.project
 	$scope.now = getCleanDate()
 	
@@ -75,11 +77,12 @@ synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, $location, Project
 	# 
 	# $scope.seen = ( alertID ) ->
 	# 	Projects.seen $scope.project.id, alertID, DB.user.uid
+]
 
 
 # Comment Controller
 # ------------------------------		
-synappseApp.controller 'CommentCtrl', ( $scope, $routeParams, Projects ) ->
+synappseApp.controller 'CommentCtrl', ['$scope', '$routeParams', 'Projects', ( $scope, $routeParams, Projects ) ->
 	$scope.createComment = ->
 		Projects.createComment $scope.project.id,
 			author: DB.user.uid
@@ -91,3 +94,4 @@ synappseApp.controller 'CommentCtrl', ( $scope, $routeParams, Projects ) ->
 
 	$scope.deleteComment = ->
 		Projects.deleteComment $scope.project.id, $scope.comment.id
+]

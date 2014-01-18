@@ -12,7 +12,6 @@ synappseApp = angular.module 'synappseApp', [
 	'ngRoute'
 	'synappseControllers'
 	'synappseServices'
-	'synappseHelpers'
 	'synappseFilters'
 	'synappseDirectives'
 ]

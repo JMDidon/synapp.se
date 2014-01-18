@@ -1,11 +1,5 @@
-# Helpers module
+# Helpers
 # ------------------------------
-synappseApp = angular.module 'synappseHelpers', []
-
-
-# Data processing helpers
-# ------------------------------
-
 getCleanDate = ( date ) ->
 	date = if date then new Date date else new Date
 	date = new Date date.getFullYear(), date.getMonth(), date.getDate()

@@ -8,7 +8,7 @@ synappseApp = angular.module 'synappseDirectives', []
 synappseApp.directive 'task', ['Projects', ( Projects ) ->
   templateUrl: 'views/task.html'
   scope: true      
-  controller: ( $scope ) ->
+  controller: ['$scope', ( $scope ) ->
     # edit mode
     $scope.editMode = false
     $scope.$watch 'taskOpen', -> $scope.editMode = $scope.taskOpen is $scope.task.id
@@ -23,6 +23,7 @@ synappseApp.directive 'task', ['Projects', ( Projects ) ->
     # delete
     $scope.deleteTask = ->
       Projects.deleteTask $scope.project.id, $scope.task.id
+  ]
 ]
 
 
@@ -31,7 +32,7 @@ synappseApp.directive 'task', ['Projects', ( Projects ) ->
 synappseApp.directive 'taskForm', ['Projects', ( Projects ) ->
   templateUrl: 'views/taskForm.html'
   scope: true      
-  controller: ( $scope, $element ) ->
+  controller: ['$scope', '$element', ( $scope, $element ) ->
     $element[0].querySelector( 'textarea' ).focus()
     $scope.tmpTask = if $scope.task.id then angular.copy $scope.task else $scope.task
     $scope.tmpTask.users = [] if not $scope.tmpTask.users?
@@ -56,6 +57,7 @@ synappseApp.directive 'taskForm', ['Projects', ( Projects ) ->
     $scope.toggleUser = ( uid ) ->
       index = $scope.tmpTask.users.indexOf uid
       if index > -1 then $scope.tmpTask.users.splice index, 1 else $scope.tmpTask.users.push uid 
+  ]
 ]
 
 
