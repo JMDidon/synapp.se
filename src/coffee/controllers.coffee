@@ -7,6 +7,9 @@ synappseApp = angular.module 'synappseControllers', []
 # Main Controller
 # ------------------------------
 synappseApp.controller 'MainCtrl', ['$scope', 'Projects', ( $scope, Projects ) ->
+	$scope.about = false
+	$scope.timeout = false
+	$scope.synced = false
 	$scope.projects = do Projects.getProjects
 	$scope.me = {}
 
@@ -14,11 +17,20 @@ synappseApp.controller 'MainCtrl', ['$scope', 'Projects', ( $scope, Projects ) -
 		$scope.me = DB.user
 		do $scope.$apply
 
-	$scope.sync = -> 
+	$scope.sync = ->
 		localStorage['projects'] = [] # Reinitialize cache
 		DB.sync $scope.projects, ->
 			do Projects.cache
 			do $scope.$apply
+			clearTimeout $scope.timeout
+			$scope.synced = true
+			do $scope.$apply
+	do $scope.sync
+	
+	$scope.schedule = ->
+		$scope.synced = false
+		clearTimeout $scope.timeout if $scope.timeout
+		$scope.timeout = setTimeout $scope.sync, 20*1000
 
 	$scope.createProject = ->
 		Projects.createProject $scope.projectName
@@ -40,6 +52,10 @@ synappseApp.controller 'HomeCtrl', ['$scope', 'Projects', ( $scope, Projects ) -
 synappseApp.controller 'ProjectCtrl', ['$scope', '$routeParams', '$location', 'Projects', ( $scope, $routeParams, $location, Projects ) ->
 	$scope.project = Projects.findProject $routeParams.project
 	$scope.now = getCleanDate()
+	
+	# autosync
+	$scope.$watch 'project', $scope.schedule, true
+	
 	
 	# $location.path '/home' if not $scope.project
 	$scope.project.alerts = [] if not $scope.project.alerts?

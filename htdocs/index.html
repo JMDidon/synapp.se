@@ -12,8 +12,8 @@
 <body ng-controller="MainCtrl">
 	
 	
-	<div ng-view></div>
-	<div ng-hide="true">
+	<div ng-view ng-hide="about"></div>
+	<div ng-show="about">
 		<p>Landing page coming soon…</p>
 		<button type="button" id="auth">Connect with Dropbox</button>
 	</div>

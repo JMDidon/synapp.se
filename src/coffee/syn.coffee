@@ -111,8 +111,8 @@ DB =
 
 	# Synchronize
 	# ---
-	sync: ( local, callback ) ->
-		return do callback if not @client
+	sync: ( local, callback = false ) ->
+		return ( do callback if callback ) if not @client
 		$this = @
 
 		@readFolder @folder, ( children ) ->
@@ -134,8 +134,7 @@ DB =
 					# when all DB folders are sync
 					if not waiting
 						$this.checkLocalProjects local, ( c.path+'/' for c in projects ), -> 
-							console.log "sync complete"
-							do callback
+							do callback if callback
 
 
 	# Update project
