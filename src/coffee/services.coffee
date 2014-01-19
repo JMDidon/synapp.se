@@ -14,32 +14,21 @@ synappseApp.factory 'Projects', ->
 
 	# PROJECTS
 	factory.createProject = ( name ) ->
-		# Check if project exist
-		projectExist = false
-		projectTestName = name.toLowerCase()
+		[original, n] = [name, 2]
+		( name = original+' ('+n+')'; n++ ) while name.toLowerCase() in ( p.name.toLowerCase() for p in Projects )
+		Projects.push
+			name: name
+			id: generateID 2, ( p.id for p in Projects )
+			folder: DB.folder+( slug name )+'/'
+			slug: slug name
+			users: []
+			alerts: []
+			tasks: []
+			deletedTasks: []
+			comments: []
+			deletedComments: []
+		do factory.cache
 
-		for project in Projects when project.name is projectTestName
-			projectExist = true
-
-		if projectExist == true
-			console.log 'Project already exists !' 
-			return
-		else
-			id = generateID 2, ( project.id for project in Projects )
-			console.log 'Creating task with id : ', id
-			Projects.push
-				name: name
-				id: id
-				folder: DB.folder+( slug name )+'/'
-				slug: slug name
-				users: []
-				alerts: []
-				tasks: []
-				deletedTasks: []
-				comments: []
-				deletedComments: []
-			do factory.cache
-	
 	factory.readProject = ( id ) -> 
 		( project for project in Projects when project.id is id )[0] or {}
 		

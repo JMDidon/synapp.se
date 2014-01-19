@@ -44,7 +44,7 @@ DB =
 			$this.user = name: info.name, email: info.email, uid: info.uid
 			localStorage['user'] = JSON.stringify $this.user
 		
-		load ['public/app.css', '//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.min.js', '//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular-route.min.js', 'public/app.js'], ->
+		load ['public/app.css', '//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.js', '//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular-route.min.js', 'public/app.js'], ->
 			angular.bootstrap document, ['synappseApp']
 
 
@@ -186,6 +186,7 @@ DB =
 		# edit local items from distant
 		for localItem in localItems when localItem.id.length is 3 and localItem.id in distantIDs
 			for distantItem in distantItems when localItem.id is distantItem.id
+				console.log localItem.name+': '+localItem.edit+' '+distantItem.edit+' '+(localItem.edit <= distantItem.edit)
 				( localItem[k] = v for k, v of distantItem ) if localItem.edit <= distantItem.edit
 
 		# return distant items missing in local

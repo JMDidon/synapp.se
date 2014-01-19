@@ -16,7 +16,7 @@ synappseApp.directive 'task', ['Projects', ( Projects ) ->
       
     # statuses
     $scope.late = ( $scope.task.due <= $scope.now and $scope.task.status < 3 )
-    $scope.$watch 'task.status', ->
+    $scope.editTask = ->
       $scope.late = ( $scope.task.due <= $scope.now and $scope.task.status < 3 )
       Projects.editTask $scope.project.id, $scope.task.id, $scope.task	
     

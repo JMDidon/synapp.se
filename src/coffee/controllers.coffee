@@ -31,11 +31,6 @@ synappseApp.controller 'MainCtrl', ['$scope', 'Projects', ( $scope, Projects ) -
 		$scope.synced = false
 		clearTimeout $scope.timeout if $scope.timeout
 		$scope.timeout = setTimeout $scope.sync, 20*1000
-
-	$scope.createProject = ->
-		Projects.createProject $scope.projectName
-		$scope.projectName = ""
-		$scope.projectFolder = ""
 ]
 
 
@@ -43,7 +38,8 @@ synappseApp.controller 'MainCtrl', ['$scope', 'Projects', ( $scope, Projects ) -
 # ------------------------------
 synappseApp.controller 'HomeCtrl', ['$scope', 'Projects', ( $scope, Projects ) ->
 	$scope.createProject = ->
-		Projects.createProject $scope.name
+		Projects.createProject $scope.projectName
+		$scope.projectName = ""
 ]
 
 

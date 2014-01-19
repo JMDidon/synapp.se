@@ -3,6 +3,8 @@
   <li ng-repeat="p in projects"><a href="#/{{ p.slug }}">{{ p.name }}</a></li>
 </ul>
 
-<button type="button" class="btn btn-primary" ng-click="sync()">Sync</button>
-
 <h1>Create a new project</h1>
+<form ng-submit="createProject()">
+  <input ng-model="projectName">
+  <input type="submit">
+</form>
