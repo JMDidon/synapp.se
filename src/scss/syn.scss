@@ -46,6 +46,7 @@ a { color: $color; text-decoration: none;  }
 .bold { font-weight: $bold; }
 .italic { font-style: italic; }
 .center { text-align: center; }
+.absolute-center-content { position: absolute; top: 0; bottom: 0; left: 0; right: 0; margin: auto; width: 100%; height: 50%; }
 
 
 // Mixins
@@ -60,7 +61,7 @@ a { color: $color; text-decoration: none;  }
 // ------------------------------
 
 .hero { position: relative; height: 20*$unit; background: $color; color: white; @extend .center; }
-.hero-content { position: absolute; top: 0; bottom: 0; left: 0; right: 0; margin: auto; width: 100%; height: 50%; }
+.hero-content { @extend .absolute-center-content; }
 .main-title { margin-bottom: $base; font-size: 2*$base; letter-spacing: 0.1em; }
 .main-infos { margin-bottom: $base; font-size: $unit; @extend .light; letter-spacing: 0.1em; }
 .db-button { height: 2*$unit; padding: 0 $base; color: white; border: none; @include border-radius($base/2, $db-button-1, 1px); @include db-linear-gradient($db-button-1, $db-button-2); @include box-shadow(0px, 6px, 4px, 0px, rgba(0, 0, 0, 0.1)); @extend .cursor; letter-spacing: 0.1em; }
@@ -69,14 +70,23 @@ a { color: $color; text-decoration: none;  }
 .article { width: 15*$unit; }
 h3 { display: inline-block; height: 2*$base; margin-bottom: $unit; border-bottom: solid 3px $title-color; color: $title-color; text-transform: uppercase; letter-spacing: 0.3em; @extend .bold; }
 .text { line-height: 1.66; text-align: justify; }
-.quote { float: none; width: 66%; margin: 2*$unit auto; font-size: 2*$base; @extend .italic; @extend .light; @extend .center; }
-.quote:before { content: "« "; }
-.quote:after { content: " »"; display: inline; }
+
+.big { float: none; width: 66%; margin: 2*$unit auto; font-size: 2*$base; @extend .italic; @extend .light; @extend .center; }
+.big:before { content: "« "; }
+.big:after { content: " »"; display: inline; }
 
 .team-member { float: left; width: 20%; }
+.photos { max-width: 80%; }
 .name { display: block; color: $title-color; font-family: $serif; margin: 1em 0 0 0; @extend .italic; @extend .bold; }
 .role { display: block; color: $title-color; font-family: $sans;  margin: 0.9em 0; font-size: 0.6*$base; font-style: normal; opacity: 0.5; text-transform: uppercase; letter-spacing: 0.3em; @extend .regular; }
 
-.pre-footer { height: 10*$unit; background: $color; }
-footer { height: 3*$unit; line-height: 3*$unit; background: $footer-bckg; color: $footer-font; }
+.pre-footer { position: relative; height: 10*$unit; background: $color; color: $footer-font; font-family: $serif; @extend .italic; @extend .center; @extend .light; }
+.pre-footer-content { @extend .absolute-center-content; }
+.contact-title { border-bottom: solid 3px white; color: white; font-family: $sans; font-style: normal; }
+.contact-mail { color: white; font-family: $sans; }
+.contact-mail:before { content: ""; }
+.contact-mail:after { content: ""; }
+.footer-text { color: $footer-font; font-size: 0.8em;}
+footer { height: 3*$unit; line-height: 3*$unit; background: $footer-bckg; }
+
 //.photos { position: absolute; clip: circle(65px, 65px, 130px); }

@@ -1,31 +1,31 @@
+# Load css/js
+# ------------------------------
+load = ( url, callback = false ) ->
+	if url instanceof Array then load url.shift(), ( if url.length then ( -> load url, callback ) else callback )
+	else if typeof url is 'string'
+		css = url.match /\.css(\?.*)?$/
+		url += '?t='+( new Date ).getTime() # avoid cache
+		item = document.createElement if css then 'link' else 'script'
+		if css then [ item.type, item.rel, item.href ] = [ 'text/css', 'stylesheet', url ] else item.src = url
+		item.addEventListener 'load', ( e ) -> callback null, e if callback
+		( if css then document.body else document.head ).appendChild item
+
+
+
 # Dropbox auth & sync
 # ------------------------------
-css = ( href ) ->
-	link = document.createElement 'link'
-	link.type = 'text/css'
-	link.rel = 'stylesheet'
-	link.href = href
-	document.head.appendChild link
-	
-async = ( src, callback = false ) ->
-	script = document.createElement 'script'
-	script.src = src
-	script.addEventListener 'load', ( e ) -> callback null, e if callback
-	document.body.appendChild script
-
-
 DB = 
 	folder: 'Synappse/'
 	file: '_project.json'
-	user: {}
-	client: new Dropbox.Client key: '8437zcdkz4nvggb'
+	user: if localStorage['user'] then JSON.parse localStorage['user'] else {}
+	client: if Dropbox? then new Dropbox.Client key: 'd1y1wxe9ow97xx0' else {}
 
 
 	# Authenticate to Dropbox account
 	# ---
 	checkAuth: ->
 		$this = @
-		@client.authenticate { interactive: false }, ( error, client ) -> 
+		@client.authenticate { interactive: false }, ( error, client ) -> 
 			console.log error if error
 			do $this.init if client.isAuthenticated()
 			
@@ -42,12 +42,11 @@ DB =
 		$this = @
 		@client.getAccountInfo ( error, info ) ->
 			$this.user = name: info.name, email: info.email, uid: info.uid
+			localStorage['user'] = JSON.stringify $this.user
 		
-		css 'public/app.css'
-		async '//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.min.js', ->
-			async '//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular-route.min.js', ->
-				async 'public/app.js', ->
-					angular.element(document).ready -> angular.bootstrap document, ['synappseApp']
+		load ['public/app.css', '//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.js', '//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular-route.min.js', 'public/app.js'], ->
+			angular.bootstrap document, ['synappseApp']
+
 
 	# Check if Synappse folder exists, else create it
 	# ---
@@ -112,8 +111,8 @@ DB =
 
 	# Synchronize
 	# ---
-	sync: ( local, callback ) ->
-		return do callback if not @client
+	sync: ( local, callback = false ) ->
+		return ( do callback if callback ) if not @client
 		$this = @
 
 		@readFolder @folder, ( children ) ->
@@ -135,8 +134,7 @@ DB =
 					# when all DB folders are sync
 					if not waiting
 						$this.checkLocalProjects local, ( c.path+'/' for c in projects ), -> 
-							console.log "sync complete"
-							do callback
+							do callback if callback
 
 
 	# Update project
@@ -171,7 +169,6 @@ DB =
 		@saveProject local
 
 
-
 	# Solve conflicts (add, edit, delete)
 	# ---
 	solveConflicts: ( localItems, distantItems, deletedItems ) ->	
@@ -189,6 +186,7 @@ DB =
 		# edit local items from distant
 		for localItem in localItems when localItem.id.length is 3 and localItem.id in distantIDs
 			for distantItem in distantItems when localItem.id is distantItem.id
+				console.log localItem.name+': '+localItem.edit+' '+distantItem.edit+' '+(localItem.edit <= distantItem.edit)
 				( localItem[k] = v for k, v of distantItem ) if localItem.edit <= distantItem.edit
 
 		# return distant items missing in local
@@ -202,4 +200,4 @@ DB =
 # ------------------------------
 do -> 
 	do DB.checkAuth
-	( document.getElementById 'dbauth' ).addEventListener 'click', -> do DB.auth
+	( document.getElementById 'auth' ).addEventListener 'click', -> do DB.auth

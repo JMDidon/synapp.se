@@ -44,6 +44,8 @@ a { color: $color; text-decoration: none;  }
 // Specific
 // ------------------------------
 .task { position: relative; }
+.task-priority { @extend .bold; }
+.task-late .task-date { color: red; }
 .task-date { @extend .txt-right, .small, .sans, .uppercase, .x-bold; position: absolute; top: 0; right: 100%; width: $unit*3; padding-right: $unit; }
 .task-comments-nb { position: absolute; top: 0; left: 100%; width: $unit*3; padding-left: $unit; }
 .task-content { display: table; table-layout: fixed; width: 100%; }

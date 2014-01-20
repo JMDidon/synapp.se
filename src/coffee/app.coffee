@@ -1,4 +1,3 @@
-#@prepros-append sync.coffee
 #@prepros-append controllers.coffee
 #@prepros-append services.coffee
 #@prepros-append helpers.coffee
@@ -13,7 +12,6 @@ synappseApp = angular.module 'synappseApp', [
 	'ngRoute'
 	'synappseControllers'
 	'synappseServices'
-	'synappseHelpers'
 	'synappseFilters'
 	'synappseDirectives'
 ]
@@ -43,5 +41,3 @@ synappseApp.config ['$routeProvider',
 			redirectTo: '/'
 		undefined
 ]
-
-console.log 'App loaded'

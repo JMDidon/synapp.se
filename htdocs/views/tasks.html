@@ -1,0 +1,17 @@
+<section>
+	<section>
+		<div ng-hide="editMode">
+			<input class="form-fake" value="{{ task.name }}" ng-click="toggleForm()" placeholder="Enter your task here with some #hastags"></input>
+		</div>
+		<div task-form ng-if="editMode"></div>
+	</section>
+
+	<h1>Scheduled</h1>
+	<article task class="task" ng-repeat="task in project.tasks | tasksDue | orderBy:['-priority', 'due']"></article>
+	
+	<h1>Unscheduled</h1>
+	<article task class="task" ng-repeat="task in project.tasks | tasksNoDue | orderBy:['edit']:true"></article>
+	
+	<h1>Archived</h1>
+	<article task class="task" ng-repeat="task in project.tasks | tasksArchived | orderBy:['-priority', 'due']"></article>
+</section>
