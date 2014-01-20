@@ -89,7 +89,6 @@ h3 { display: inline-block; height: 2*$base; margin-bottom: $unit; border-bottom
 .footer-text { color: $footer-font; font-size: 0.8em;}
 footer { height: 3*$unit; line-height: 3*$unit; background: $footer-bckg; }
 
-<<<<<<< HEAD
 @media screen and (max-width: 1200px) {
 	.wrapper { width: 85%; margin: 2*$unit auto; }
 	.article { float: none; width: 100%; margin-bottom: 2*$unit; }
@@ -100,6 +99,3 @@ footer { height: 3*$unit; line-height: 3*$unit; background: $footer-bckg; }
 	.name { font-size: 0.55em; }
 	.role { font-size: 0.4em; }
 }
-=======
-//.photos { position: absolute; clip: circle(65px, 65px, 130px); }
->>>>>>> 77eee50af5e4abb5e43e336f1af32cf3cecd4140
