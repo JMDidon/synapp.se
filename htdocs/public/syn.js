@@ -36,36 +36,30 @@ DB = {
   client: typeof Dropbox !== "undefined" && Dropbox !== null ? new Dropbox.Client({
     key: 'd1y1wxe9ow97xx0'
   }) : {},
-  checkAuth: function() {
+  auth: function(button) {
     var $this;
+    if (button == null) {
+      button = false;
+    }
     $this = this;
-    return this.client.authenticate({
-      interactive: false
-    }, function(error, client) {
-      if (error) {
-        console.log(error);
-      }
-      if (client.isAuthenticated()) {
-        return $this.init();
-      }
-    });
+    if (localStorage['user'] && !button) {
+      return $this.init();
+    } else {
+      return this.client.authenticate({
+        interactive: button
+      }, function(error, client) {
+        if (client.isAuthenticated()) {
+          return $this.init();
+        } else if (!button) {
+          return $this.auth();
+        }
+      });
+    }
   },
-  auth: function() {
+  updateUser: function() {
     var $this;
     $this = this;
-    return this.client.authenticate(function(error, client) {
-      if (error) {
-        console.log(error);
-      }
-      if (client.isAuthenticated()) {
-        return $this.init();
-      }
-    });
-  },
-  init: function() {
-    var $this;
-    $this = this;
-    this.client.getAccountInfo(function(error, info) {
+    return this.client.getAccountInfo(function(error, info) {
       $this.user = {
         name: info.name,
         email: info.email,
@@ -73,6 +67,19 @@ DB = {
       };
       return localStorage['user'] = JSON.stringify($this.user);
     });
+  },
+  init: function() {
+    var $this;
+    $this = this;
+    if (this.client.isAuthenticated()) {
+      $this.updateUser();
+    } else {
+      this.client.authenticate({
+        interactive: false
+      }, function(error, client) {
+        return $this.updateUser();
+      });
+    }
     return load(['public/app.css', '//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.js', '//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular-route.min.js', 'public/app.js'], function() {
       return angular.bootstrap(document, ['synappseApp']);
     });
@@ -345,14 +352,12 @@ DB = {
       if (localItem.id.length === 3 && (_ref = localItem.id, __indexOf.call(distantIDs, _ref) >= 0)) {
         for (_k = 0, _len2 = distantItems.length; _k < _len2; _k++) {
           distantItem = distantItems[_k];
-          if (!(localItem.id === distantItem.id)) {
-            continue;
-          }
-          console.log(localItem.name + ': ' + localItem.edit + ' ' + distantItem.edit + ' ' + (localItem.edit <= distantItem.edit));
-          if (localItem.edit <= distantItem.edit) {
-            for (k in distantItem) {
-              v = distantItem[k];
-              localItem[k] = v;
+          if (localItem.id === distantItem.id) {
+            if (localItem.edit <= distantItem.edit) {
+              for (k in distantItem) {
+                v = distantItem[k];
+                localItem[k] = v;
+              }
             }
           }
         }
@@ -378,8 +383,8 @@ DB = {
 };
 
 (function() {
-  DB.checkAuth();
+  DB.auth();
   return (document.getElementById('auth')).addEventListener('click', function() {
-    return DB.auth();
+    return DB.auth(true);
   });
 })();

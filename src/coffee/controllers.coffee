@@ -36,18 +36,24 @@ synappseApp.controller 'MainCtrl', ['$scope', 'Projects', ( $scope, Projects ) -
 
 # Home Controller
 # ------------------------------
-synappseApp.controller 'HomeCtrl', ['$scope', 'Projects', ( $scope, Projects ) ->
+synappseApp.controller 'HomeCtrl', ['$scope', '$location', 'Projects', ( $scope, $location, Projects ) ->
 	$scope.createProject = ->
-		Projects.createProject $scope.projectName
+		slug = Projects.createProject $scope.projectName
 		$scope.projectName = ""
+		$location.path '/'+slug
 ]
 
 
 # Project Controller
 # ------------------------------	
-synappseApp.controller 'ProjectCtrl', ['$scope', '$routeParams', '$location', 'Projects', ( $scope, $routeParams, $location, Projects ) ->
+synappseApp.controller 'ProjectCtrl', ['$scope', '$routeParams', '$filter', 'Projects', ( $scope, $routeParams, $filter, Projects ) ->
 	$scope.project = Projects.findProject $routeParams.project
 	$scope.now = getCleanDate()
+	
+	# tabs
+	$scope.tabs = ['Due', 'Others', 'Archived']
+	$scope.currentTab = 0
+	$scope.changeTab = ( tab ) -> $scope.currentTab = tab
 	
 	# autosync
 	$scope.$watch 'project', $scope.schedule, true
@@ -62,9 +68,6 @@ synappseApp.controller 'ProjectCtrl', ['$scope', '$routeParams', '$location', 'P
 		{ k:3, v:'Done' },
 		{ k:4, v:'Archived' }
 	]
-
-	$scope.$watch 'selectProject', ->
-		$location.path '/'+$scope.selectProject
 		
 	# add task
 	$scope.task = {}
@@ -81,6 +84,9 @@ synappseApp.controller 'ProjectCtrl', ['$scope', '$routeParams', '$location', 'P
 	window.addEventListener 'keydown', ( e ) ->
 		if e.which is 27
 			$scope.setTaskOpen false
+			do $scope.$apply
+		else if e.which >= 65 and e.which <= 90 and $scope.taskOpen is false
+			$scope.setTaskOpen 0
 			do $scope.$apply
 
 	# alerts

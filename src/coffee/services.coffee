@@ -28,6 +28,7 @@ synappseApp.factory 'Projects', ->
 			comments: []
 			deletedComments: []
 		do factory.cache
+		slug name
 
 	factory.readProject = ( id ) -> 
 		( project for project in Projects when project.id is id )[0] or {}

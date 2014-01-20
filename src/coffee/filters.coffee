@@ -30,9 +30,11 @@ synappseApp.filter 'unseen', ->
 
 # Tasks
 # ------------------------------
-synappseApp.filter 'tasksDue', -> ( tasks ) -> task for task in tasks when task.due isnt false and task.status < 4
-synappseApp.filter 'tasksNoDue', -> ( tasks ) -> task for task in tasks when task.due is false and task.status < 4
-synappseApp.filter 'tasksArchived', -> ( tasks ) -> task for task in tasks when task.status is 4
+synappseApp.filter 'tasksFilter', -> ( tasks, filter ) -> 
+	switch filter
+		when 'Others' then task for task in tasks or [] when task.due is false and task.status < 4
+		when 'Archived' then task for task in tasks or [] when task.status is 4
+		else task for task in tasks or [] when task.due isnt false and task.status < 4
 
 
 

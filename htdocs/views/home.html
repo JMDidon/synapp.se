@@ -1,10 +1,16 @@
-<h1>Choose a project</h1>
-<ul>
-  <li ng-repeat="p in projects"><a href="#/{{ p.slug }}">{{ p.name }}</a></li>
-</ul>
+<section class="insights"></section>
 
-<h1>Create a new project</h1>
-<form ng-submit="createProject()">
-  <input ng-model="projectName">
-  <input type="submit">
-</form>
+<main class="wrapper">
+  <header class="nav">
+    <h1 class="nav-title bold">Select a project</h1>
+  </header>
+  
+  <ul>
+    <li class="list-item" ng-repeat="p in projects"><a href="#/{{ p.slug }}">{{ p.name }}</a></li>
+  </ul>
+  
+  <form class="pt2 pb2" ng-submit="createProject()">
+    <input class="form-create-text left" ng-model="projectName" placeholder="Create new project">
+    <button class="form-submit right" type="submit">create</button>
+  </form>
+</main>

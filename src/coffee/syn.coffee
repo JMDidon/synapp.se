@@ -23,27 +23,25 @@ DB =
 
 	# Authenticate to Dropbox account
 	# ---
-	checkAuth: ->
+	auth: ( button = false ) ->
 		$this = @
-		@client.authenticate { interactive: false }, ( error, client ) -> 
-			console.log error if error
-			do $this.init if client.isAuthenticated()
-			
-	auth: ->
-		$this = @
-		@client.authenticate ( error, client ) -> 
-			console.log error if error
-			do $this.init if client.isAuthenticated()
+		if localStorage['user'] and not button then do $this.init 
+		else @client.authenticate { interactive: button }, ( error, client ) -> 
+			if client.isAuthenticated() then do $this.init else if not button then do $this.auth
 		
 		
 	# Initialize app
 	# ---
-	init: ->
+	updateUser: ->
 		$this = @
 		@client.getAccountInfo ( error, info ) ->
 			$this.user = name: info.name, email: info.email, uid: info.uid
 			localStorage['user'] = JSON.stringify $this.user
-		
+			
+	init: ->
+		$this = @
+		if @client.isAuthenticated() then do $this.updateUser 
+		else @client.authenticate { interactive: false }, ( error, client ) -> do $this.updateUser 
 		load ['public/app.css', '//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.js', '//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular-route.min.js', 'public/app.js'], ->
 			angular.bootstrap document, ['synappseApp']
 
@@ -186,7 +184,6 @@ DB =
 		# edit local items from distant
 		for localItem in localItems when localItem.id.length is 3 and localItem.id in distantIDs
 			for distantItem in distantItems when localItem.id is distantItem.id
-				console.log localItem.name+': '+localItem.edit+' '+distantItem.edit+' '+(localItem.edit <= distantItem.edit)
 				( localItem[k] = v for k, v of distantItem ) if localItem.edit <= distantItem.edit
 
 		# return distant items missing in local
@@ -199,5 +196,5 @@ DB =
 # Check auth & bind button
 # ------------------------------
 do -> 
-	do DB.checkAuth
-	( document.getElementById 'auth' ).addEventListener 'click', -> do DB.auth
+	do DB.auth
+	( document.getElementById 'auth' ).addEventListener 'click', -> DB.auth true

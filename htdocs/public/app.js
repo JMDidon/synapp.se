@@ -11,20 +11,21 @@ synappseApp.config([
     $routeProvider.when('/', {
       templateUrl: 'views/home.html',
       controller: 'HomeCtrl'
-    }).when('/home', {
-      redirectTo: '/'
-    }).when('/:project', {
-      templateUrl: 'views/project.html',
-      controller: 'ProjectCtrl'
-    }, {
-      controller: 'HomeCtrl'
-    }).when('/:project/:section', {
-      templateUrl: 'views/project.html',
-      controller: 'ProjectCtrl'
-    }).otherwise({
+    });
+    $routeProvider.when('/home', {
       redirectTo: '/'
     });
-    return void 0;
+    $routeProvider.when('/:project', {
+      templateUrl: 'views/project.html',
+      controller: 'ProjectCtrl'
+    });
+    $routeProvider.when('/:project/:section', {
+      templateUrl: 'views/project.html',
+      controller: 'ProjectCtrl'
+    });
+    return $routeProvider.otherwise({
+      redirectTo: '/'
+    });
   }
 ]);
 
@@ -107,18 +108,24 @@ synappseApp.controller('MainCtrl', [
 ]);
 
 synappseApp.controller('HomeCtrl', [
-  '$scope', 'Projects', function($scope, Projects) {
+  '$scope', '$location', 'Projects', function($scope, $location, Projects) {
     return $scope.createProject = function() {
-      Projects.createProject($scope.projectName);
-      return $scope.projectName = "";
+      slug = Projects.createProject($scope.projectName);
+      $scope.projectName = "";
+      return $location.path('/' + slug);
     };
   }
 ]);
 
 synappseApp.controller('ProjectCtrl', [
-  '$scope', '$routeParams', '$location', 'Projects', function($scope, $routeParams, $location, Projects) {
+  '$scope', '$routeParams', '$filter', 'Projects', function($scope, $routeParams, $filter, Projects) {
     $scope.project = Projects.findProject($routeParams.project);
     $scope.now = getCleanDate();
+    $scope.tabs = ['Due', 'Others', 'Archived'];
+    $scope.currentTab = 0;
+    $scope.changeTab = function(tab) {
+      return $scope.currentTab = tab;
+    };
     $scope.$watch('project', $scope.schedule, true);
     if ($scope.project.alerts == null) {
       $scope.project.alerts = [];
@@ -141,9 +148,6 @@ synappseApp.controller('ProjectCtrl', [
         v: 'Archived'
       }
     ];
-    $scope.$watch('selectProject', function() {
-      return $location.path('/' + $scope.selectProject);
-    });
     $scope.task = {};
     $scope.emptyTask = function() {
       return $scope.task = {};
@@ -162,6 +166,9 @@ synappseApp.controller('ProjectCtrl', [
     return window.addEventListener('keydown', function(e) {
       if (e.which === 27) {
         $scope.setTaskOpen(false);
+        return $scope.$apply();
+      } else if (e.which >= 65 && e.which <= 90 && $scope.taskOpen === false) {
+        $scope.setTaskOpen(0);
         return $scope.$apply();
       }
     });
@@ -239,7 +246,8 @@ synappseApp.factory('Projects', function() {
       comments: [],
       deletedComments: []
     });
-    return factory.cache();
+    factory.cache();
+    return slug(name);
   };
   factory.readProject = function(id) {
     var project;
@@ -518,6 +526,7 @@ synappseApp.directive('taskForm', [
                 due: $scope.tmpTask.due,
                 users: $scope.tmpTask.users
               });
+              $scope.changeTab(($scope.tmpTask.due === false ? 1 : 0));
               $scope.emptyTask();
               $scope.tmpTask = $scope.task;
               return $element[0].querySelector('textarea').focus();
@@ -675,45 +684,43 @@ synappseApp.filter('unseen', function() {
   };
 });
 
-synappseApp.filter('tasksDue', function() {
-  return function(tasks) {
-    var task, _i, _len, _results;
-    _results = [];
-    for (_i = 0, _len = tasks.length; _i < _len; _i++) {
-      task = tasks[_i];
-      if (task.due !== false && task.status < 4) {
-        _results.push(task);
-      }
+synappseApp.filter('tasksFilter', function() {
+  return function(tasks, filter) {
+    var task, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _results, _results1, _results2;
+    switch (filter) {
+      case 'Others':
+        _ref = tasks || [];
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          task = _ref[_i];
+          if (task.due === false && task.status < 4) {
+            _results.push(task);
+          }
+        }
+        return _results;
+        break;
+      case 'Archived':
+        _ref1 = tasks || [];
+        _results1 = [];
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          task = _ref1[_j];
+          if (task.status === 4) {
+            _results1.push(task);
+          }
+        }
+        return _results1;
+        break;
+      default:
+        _ref2 = tasks || [];
+        _results2 = [];
+        for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
+          task = _ref2[_k];
+          if (task.due !== false && task.status < 4) {
+            _results2.push(task);
+          }
+        }
+        return _results2;
     }
-    return _results;
-  };
-});
-
-synappseApp.filter('tasksNoDue', function() {
-  return function(tasks) {
-    var task, _i, _len, _results;
-    _results = [];
-    for (_i = 0, _len = tasks.length; _i < _len; _i++) {
-      task = tasks[_i];
-      if (task.due === false && task.status < 4) {
-        _results.push(task);
-      }
-    }
-    return _results;
-  };
-});
-
-synappseApp.filter('tasksArchived', function() {
-  return function(tasks) {
-    var task, _i, _len, _results;
-    _results = [];
-    for (_i = 0, _len = tasks.length; _i < _len; _i++) {
-      task = tasks[_i];
-      if (task.status === 4) {
-        _results.push(task);
-      }
-    }
-    return _results;
   };
 });
 

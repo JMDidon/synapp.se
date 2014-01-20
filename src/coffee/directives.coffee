@@ -51,6 +51,7 @@ synappseApp.directive 'taskForm', ['Projects', ( Projects ) ->
           priority: $scope.tmpTask.priority or false
           due: $scope.tmpTask.due
           users: $scope.tmpTask.users
+        $scope.changeTab ( if $scope.tmpTask.due is false then 1 else 0 )
         do $scope.emptyTask
         $scope.tmpTask = $scope.task
         $element[0].querySelector( 'textarea' ).focus()
