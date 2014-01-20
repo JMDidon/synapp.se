@@ -42,7 +42,7 @@ synappseApp.filter 'tasksFilter', -> ( tasks, filter ) ->
 # ------------------------------
 synappseApp.filter 'miniDate', ->
 	( date ) ->
-		return "" if date is false
+		return 'No due' if date is false
 		months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 		date = getCleanDate date
 		diffDays = Math.round (date-getCleanDate())/(1000*60*60*24)

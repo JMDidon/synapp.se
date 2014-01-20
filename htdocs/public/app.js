@@ -728,7 +728,7 @@ synappseApp.filter('miniDate', function() {
   return function(date) {
     var diffDays, months;
     if (date === false) {
-      return "";
+      return 'No due';
     }
     months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     date = getCleanDate(date);
