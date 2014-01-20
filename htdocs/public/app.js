@@ -31,6 +31,48 @@ synappseApp.config([
 console.log('App loaded');
 
 /* --------------------------------------------
+     Begin helpers.coffee
+--------------------------------------------
+*/
+
+
+synappseApp = angular.module('synappseHelpers', []);
+
+getCleanDate = function(date) {
+  date = date ? new Date(date) : new Date;
+  date = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  return date;
+};
+
+generateID = function(n, list, prefix) {
+  var k;
+  if (prefix == null) {
+    prefix = '';
+  }
+  return ((function() {
+    var _results;
+    _results = [];
+    while ((k == null) || (__indexOf.call(list, k) >= 0)) {
+      _results.push(k = prefix + Math.random().toString(36).substr(2, n));
+    }
+    return _results;
+  })()).toString();
+};
+
+slug = function(str) {
+  var from, i, to, _i, _len, _ref, _ref1;
+  _ref = ['àáäãâèéëêìíïîòóöôõùúüûñç·/_,:;', 'aaaaaeeeeiiiiooooouuuunc------', str.toLowerCase()], from = _ref[0], to = _ref[1], str = _ref[2];
+  _ref1 = from.length;
+  for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+    i = _ref1[_i];
+    str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+  }
+  return str.replace(/^\s+|\s+$/g, '').replace(/[^-a-zA-Z0-9\s]+/ig, '').replace(/\s/gi, "-");
+};
+
+console.log('Helpers module loaded');
+
+/* --------------------------------------------
      Begin controllers.coffee
 --------------------------------------------
 */
@@ -414,46 +456,128 @@ synappseApp.factory('Projects', function() {
 console.log('Services loaded');
 
 /* --------------------------------------------
-     Begin helpers.coffee
+     Begin directives.coffee
 --------------------------------------------
 */
 
 
-synappseApp = angular.module('synappseHelpers', []);
+synappseApp = angular.module('synappseDirectives', []);
 
-getCleanDate = function(date) {
-  date = date ? new Date(date) : new Date;
-  date = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-  return date;
-};
-
-generateID = function(n, list, prefix) {
-  var k;
-  if (prefix == null) {
-    prefix = '';
+synappseApp.directive('taskForm', [
+  'Projects', function(Projects) {
+    return {
+      templateUrl: 'views/taskForm.html',
+      scope: true,
+      controller: function($scope, $element) {
+        $element[0].querySelector('textarea').focus();
+        $scope.tmpTask = $scope.task.id ? angular.copy($scope.task) : $scope.task;
+        if ($scope.tmpTask.users == null) {
+          $scope.tmpTask.users = [];
+        }
+        $scope.submit = function() {
+          if ($scope.tmpTask.name.match(/^\s*$/)) {
+            return false;
+          }
+          if (isNaN((new Date($scope.tmpTask.due)).getTime())) {
+            $scope.tmpTask.due = false;
+          }
+          if ($scope.task.id != null) {
+            $scope.toggleForm();
+            return Projects.editTask($scope.project.id, $scope.task.id, $scope.tmpTask);
+          } else {
+            Projects.createTask($scope.project.id, {
+              name: $scope.tmpTask.name,
+              author: DB.user.uid,
+              status: 0,
+              priority: $scope.tmpTask.priority,
+              due: $scope.tmpTask.due,
+              users: $scope.tmpTask.users
+            });
+            return $scope.tmpTask = {};
+          }
+        };
+        return $scope.toggleUser = function(uid) {
+          var index;
+          index = $scope.tmpTask.users.indexOf(uid);
+          if (index > -1) {
+            return $scope.tmpTask.users.splice(index, 1);
+          } else {
+            return $scope.tmpTask.users.push(uid);
+          }
+        };
+      }
+    };
   }
-  return ((function() {
-    var _results;
-    _results = [];
-    while ((k == null) || (__indexOf.call(list, k) >= 0)) {
-      _results.push(k = prefix + Math.random().toString(36).substr(2, n));
+]);
+
+synappseApp.directive('calendar', function() {
+  return {
+    templateUrl: 'views/calendar.html',
+    scope: true,
+    link: function(scope) {
+      var now;
+      scope.current = getCleanDate(scope.tmpTask.due);
+      scope.current.setDate(1);
+      scope.rows = [];
+      now = getCleanDate();
+      scope.update = function() {
+        var cell, current, first, month, row, _results;
+        scope.rows = [];
+        cell = 0;
+        row = [];
+        first = scope.current.getDay() - 2;
+        month = scope.current.getMonth();
+        _results = [];
+        while (true) {
+          current = angular.copy(scope.current);
+          current.setDate(cell - first);
+          row.push({
+            date: current.getTime(),
+            day: current.getDate(),
+            isToday: (Math.round((current - now) / (1000 * 60 * 60 * 24))) === 0,
+            isWeekEnd: cell % 7 > 4,
+            isPrev: cell <= first,
+            isNext: cell > first && current.getMonth() !== month
+          });
+          if (cell % 7 === 6) {
+            scope.rows.push({
+              cells: angular.copy(row)
+            });
+            row = [];
+          }
+          if (cell > first && current.getMonth() !== month && current.getDate() < 8 && cell % 7 === 6) {
+            break;
+          }
+          _results.push(cell++);
+        }
+        return _results;
+      };
+      scope.prev = function() {
+        scope.current.setMonth(scope.current.getMonth() - 1);
+        return scope.update();
+      };
+      scope.next = function() {
+        scope.current.setMonth(scope.current.getMonth() + 1);
+        return scope.update();
+      };
+      scope.setDate = function(cell) {
+        if (cell.isPrev) {
+          scope.prev();
+        }
+        if (cell.isNext) {
+          scope.next();
+        }
+        return scope.tmpTask.due = cell.date !== scope.tmpTask.due ? cell.date : false;
+      };
+      scope.remove = function() {
+        return scope.tmpTask.due = false;
+      };
+      return scope.update();
     }
-    return _results;
-  })()).toString();
-};
+  };
+});
 
-slug = function(str) {
-  var from, i, to, _i, _len, _ref, _ref1;
-  _ref = ['àáäãâèéëêìíïîòóöôõùúüûñç·/_,:;', 'aaaaaeeeeiiiiooooouuuunc------', str.toLowerCase()], from = _ref[0], to = _ref[1], str = _ref[2];
-  _ref1 = from.length;
-  for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-    i = _ref1[_i];
-    str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
-  }
-  return str.replace(/^\s+|\s+$/g, '').replace(/[^-a-zA-Z0-9\s]+/ig, '').replace(/\s/gi, "-");
-};
-
-console.log('Helpers module loaded');
+console.log('Directives loaded');
 
 /* --------------------------------------------
      Begin filters.coffee
@@ -599,127 +723,3 @@ synappseApp.filter('smartDate', function() {
 });
 
 console.log('Filters module loaded');
-
-/* --------------------------------------------
-     Begin directives.coffee
---------------------------------------------
-*/
-
-
-synappseApp = angular.module('synappseDirectives', []);
-
-synappseApp.directive('taskForm', [
-  'Projects', function(Projects) {
-    return {
-      templateUrl: 'views/taskForm.html',
-      scope: true,
-      controller: function($scope, $element) {
-        $element[0].querySelector('textarea').focus();
-        $scope.tmpTask = $scope.task.id ? angular.copy($scope.task) : $scope.task;
-        if ($scope.tmpTask.users == null) {
-          $scope.tmpTask.users = [];
-        }
-        $scope.submit = function() {
-          if ($scope.tmpTask.name.match(/^\s*$/)) {
-            return false;
-          }
-          if (isNaN((new Date($scope.tmpTask.due)).getTime())) {
-            $scope.tmpTask.due = false;
-          }
-          if ($scope.task.id != null) {
-            $scope.toggleForm();
-            return Projects.editTask($scope.project.id, $scope.task.id, $scope.tmpTask);
-          } else {
-            Projects.createTask($scope.project.id, {
-              name: $scope.tmpTask.name,
-              author: DB.user.uid,
-              status: 0,
-              priority: $scope.tmpTask.priority,
-              due: $scope.tmpTask.due,
-              users: $scope.tmpTask.users
-            });
-            return $scope.tmpTask = {};
-          }
-        };
-        return $scope.toggleUser = function(uid) {
-          var index;
-          index = $scope.tmpTask.users.indexOf(uid);
-          if (index > -1) {
-            return $scope.tmpTask.users.splice(index, 1);
-          } else {
-            return $scope.tmpTask.users.push(uid);
-          }
-        };
-      }
-    };
-  }
-]);
-
-synappseApp.directive('calendar', function() {
-  return {
-    templateUrl: 'views/calendar.html',
-    scope: true,
-    link: function(scope) {
-      var now;
-      scope.current = getCleanDate(scope.tmpTask.due);
-      scope.current.setDate(1);
-      scope.rows = [];
-      now = getCleanDate();
-      scope.update = function() {
-        var cell, current, first, month, row, _results;
-        scope.rows = [];
-        cell = 0;
-        row = [];
-        first = scope.current.getDay() - 2;
-        month = scope.current.getMonth();
-        _results = [];
-        while (true) {
-          current = angular.copy(scope.current);
-          current.setDate(cell - first);
-          row.push({
-            date: current.getTime(),
-            day: current.getDate(),
-            isToday: (Math.round((current - now) / (1000 * 60 * 60 * 24))) === 0,
-            isWeekEnd: cell % 7 > 4,
-            isPrev: cell <= first,
-            isNext: cell > first && current.getMonth() !== month
-          });
-          if (cell % 7 === 6) {
-            scope.rows.push({
-              cells: angular.copy(row)
-            });
-            row = [];
-          }
-          if (cell > first && current.getMonth() !== month && current.getDate() < 8 && cell % 7 === 6) {
-            break;
-          }
-          _results.push(cell++);
-        }
-        return _results;
-      };
-      scope.prev = function() {
-        scope.current.setMonth(scope.current.getMonth() - 1);
-        return scope.update();
-      };
-      scope.next = function() {
-        scope.current.setMonth(scope.current.getMonth() + 1);
-        return scope.update();
-      };
-      scope.setDate = function(cell) {
-        if (cell.isPrev) {
-          scope.prev();
-        }
-        if (cell.isNext) {
-          scope.next();
-        }
-        return scope.tmpTask.due = cell.date !== scope.tmpTask.due ? cell.date : false;
-      };
-      scope.remove = function() {
-        return scope.tmpTask.due = false;
-      };
-      return scope.update();
-    }
-  };
-});
-
-console.log('Directives loaded');
