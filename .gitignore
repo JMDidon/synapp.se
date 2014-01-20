@@ -1,2 +1,3 @@
 .DS_Store
-site/emails.json
+htdocs/public/*.js
+htdocs/public/*.css
