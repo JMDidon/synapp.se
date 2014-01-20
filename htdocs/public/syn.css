@@ -129,13 +129,13 @@ a {
 }
 
 .main-title {
-  margin-bottom: 1em;
-  font-size: 2em;
-  letter-spacing: 0.1em;
+  margin: 0.66667em 0;
+  font-size: 2.5em;
+  letter-spacing: 0.15em;
 }
 
 .main-infos {
-  margin-bottom: 1em;
+  margin-bottom: 1.5em;
   font-size: 1.5em;
   letter-spacing: 0.1em;
 }
@@ -270,4 +270,44 @@ footer {
   height: 4.5em;
   line-height: 4.5em;
   background: #453b58;
+}
+
+@media screen and (max-width: 1200px) {
+  .wrapper {
+    width: 85%;
+    margin: 3em auto;
+  }
+
+  .article {
+    float: none;
+    width: 100%;
+    margin-bottom: 3em;
+  }
+
+  .article:last-child {
+    margin-bottom: 0;
+  }
+
+  h3 {
+    letter-spacing: 0.2em;
+  }
+
+  blockquote .big {
+    margin: 0;
+  }
+
+  .team-member {
+    display: inline-block;
+    float: none;
+    width: 30%;
+    text-align: center;
+  }
+
+  .name {
+    font-size: 0.55em;
+  }
+
+  .role {
+    font-size: 0.4em;
+  }
 }

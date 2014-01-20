@@ -62,8 +62,8 @@ a { color: $color; text-decoration: none;  }
 
 .hero { position: relative; height: 20*$unit; background: $color; color: white; @extend .center; }
 .hero-content { @extend .absolute-center-content; }
-.main-title { margin-bottom: $base; font-size: 2*$base; letter-spacing: 0.1em; }
-.main-infos { margin-bottom: $base; font-size: $unit; @extend .light; letter-spacing: 0.1em; }
+.main-title { margin: $base/1.5 0; font-size: 2.5*$base; letter-spacing: 0.15em; }
+.main-infos { margin-bottom: $unit; font-size: $unit; @extend .light; letter-spacing: 0.1em; }
 .db-button { height: 2*$unit; padding: 0 $base; color: white; border: none; @include border-radius($base/2, $db-button-1, 1px); @include db-linear-gradient($db-button-1, $db-button-2); @include box-shadow(0px, 6px, 4px, 0px, rgba(0, 0, 0, 0.1)); @extend .cursor; letter-spacing: 0.1em; }
 
 .wrapper { display: block; width: 66%; height: 100%; margin: 4*$unit auto; @extend .clearfix; }
@@ -87,4 +87,14 @@ h3 { display: inline-block; height: 2*$base; margin-bottom: $unit; border-bottom
 .contact-mail:after { content: ""; }
 .footer-text { color: $footer-font; font-size: 0.8em;}
 footer { height: 3*$unit; line-height: 3*$unit; background: $footer-bckg; }
-//.photos { position: absolute; clip: circle(65px, 65px, 130px); }
+
+@media screen and (max-width: 1200px) {
+	.wrapper { width: 85%; margin: 2*$unit auto; }
+	.article { float: none; width: 100%; margin-bottom: 2*$unit; }
+	.article:last-child { margin-bottom: 0; }
+	h3 { letter-spacing: 0.2em; }
+	blockquote .big { margin: 0; }
+	.team-member { display: inline-block; float: none; width: 30%; text-align: center; }
+	.name { font-size: 0.55em; }
+	.role { font-size: 0.4em; }
+}
