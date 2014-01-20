@@ -5,7 +5,6 @@ synappseApp = angular.module 'synappseFilters', []
 
 # Dropbox uid to username
 # ------------------------------
-
 synappseApp.filter 'DropboxUIDToUsername', ['Projects', ( Projects ) ->
 	( uid, projectID ) ->
 		project = Projects.readProject projectID
@@ -17,25 +16,34 @@ synappseApp.filter 'DropboxUIDToUsername', ['Projects', ( Projects ) ->
 
 synappseApp.filter 'assignee', ->
 	( name ) ->
-		name.substring 0, 1
+		name.substr 0, 1
 
 
 # Alerts
 # ------------------------------
 synappseApp.filter 'unseen', ->
 	( alerts ) ->
-		alert for alert in ( alerts || [] ) when DB.user.uid not in alert.seen
+		alert for alert in ( alerts or [] ) when DB.user.uid not in alert.seen
+
+
+
+
+# Tasks
+# ------------------------------
+synappseApp.filter 'tasksDue', -> ( tasks ) -> task for task in tasks when task.due isnt false and task.status < 4
+synappseApp.filter 'tasksNoDue', -> ( tasks ) -> task for task in tasks when task.due is false and task.status < 4
+synappseApp.filter 'tasksArchived', -> ( tasks ) -> task for task in tasks when task.status is 4
+
 
 
 # Date filters
 # ------------------------------
 synappseApp.filter 'miniDate', ->
 	( date ) ->
+		return "" if date is false
 		months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 		date = getCleanDate date
-		return "" if isNaN date.getTime()
-		now = getCleanDate()
-		diffDays = Math.round (date-now)/(1000*60*60*24)
+		diffDays = Math.round (date-getCleanDate())/(1000*60*60*24)
 		if diffDays is 0 then 'Today' else months[date.getMonth()]+' '+date.getDate()
 		
 synappseApp.filter 'month', ->
@@ -71,5 +79,3 @@ synappseApp.filter 'smartDate', ->
 			when diffDays is 1 then 'Tomorrow'
 			when 0 < diffDays < 7 then days[(now.getDay()+diffDays-1)%7]
 			else months[date.getMonth()]+' '+date.getDate()
-
-console.log 'Filters module loaded'

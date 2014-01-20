@@ -67,7 +67,7 @@ a {
 .uppercase, .task-date, .cal-th {
   text-transform: uppercase; }
 
-.bold, .cal-switch {
+.bold, .task-priority, .cal-switch {
   font-weight: bold; }
 
 .x-bold, .task-date, .cal-th {
@@ -79,6 +79,9 @@ a {
 
 .task {
   position: relative; }
+
+.task-late .task-date {
+  color: red; }
 
 .task-date {
   position: absolute;

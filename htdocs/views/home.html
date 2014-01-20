@@ -1,0 +1,10 @@
+<h1>Choose a project</h1>
+<ul>
+  <li ng-repeat="p in projects"><a href="#/{{ p.slug }}">{{ p.name }}</a></li>
+</ul>
+
+<h1>Create a new project</h1>
+<form ng-submit="createProject()">
+  <input ng-model="projectName">
+  <input type="submit">
+</form>
