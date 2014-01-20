@@ -15,9 +15,9 @@ synappseApp.directive 'task', ['Projects', ( Projects ) ->
     $scope.toggleForm = -> $scope.setTaskOpen $scope.task.id
       
     # statuses
-    $scope.late = ( $scope.task.due <= $scope.now and $scope.task.status < 3 )
+    $scope.$watch 'task.due', -> 
+      $scope.late = ( $scope.task.due isnt false and $scope.task.due <= $scope.now and $scope.task.status < 3 )
     $scope.editTask = ->
-      $scope.late = ( $scope.task.due <= $scope.now and $scope.task.status < 3 )
       Projects.editTask $scope.project.id, $scope.task.id, $scope.task	
     
     # delete

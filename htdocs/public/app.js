@@ -481,9 +481,10 @@ synappseApp.directive('task', [
           $scope.toggleForm = function() {
             return $scope.setTaskOpen($scope.task.id);
           };
-          $scope.late = $scope.task.due <= $scope.now && $scope.task.status < 3;
+          $scope.$watch('task.due', function() {
+            return $scope.late = $scope.task.due !== false && $scope.task.due <= $scope.now && $scope.task.status < 3;
+          });
           $scope.editTask = function() {
-            $scope.late = $scope.task.due <= $scope.now && $scope.task.status < 3;
             return Projects.editTask($scope.project.id, $scope.task.id, $scope.task);
           };
           return $scope.deleteTask = function() {

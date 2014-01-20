@@ -1,6 +1,7 @@
 // Variables
 // ------------------------------
 $color: #5C4975;
+$red: #963029;
 $dark: #101010;
 $light: #676767;
 $lighter: #A0A0A0;
@@ -35,6 +36,7 @@ a { color: $color; text-decoration: none;  }
 .x-bold { font-weight: 900; }
 
 .color { color: $color; }
+.red { color: $red; }
 .dark { color: $dark; }
 .light { color: $light; }
 .lighter { color: $lighter; }
@@ -96,11 +98,11 @@ a { color: $color; text-decoration: none;  }
 }
 
 .task { @extend .list-item; }
-.task-priority { @extend .bold; }
-.task-late .task-date { color: red; }
 .task-status { @extend .right, .pt1; }
 .task-name { @extend .dark, .bold; display: block; }
 .task-info { @extend .medium, .lighter; line-height: 1; }
+.task-date { @extend .light; }
+.task-late .task-name { @extend .red; }
 
 
 .form { @extend .clearfix; padding: $unit/2; border: 1px solid lighten($shade, 5%); border-radius: 2px; }
