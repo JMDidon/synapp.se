@@ -1,15 +1,21 @@
-<a href="" ng-click="toggleForm()">Cancel</a>
 <form class="form" ng-submit="submit()">
-	<div calendar class="form-cal"></div>
+	<div class="clearfix">
+		<span class="left medium bold dark">{{ task.id?task.name:'New task' }}</span>
+		<a href="" class="form-cancel" ng-click="toggleForm()">cancel</a>
+	</div>
 	<div class="form-fields">
-		<textarea class="form-text" ng-Model="tmpTask.name" placeholder="Enter your task here with some #hastags"></textarea>
-		<div class="form-btns">
-			<label class="form-toggle"><input type="checkbox" ng-Model="tmpTask.priority">⚠</label>
-			<label class="form-toggle" ng-repeat="user in project.users">
-				<input type="checkbox" ng-click="toggleUser(user.uid)" ng-checked="tmpTask.users.indexOf(user.uid) > -1">
+		<textarea class="form-text" ng-Model="tmpTask.name" placeholder="What do you have to do?"></textarea>
+		<div class="mb1">
+			<label class="btn-small-color" ng-repeat="user in project.users" ng-class="{'btn-active':tmpTask.users.indexOf(user.uid) > -1}">
+				<input type="checkbox" class="hide" ng-click="toggleUser(user.uid)" ng-checked="tmpTask.users.indexOf(user.uid) > -1">
 				{{ user.uid | DropboxUIDToUsername: project.id }}
 			</label>
-			<input class="form-btn" type="submit" value="{{ tmpTask.id?'Edit task':'Create task' }}">
 		</div>
+		<div class="clearfix">
+			<label class="btn left"><input type="checkbox" class="hide" ng-model="openCal">{{ openCal?'hide calendar':'set due date' }}</label>
+			<button class="form-task-submit right" type="submit">{{ tmpTask.id?'edit task':'create task' }}</button>
+			<label class="btn-color right" ng-class="{'btn-active':tmpTask.priority}"><input type="checkbox" class="hide" ng-Model="tmpTask.priority">priority</label>
+		</div>
+		<div calendar ng-if="openCal" class="form-cal"></div>
 	</div>
 </form>
