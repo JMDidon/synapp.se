@@ -152,6 +152,10 @@ synappseApp.controller('ProjectCtrl', [
     $scope.emptyTask = function() {
       return $scope.task = {};
     };
+    $scope.task = {};
+    $scope.emptyTask = function() {
+      return $scope.task = {};
+    };
     $scope.taskOpen = false;
     $scope.editMode = false;
     $scope.$watch('taskOpen', function() {

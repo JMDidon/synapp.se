@@ -1,11 +1,10 @@
 <section>
 	<section class="mb2">
 		<div ng-hide="editMode">
-			<input class="form-fake" value="{{ task.name }}" ng-click="toggleForm()" placeholder="What do you have to do?"></input>
+			<input class="form-fake" value="{{ task.name }}" ng-click="toggleForm()" placeholder="What do you have to do?">
 		</div>
 		<div task-form ng-if="editMode"></div>
 	</section>
-
 	<ul class="tabs">
 		<li ng-repeat="tab in tabs" ng-class="{'tab-current': $index==currentTab}" ng-click="changeTab($index)">{{ tab }}</li>
 	</ul>

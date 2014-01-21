@@ -1,19 +1,24 @@
-<section class="insights"></section>
+<aside class="insights">
+</aside>
 
 <main class="wrapper">
-	<header class="nav mb2">
-		<div class="nav-title">
-			<a href="#/" class="left bold">&#9776; {{ project.name }}</a>
-			<span class="right txt-right lighter" ng-show="synced">synced</span>
+	<header>
+		<div class="row">
+			<nav class="col-lg-8 col-lg-offset-2">
+				<div class="navbar-left">
+					<select ng-model="selectProject" ng-init="selectProject = project.slug">
+						<option ng-repeat="p in projects" value="{{ p.slug }}" ng-selected="p.slug == selectProject">{{ p.name }}</option>
+					</select>
+					<span ng-show="synced">synced</span>
+				</div>
+				<ul class="nav navbar-nav navbar-right">
+					<li class="active"><a href="{{ project.slug }}">Tasks</a></li>
+					<li ng-hide="true"><a href="{{ project.slug }}/files">Files</a></li>
+					<li ng-hide="true"><a href="{{ project.slug }}/discussions">Discussions</a></li>
+				</ul>
+			</nav>
 		</div>
-		<nav class="hide">
-			<ul>
-				<li class="active"><a href="{{ project.slug }}">Tasks</a></li>
-				<li ng-hide="true"><a href="{{ project.slug }}/files">Files</a></li>
-				<li ng-hide="true"><a href="{{ project.slug }}/discussions">Discussions</a></li>
-			</ul>
-		</nav>
 	</header>
 
-	<section ng-include src="'views/tasks.html'"></section>
+	<section ng-include src="'views/tasks.html'" class="container"></section>
 </main>

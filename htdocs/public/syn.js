@@ -352,12 +352,14 @@ DB = {
       if (localItem.id.length === 3 && (_ref = localItem.id, __indexOf.call(distantIDs, _ref) >= 0)) {
         for (_k = 0, _len2 = distantItems.length; _k < _len2; _k++) {
           distantItem = distantItems[_k];
-          if (localItem.id === distantItem.id) {
-            if (localItem.edit <= distantItem.edit) {
-              for (k in distantItem) {
-                v = distantItem[k];
-                localItem[k] = v;
-              }
+          if (!(localItem.id === distantItem.id)) {
+            continue;
+          }
+          console.log(localItem.name + ': ' + localItem.edit + ' ' + distantItem.edit + ' ' + (localItem.edit <= distantItem.edit));
+          if (localItem.edit <= distantItem.edit) {
+            for (k in distantItem) {
+              v = distantItem[k];
+              localItem[k] = v;
             }
           }
         }

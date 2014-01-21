@@ -74,6 +74,11 @@ synappseApp.controller 'ProjectCtrl', ['$scope', '$routeParams', '$filter', 'Pro
 	$scope.emptyTask = ->
 		$scope.task = {}
 		
+	# add task
+	$scope.task = {}
+	$scope.emptyTask = ->
+		$scope.task = {}
+		
 	# edit mode
 	$scope.taskOpen = false
 	$scope.editMode = false
