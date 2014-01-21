@@ -47,7 +47,9 @@ synappseApp.controller 'HomeCtrl', ['$scope', '$location', 'Projects', ( $scope,
 # ------------------------------	
 synappseApp.controller 'ProjectCtrl', ['$scope', '$routeParams', '$filter', 'Projects', ( $scope, $routeParams, $filter, Projects ) ->
 	$scope.project = Projects.findProject $routeParams.project
+	$scope.project.alerts = [] if not $scope.project.alerts?
 	$scope.now = getCleanDate()
+	$scope.statuses = [{ k:0, v:'Todo' }, { k:1, v:'In progress' }, { k:2, v:'Advanced' }, { k:3, v:'Done' }, { k:4, v:'Archived' }]
 	
 	# tabs
 	$scope.tabs = ['Due', 'Others', 'Archived']
@@ -56,17 +58,6 @@ synappseApp.controller 'ProjectCtrl', ['$scope', '$routeParams', '$filter', 'Pro
 	
 	# autosync
 	$scope.$watch 'project', $scope.schedule, true
-	
-	
-	# $location.path '/home' if not $scope.project
-	$scope.project.alerts = [] if not $scope.project.alerts?
-	$scope.statuses = [
-		{ k:0, v:'Todo' },
-		{ k:1, v:'In progress' },
-		{ k:2, v:'Advanced' },
-		{ k:3, v:'Done' },
-		{ k:4, v:'Archived' }
-	]
 		
 	# add task
 	$scope.task = {}

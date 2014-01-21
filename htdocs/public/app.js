@@ -123,16 +123,10 @@ synappseApp.controller('HomeCtrl', [
 synappseApp.controller('ProjectCtrl', [
   '$scope', '$routeParams', '$filter', 'Projects', function($scope, $routeParams, $filter, Projects) {
     $scope.project = Projects.findProject($routeParams.project);
-    $scope.now = getCleanDate();
-    $scope.tabs = ['Due', 'Others', 'Archived'];
-    $scope.currentTab = 0;
-    $scope.changeTab = function(tab) {
-      return $scope.currentTab = tab;
-    };
-    $scope.$watch('project', $scope.schedule, true);
     if ($scope.project.alerts == null) {
       $scope.project.alerts = [];
     }
+    $scope.now = getCleanDate();
     $scope.statuses = [
       {
         k: 0,
@@ -151,6 +145,12 @@ synappseApp.controller('ProjectCtrl', [
         v: 'Archived'
       }
     ];
+    $scope.tabs = ['Due', 'Others', 'Archived'];
+    $scope.currentTab = 0;
+    $scope.changeTab = function(tab) {
+      return $scope.currentTab = tab;
+    };
+    $scope.$watch('project', $scope.schedule, true);
     $scope.task = {};
     $scope.emptyTask = function() {
       return $scope.task = {};
