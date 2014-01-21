@@ -87,13 +87,16 @@ synappseApp.controller('MainCtrl', [
       return $scope.$apply();
     };
     $scope.sync = function() {
-      localStorage['projects'] = [];
       return DB.sync($scope.projects, function() {
         Projects.cache();
-        $scope.$apply();
+        if (!$scope.$$phase) {
+          $scope.$apply();
+        }
         clearTimeout($scope.timeout);
         $scope.synced = true;
-        return $scope.$apply();
+        if (!$scope.$$phase) {
+          return $scope.$apply();
+        }
       });
     };
     $scope.sync();

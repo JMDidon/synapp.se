@@ -23,11 +23,11 @@ DB =
 
 	# Authenticate to Dropbox account
 	# ---
-	auth: ( button = false ) ->
+	auth: ( interactive = false ) ->
 		$this = @
-		if localStorage['user'] and not button then do $this.init 
-		else @client.authenticate { interactive: button }, ( error, client ) -> 
-			if client.isAuthenticated() then do $this.init else if not button then do $this.auth
+		if localStorage['user'] and not interactive then do $this.init 
+		else @client.authenticate { interactive: interactive }, ( error, client ) -> 
+			do $this.init if client.isAuthenticated()
 		
 		
 	# Initialize app
@@ -40,10 +40,9 @@ DB =
 			
 	init: ->
 		$this = @
-		if @client.isAuthenticated() then do $this.updateUser 
-		else @client.authenticate { interactive: false }, ( error, client ) -> do $this.updateUser 
-		load ['public/app.css', '//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.js', '//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular-route.min.js', 'public/app.js'], ->
+		load ['//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.js', '//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular-route.min.js', 'public/app.js'], ->
 			angular.bootstrap document, ['synappseApp']
+			if $this.client.isAuthenticated() then do $this.updateUser else $this.client.authenticate { interactive: false }, ( error, client ) -> do $this.updateUser 
 
 
 	# Check if Synappse folder exists, else create it
@@ -110,7 +109,7 @@ DB =
 	# Synchronize
 	# ---
 	sync: ( local, callback = false ) ->
-		return ( do callback if callback ) if not @client
+		return ( do callback if callback ) if not @client.isAuthenticated()
 		$this = @
 
 		@readFolder @folder, ( children ) ->

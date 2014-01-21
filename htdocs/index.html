@@ -7,7 +7,7 @@
   <meta name="viewport" content="initial-scale=1.0">
 
   <link href='http://fonts.googleapis.com/css?family=Lato:100,300,400,700,300italic|Merriweather:300italic,400,700,700italic' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" type="text/css" href="public/syn.css">
+  <link rel="stylesheet" type="text/css" href="public/synapp.css">
 </head>
 <body ng-controller="MainCtrl">
 
@@ -15,8 +15,8 @@
   <div ng-view></div>
 
   <!-- Landing page -->
-  <div ng-hide="true">
-    <section class="hero">
+  <main ng-hide="true">
+    <header class="hero">
       <div class="hero-content">
         <h2 class="main-title">Synappse</h2>
         <h1 class="main-infos"><span class="regular">Manage</span> your projects <strong class="regular">easily</strong>. For <strong class="regular">free</strong>.</h1>
@@ -42,9 +42,9 @@
           Connect with Dropbox
         </button>
       </div>
-    </section>
+    </header>
 
-    <div class="wrapper">
+    <div class="lp-wrapper">
       <section class="article left">
         <i class="title-icon">
           <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
@@ -89,9 +89,9 @@
 
     </div>
 
-    <blockquote class="wrapper big">Yes, no. Maybe. I don't know... Can you repeat the question ? You are not the boss of me now ! And you're not so big !</blockquote>
+    <blockquote class="lp-wrapper big">Yes, no. Maybe. I don't know... Can you repeat the question ? You are not the boss of me now ! And you're not so big !</blockquote>
 
-    <div class="wrapper center">
+    <div class="lp-wrapper txt-center">
       <div><h3 class="team-title">Our team</h3></div>
 
       <a href="http://guillaumebeck.me/" title="Portfolio Guillaume Beck">
@@ -153,10 +153,11 @@
         <a href="" class="big contact-mail">contact@synapp.se</a>
       </div>
     </div>
-    <footer class="center">
+    <footer class="txt-center">
       <p class="footer-text">© 2013, Synappse ™. All rights reserved.</p>
     </footer>
-  </div>
+  </main>
+
 
   <!-- Scripts -->
   <script>// Google Analytics

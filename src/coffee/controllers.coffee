@@ -18,13 +18,12 @@ synappseApp.controller 'MainCtrl', ['$scope', 'Projects', ( $scope, Projects ) -
 		do $scope.$apply
 
 	$scope.sync = ->
-		localStorage['projects'] = [] # Reinitialize cache
 		DB.sync $scope.projects, ->
 			do Projects.cache
-			do $scope.$apply
+			do $scope.$apply if not $scope.$$phase
 			clearTimeout $scope.timeout
 			$scope.synced = true
-			do $scope.$apply
+			do $scope.$apply if not $scope.$$phase
 	do $scope.sync
 	
 	$scope.schedule = ->

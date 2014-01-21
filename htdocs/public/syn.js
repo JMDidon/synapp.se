@@ -36,22 +36,20 @@ DB = {
   client: typeof Dropbox !== "undefined" && Dropbox !== null ? new Dropbox.Client({
     key: 'd1y1wxe9ow97xx0'
   }) : {},
-  auth: function(button) {
+  auth: function(interactive) {
     var $this;
-    if (button == null) {
-      button = false;
+    if (interactive == null) {
+      interactive = false;
     }
     $this = this;
-    if (localStorage['user'] && !button) {
+    if (localStorage['user'] && !interactive) {
       return $this.init();
     } else {
       return this.client.authenticate({
-        interactive: button
+        interactive: interactive
       }, function(error, client) {
         if (client.isAuthenticated()) {
           return $this.init();
-        } else if (!button) {
-          return $this.auth();
         }
       });
     }
@@ -71,17 +69,17 @@ DB = {
   init: function() {
     var $this;
     $this = this;
-    if (this.client.isAuthenticated()) {
-      $this.updateUser();
-    } else {
-      this.client.authenticate({
-        interactive: false
-      }, function(error, client) {
+    return load(['//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.js', '//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular-route.min.js', 'public/app.js'], function() {
+      angular.bootstrap(document, ['synappseApp']);
+      if ($this.client.isAuthenticated()) {
         return $this.updateUser();
-      });
-    }
-    return load(['public/app.css', '//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.js', '//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular-route.min.js', 'public/app.js'], function() {
-      return angular.bootstrap(document, ['synappseApp']);
+      } else {
+        return $this.client.authenticate({
+          interactive: false
+        }, function(error, client) {
+          return $this.updateUser();
+        });
+      }
     });
   },
   readFolder: function(folder, callback) {
@@ -189,7 +187,7 @@ DB = {
     if (callback == null) {
       callback = false;
     }
-    if (!this.client) {
+    if (!this.client.isAuthenticated()) {
       return (callback ? callback() : void 0);
     }
     $this = this;

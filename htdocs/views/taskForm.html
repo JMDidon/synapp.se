@@ -14,7 +14,7 @@
 		<div class="clearfix">
 			<label class="btn left"><input type="checkbox" class="hide" ng-model="openCal">{{ openCal?'hide calendar':'set due date' }}</label>
 			<button class="form-task-submit right" type="submit">{{ tmpTask.id?'edit task':'create task' }}</button>
-			<label class="btn-color right" ng-class="{'btn-active':tmpTask.priority}"><input type="checkbox" class="hide" ng-Model="tmpTask.priority">priority</label>
+			<label class="btn-color right" ng-class="{'btn-active':tmpTask.priority}"><input type="checkbox" class="hide" ng-Model="tmpTask.priority">⚠</label>
 		</div>
 		<div calendar ng-if="openCal" class="form-cal"></div>
 	</div>
