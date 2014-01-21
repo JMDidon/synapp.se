@@ -183,7 +183,6 @@ DB =
 		# edit local items from distant
 		for localItem in localItems when localItem.id.length is 3 and localItem.id in distantIDs
 			for distantItem in distantItems when localItem.id is distantItem.id
-				console.log localItem.name+': '+localItem.edit+' '+distantItem.edit+' '+(localItem.edit <= distantItem.edit)
 				( localItem[k] = v for k, v of distantItem ) if localItem.edit <= distantItem.edit
 
 		# return distant items missing in local
