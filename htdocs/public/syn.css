@@ -141,15 +141,16 @@ a {
 }
 
 .db-button {
-  height: 3em;
+  height: 3.3em;
+  line-height: 3.3em;
   padding: 0 1em;
   color: white;
   border: none;
-  -webkit-border-radius: 0.5em;
-  -moz-border-radius: 0.5em;
-  -ms-border-radius: 0.5em;
-  -o-border-radius: 0.5em;
-  border-radius: 0.5em;
+  -webkit-border-radius: 0.33333em;
+  -moz-border-radius: 0.33333em;
+  -ms-border-radius: 0.33333em;
+  -o-border-radius: 0.33333em;
+  border-radius: 0.33333em;
   border: solid 1px #1e88e8;
   /* Fallback */
   background: #1e88e8;
@@ -163,6 +164,11 @@ a {
   letter-spacing: 0.1em;
 }
 
+.db-icon {
+  vertical-align: sub;
+  margin-right: 0.5em;
+}
+
 .wrapper {
   display: block;
   width: 66%;
@@ -174,6 +180,17 @@ a {
   width: 22.5em;
 }
 
+.title-icon {
+  display: inline-block;
+  width: 2em;
+  height: 2em;
+  margin-right: 0.5em;
+}
+
+.db-title {
+  opacity: 0.57;
+}
+
 h3 {
   display: inline-block;
   height: 2em;
@@ -182,6 +199,7 @@ h3 {
   color: #5a457c;
   text-transform: uppercase;
   letter-spacing: 0.3em;
+  vertical-align: top;
 }
 
 .text {

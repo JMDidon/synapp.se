@@ -32,7 +32,7 @@ textarea, input, button { font-size: 1em; }
 
 h1, h2, h3, h4, h5, h6 { font-size: 1em; font-weight: normal; }
 ul, ol { list-style: none; }
-a { color: $color; text-decoration: none;  }
+a { color: $color; text-decoration: none; }
 
 .antialiased { -webkit-font-smoothing: antialiased; }
 .noselect { -webkit-touch-callout: none; -webkit-user-select: none; -moz-user-select: -moz-none; -ms-user-select: none; user-select: none; }
@@ -64,11 +64,14 @@ a { color: $color; text-decoration: none;  }
 .hero-content { @extend .absolute-center-content; }
 .main-title { margin: $base/1.5 0; font-size: 2.5*$base; letter-spacing: 0.15em; }
 .main-infos { margin-bottom: $unit; font-size: $unit; @extend .light; letter-spacing: 0.1em; }
-.db-button { height: 2*$unit; padding: 0 $base; color: white; border: none; @include border-radius($base/2, $db-button-1, 1px); @include db-linear-gradient($db-button-1, $db-button-2); @include box-shadow(0px, 6px, 4px, 0px, rgba(0, 0, 0, 0.1)); @extend .cursor; letter-spacing: 0.1em; }
+.db-button { height: 2.2*$unit; line-height: 2.2*$unit; padding: 0 $base; color: white; border: none; @include border-radius($base/3, $db-button-1, 1px); @include db-linear-gradient($db-button-1, $db-button-2); @include box-shadow(0px, 6px, 4px, 0px, rgba(0, 0, 0, 0.1)); @extend .cursor; letter-spacing: 0.1em; }
+.db-icon { vertical-align: sub; margin-right: 0.5em; }
 
 .wrapper { display: block; width: 66%; height: 100%; margin: 4*$unit auto; @extend .clearfix; }
 .article { width: 15*$unit; }
-h3 { display: inline-block; height: 2*$base; margin-bottom: $unit; border-bottom: solid 3px $title-color; color: $title-color; text-transform: uppercase; letter-spacing: 0.3em; @extend .bold; }
+.title-icon { display: inline-block; width: 2*$base; height: 2*$base; margin-right: $base/2; }
+.db-title { opacity: 0.57; }
+h3 { display: inline-block; height: 2*$base; margin-bottom: $unit; border-bottom: solid 3px $title-color; color: $title-color; text-transform: uppercase; letter-spacing: 0.3em; vertical-align: top; @extend .bold; }
 .text { line-height: 1.66; text-align: justify; }
 
 .big { float: none; width: 66%; margin: 2*$unit auto; font-size: 2*$base; @extend .italic; @extend .light; @extend .center; }
