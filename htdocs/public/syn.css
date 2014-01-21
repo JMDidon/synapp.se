@@ -124,7 +124,8 @@ a {
 .hero {
   position: relative;
   height: 30em;
-  background: #5c4975;
+  background: #5c4975 no-repeat url("images/hero-bg.png");
+  background-size: cover;
   color: white;
 }
 
@@ -254,7 +255,8 @@ h3 {
 .pre-footer {
   position: relative;
   height: 15em;
-  background: #5c4975;
+  background: #5c4975 no-repeat url("images/hero-bg.png");
+  background-size: cover;
   color: #b4aac7;
   font-family: "Merriweather" Georgia, Times, "Times New Roman", "Droid Serif", serif;
 }

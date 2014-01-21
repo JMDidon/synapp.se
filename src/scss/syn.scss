@@ -60,7 +60,7 @@ a { color: $color; text-decoration: none; }
 // Specific
 // ------------------------------
 
-.hero { position: relative; height: 20*$unit; background: $color; color: white; @extend .center; }
+.hero { position: relative; height: 20*$unit; background: $color no-repeat url('images/hero-bg.png'); background-size: cover; color: white; @extend .center; }
 .hero-content { @extend .absolute-center-content; }
 .main-title { margin: $base/1.5 0; font-size: 2.5*$base; letter-spacing: 0.15em; }
 .main-infos { margin-bottom: $unit; font-size: $unit; @extend .light; letter-spacing: 0.1em; }
@@ -83,7 +83,7 @@ h3 { display: inline-block; height: 2*$base; margin-bottom: $unit; border-bottom
 .name { display: block; color: $title-color; font-family: $serif; margin: 1em 0 0 0; @extend .italic; @extend .bold; }
 .role { display: block; color: $title-color; font-family: $sans;  margin: 0.9em 0; font-size: 0.6*$base; font-style: normal; opacity: 0.5; text-transform: uppercase; letter-spacing: 0.3em; @extend .regular; }
 
-.pre-footer { position: relative; height: 10*$unit; background: $color; color: $footer-font; font-family: $serif; @extend .italic; @extend .center; @extend .light; }
+.pre-footer { position: relative; height: 10*$unit; background: $color no-repeat url('images/hero-bg.png'); background-size: cover; color: $footer-font; font-family: $serif; @extend .italic; @extend .center; @extend .light; }
 .pre-footer-content { @extend .absolute-center-content; }
 .contact-title { border-bottom: solid 3px white; color: white; font-family: $sans; font-style: normal; }
 .contact-mail { color: white; font-family: $sans; }
