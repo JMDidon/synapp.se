@@ -190,6 +190,7 @@ footer { height: 3*$unit; line-height: 3*$unit; background: $footer-bckg; }
 .form-submit { @extend .btn, .sans, .medium; display: block; }
 .form-task-submit { @extend .form-submit; margin-left: $unit/2; }
 .form-create-text { @extend .form-text; width: 70%; }
+.form-user { @extend .btn-small-color; margin-right: $base/2; }
 
 
 
