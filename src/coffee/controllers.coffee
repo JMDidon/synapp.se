@@ -6,13 +6,22 @@ synappseApp = angular.module 'synappseControllers', []
 
 # Main Controller
 # ------------------------------
-synappseApp.controller 'MainCtrl', ['$scope', 'Projects', ( $scope, Projects ) ->
+synappseApp.controller 'MainCtrl', ['$translate', '$scope', 'Projects', ( $translate, $scope, Projects ) ->
 	$scope.about = false
 	$scope.timeout = false
 	$scope.synced = false
 	$scope.projects = do Projects.getProjects
 	$scope.me = {}
+	
+	# translations
+	$scope.lang = do $translate.uses
+	$scope.changeLanguage = ( lang ) -> 
+		$translate.uses lang
+		$scope.lang = lang
+		localStorage['lang'] = lang
+	$scope.changeLanguage localStorage['lang'] if localStorage['lang']
 
+	# sync
 	$scope.login = -> 
 		$scope.me = DB.user
 		do $scope.$apply
@@ -49,10 +58,10 @@ synappseApp.controller 'ProjectCtrl', ['$scope', '$routeParams', '$filter', 'Pro
 	$scope.project = Projects.findProject $routeParams.project
 	$scope.project.alerts = [] if not $scope.project.alerts?
 	$scope.now = getCleanDate()
-	$scope.statuses = [{ k:0, v:'Todo' }, { k:1, v:'In progress' }, { k:2, v:'Advanced' }, { k:3, v:'Done' }, { k:4, v:'Archived' }]
+	$scope.statuses = ['TODO', 'IN_PROGRESS', 'ADVANCED', 'DONE', 'ARCHIVED']
 	
 	# tabs
-	$scope.tabs = ['Due', 'Others', 'Archived']
+	$scope.tabs = ['TAB_DUES', 'TAB_OTHERS', 'TAB_ARCHIVED']
 	$scope.currentTab = 0
 	$scope.changeTab = ( tab ) -> $scope.currentTab = tab
 	

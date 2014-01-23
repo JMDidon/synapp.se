@@ -1,10 +1,10 @@
 <form class="form" ng-submit="submit()">
 	<div class="clearfix">
-		<span class="left medium bold dark">{{ task.id?task.name:'New task' }}</span>
-		<a href="" class="form-cancel" ng-click="toggleForm()">cancel</a>
+		<span class="left medium bold dark">{{ task.id?task.name:'NEW_TASK' | translate }}</span>
+		<a href="" class="form-cancel" ng-click="toggleForm()">{{ 'CANCEL' | translate }}</a>
 	</div>
 	<div class="form-fields">
-		<textarea class="form-text" ng-Model="tmpTask.name" placeholder="What do you have to do?"></textarea>
+		<textarea class="form-text" ng-Model="tmpTask.name" placeholder="{{ 'FORM_TASK_PLACEHOLDER' | translate }}"></textarea>
 		<div class="mb1">
 			<label class="form-user" ng-repeat="user in project.users" ng-class="{'btn-active':tmpTask.users.indexOf(user.uid) > -1}">
 				<input type="checkbox" class="hide" ng-click="toggleUser(user.uid)" ng-checked="tmpTask.users.indexOf(user.uid) > -1">
@@ -12,8 +12,8 @@
 			</label>
 		</div>
 		<div class="clearfix">
-			<label class="btn left"><input type="checkbox" class="hide" ng-model="openCal">{{ openCal?'hide calendar':'set due date' }}</label>
-			<button class="form-task-submit right" type="submit">{{ tmpTask.id?'edit task':'create task' }}</button>
+			<label class="btn left"><input type="checkbox" class="hide" ng-model="openCal">{{ openCal?'HIDE_CALENDAR':'SET_DUE_DATE' | translate }}</label>
+			<button class="form-task-submit right" type="submit">{{ tmpTask.id?'UPDATE':'CREATE' | translate }}</button>
 			<label class="btn-color right" ng-class="{'btn-active':tmpTask.priority}"><input type="checkbox" class="hide" ng-Model="tmpTask.priority">⚠</label>
 		</div>
 		<div calendar ng-if="openCal" class="form-cal"></div>

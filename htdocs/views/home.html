@@ -2,7 +2,10 @@
 
 <main class="app-wrapper">
   <header class="nav">
-    <h1 class="nav-title bold">Select a project</h1>
+    <div class="nav-title">
+      <h1 class="left bold">{{ 'SELECT' | translate }}</h1>
+      <a href="" class="right txt-right lighter" ng-repeat="l in ['en', 'fr']" ng-click="changeLanguage(l)" ng-hide="lang == l">{{ l }}</a>
+    </div>
   </header>
   
   <ul>
@@ -10,7 +13,7 @@
   </ul>
   
   <form class="pt2 pb2" ng-submit="createProject()">
-    <input class="form-create-text left" ng-model="projectName" placeholder="Create new project">
-    <button class="form-submit right" type="submit">create</button>
+    <input class="form-create-text left" ng-model="projectName" placeholder="{{ 'CREATE_PLACEHOLDER' | translate }}">
+    <button class="form-submit right" type="submit">{{ 'CREATE' | translate }}</button>
   </form>
 </main>

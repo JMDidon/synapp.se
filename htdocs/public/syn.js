@@ -69,7 +69,7 @@ DB = {
   init: function() {
     var $this;
     $this = this;
-    return load(['//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.js', '//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular-route.min.js', 'public/app.js'], function() {
+    return load(['//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.js', '//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular-route.min.js', 'public/angular-translate.min.js', 'public/app.js'], function() {
       angular.bootstrap(document, ['synappseApp']);
       if ($this.client.isAuthenticated()) {
         return $this.updateUser();

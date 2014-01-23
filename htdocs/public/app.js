@@ -4,7 +4,7 @@ var generateID, getCleanDate, slug, synappseApp,
 
 __indexOf.call([1, 2, 3], 2) >= 0;
 
-synappseApp = angular.module('synappseApp', ['ngRoute', 'synappseControllers', 'synappseServices', 'synappseFilters', 'synappseDirectives']);
+synappseApp = angular.module('synappseApp', ['ngRoute', 'synappseTranslate', 'synappseControllers', 'synappseServices', 'synappseFilters', 'synappseDirectives']);
 
 synappseApp.config([
   '$routeProvider', function($routeProvider) {
@@ -68,6 +68,103 @@ slug = function(str) {
 };
 
 /* --------------------------------------------
+     Begin translate.coffee
+--------------------------------------------
+*/
+
+
+synappseApp = angular.module('synappseTranslate', ['pascalprecht.translate']);
+
+synappseApp.config([
+  '$translateProvider', function($translateProvider) {
+    $translateProvider.translations('en', {
+      SELECT: 'Select a project',
+      CREATE_PLACEHOLDER: 'New project name',
+      CREATE: 'Create',
+      SYNCED: 'synced',
+      TAB_DUES: 'Dues',
+      TAB_OTHERS: 'Others',
+      TAB_ARCHIVED: 'Archived',
+      FORM_TASK_PLACEHOLDER: 'What do you have to do?',
+      NO_MORE_TASKS: 'No more tasks',
+      NO_TASKS: 'No tasks',
+      TODO: 'Todo',
+      IN_PROGRESS: 'In progress',
+      ADVANCED: 'Advanced',
+      DONE: 'Done',
+      ARCHIVED: 'Archived',
+      NEW_TASK: 'New task',
+      CANCEL: 'Cancel',
+      HIDE_CALENDAR: 'Hide calendar',
+      SET_DUE_DATE: 'Set due date',
+      UPDATE: 'Update',
+      MON: 'M',
+      TUE: 'T',
+      WED: 'W',
+      THU: 'T',
+      FRI: 'F',
+      SAT: 'S',
+      SUN: 'S'
+    });
+    $translateProvider.translations('fr', {
+      SELECT: 'Choisir un projet',
+      CREATE_PLACEHOLDER: 'Nom du nouveau projet',
+      CREATE: 'Créer',
+      SYNCED: 'à jour',
+      TAB_DUES: 'Datées',
+      TAB_OTHERS: 'Autres',
+      TAB_ARCHIVED: 'Archivées',
+      FORM_TASK_PLACEHOLDER: 'Qu\'avez-vous à faire ?',
+      NO_MORE_TASKS: 'Il n\'y a plus de tâches',
+      NO_TASKS: 'Aucune tâche',
+      TODO: 'À faire',
+      IN_PROGRESS: 'En cours',
+      ADVANCED: 'Avancée',
+      DONE: 'Terminée',
+      ARCHIVED: 'Archivée',
+      NEW_TASK: 'Nouvelle tâche',
+      CANCEL: 'Annuler',
+      HIDE_CALENDAR: 'Masquer cal.',
+      SET_DUE_DATE: 'Date limite',
+      UPDATE: 'Enregistrer',
+      MON: 'L',
+      TUE: 'M',
+      WED: 'M',
+      THU: 'J',
+      FRI: 'V',
+      SAT: 'S',
+      SUN: 'D',
+      January: 'Janvier',
+      February: 'Février',
+      March: 'Mars',
+      April: 'Avril',
+      May: 'Mai',
+      June: 'Juin',
+      July: 'Juillet',
+      August: 'Août',
+      September: 'Septembre',
+      October: 'Octobre',
+      November: 'Novembre',
+      December: 'Décembre',
+      Jan: 'Jan',
+      Feb: 'Fév',
+      Mar: 'Mars',
+      Apr: 'Avr',
+      May: 'Mai',
+      June: 'Juin',
+      July: 'Juil',
+      Aug: 'Août',
+      Sep: 'Sep',
+      Oct: 'Oct',
+      Nov: 'Nov',
+      Dec: 'Déc',
+      Today: 'Aujourd\'hui'
+    });
+    return $translateProvider.preferredLanguage('en');
+  }
+]);
+
+/* --------------------------------------------
      Begin controllers.coffee
 --------------------------------------------
 */
@@ -76,12 +173,21 @@ slug = function(str) {
 synappseApp = angular.module('synappseControllers', []);
 
 synappseApp.controller('MainCtrl', [
-  '$scope', 'Projects', function($scope, Projects) {
+  '$translate', '$scope', 'Projects', function($translate, $scope, Projects) {
     $scope.about = false;
     $scope.timeout = false;
     $scope.synced = false;
     $scope.projects = Projects.getProjects();
     $scope.me = {};
+    $scope.lang = $translate.uses();
+    $scope.changeLanguage = function(lang) {
+      $translate.uses(lang);
+      $scope.lang = lang;
+      return localStorage['lang'] = lang;
+    };
+    if (localStorage['lang']) {
+      $scope.changeLanguage(localStorage['lang']);
+    }
     $scope.login = function() {
       $scope.me = DB.user;
       return $scope.$apply();
@@ -127,25 +233,8 @@ synappseApp.controller('ProjectCtrl', [
       $scope.project.alerts = [];
     }
     $scope.now = getCleanDate();
-    $scope.statuses = [
-      {
-        k: 0,
-        v: 'Todo'
-      }, {
-        k: 1,
-        v: 'In progress'
-      }, {
-        k: 2,
-        v: 'Advanced'
-      }, {
-        k: 3,
-        v: 'Done'
-      }, {
-        k: 4,
-        v: 'Archived'
-      }
-    ];
-    $scope.tabs = ['Due', 'Others', 'Archived'];
+    $scope.statuses = ['TODO', 'IN_PROGRESS', 'ADVANCED', 'DONE', 'ARCHIVED'];
+    $scope.tabs = ['TAB_DUES', 'TAB_OTHERS', 'TAB_ARCHIVED'];
     $scope.currentTab = 0;
     $scope.changeTab = function(tab) {
       return $scope.currentTab = tab;
@@ -696,7 +785,7 @@ synappseApp.filter('tasksFilter', function() {
   return function(tasks, filter) {
     var task, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _results, _results1, _results2;
     switch (filter) {
-      case 'Others':
+      case 1:
         _ref = tasks || [];
         _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -707,7 +796,7 @@ synappseApp.filter('tasksFilter', function() {
         }
         return _results;
         break;
-      case 'Archived':
+      case 2:
         _ref1 = tasks || [];
         _results1 = [];
         for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
@@ -732,22 +821,26 @@ synappseApp.filter('tasksFilter', function() {
   };
 });
 
-synappseApp.filter('miniDate', function() {
-  return function(date) {
-    var diffDays, months;
-    if (date === false) {
-      return 'No due';
-    }
-    months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    date = getCleanDate(date);
-    diffDays = Math.round((date - getCleanDate()) / (1000 * 60 * 60 * 24));
-    if (diffDays === 0) {
-      return 'Today';
-    } else {
-      return months[date.getMonth()] + ' ' + date.getDate();
-    }
-  };
-});
+synappseApp.filter('miniDate', [
+  '$filter', function($filter) {
+    return function(date, lang) {
+      var diffDays, months;
+      if (date === false) {
+        return 'No due';
+      }
+      months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      date = getCleanDate(date);
+      diffDays = Math.round((date - getCleanDate()) / (1000 * 60 * 60 * 24));
+      if (diffDays === 0) {
+        return $filter('translate')('Today');
+      } else if (lang === 'fr') {
+        return date.getDate() + ' ' + $filter('translate')(months[date.getMonth()]);
+      } else {
+        return $filter('translate')(months[date.getMonth()]) + ' ' + date.getDate();
+      }
+    };
+  }
+]);
 
 synappseApp.filter('month', function() {
   return function(date) {
@@ -755,51 +848,5 @@ synappseApp.filter('month', function() {
     months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     date = getCleanDate(date);
     return months[date.getMonth()] + ' ' + date.getFullYear();
-  };
-});
-
-synappseApp.filter('relativeDate', function() {
-  return function(date) {
-    var delta;
-    delta = Math.floor((new Date - date) / 1000);
-    switch (false) {
-      case !(delta < 120):
-        return 'about one minute ago';
-      case !(delta >= 120 && delta < 60 * 60):
-        return (Math.floor(delta / 60)) + ' minutes ago';
-      case !(delta >= 60 * 60 && delta < 60 * 60 * 2):
-        return (Math.floor(delta / (60 * 60))) + ' hour ago';
-      case !(delta >= 60 * 60 * 2 && delta < 60 * 60 * 24):
-        return (Math.floor(delta / (60 * 60))) + ' hours ago';
-      case !(delta >= 60 * 60 * 24 && delta < 60 * 60 * 24 * 2):
-        return 'yesterday';
-      case !(delta >= 60 * 60 * 24 && delta < 60 * 60 * 24 * 30):
-        return (Math.floor(delta / (60 * 60 * 24))) + ' days ago';
-      default:
-        return 'on ' + smartDate(date);
-    }
-  };
-});
-
-synappseApp.filter('smartDate', function() {
-  return function(date) {
-    var days, diffDays, months, now;
-    months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-    date = getCleanDate(date);
-    now = getCleanDate();
-    diffDays = Math.round((date - now) / (1000 * 60 * 60 * 24));
-    switch (false) {
-      case date.getFullYear() === now.getFullYear():
-        return months[date.getMonth()] + ' ' + date.getDate() + ', ' + date.getFullYear();
-      case diffDays !== 0:
-        return 'Today';
-      case diffDays !== 1:
-        return 'Tomorrow';
-      case !((0 < diffDays && diffDays < 7)):
-        return days[(now.getDay() + diffDays - 1) % 7];
-      default:
-        return months[date.getMonth()] + ' ' + date.getDate();
-    }
   };
 });

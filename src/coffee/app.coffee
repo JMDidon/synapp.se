@@ -10,6 +10,7 @@
 2 in [1..3] # hack to fix Coffeescript compiler
 synappseApp = angular.module 'synappseApp', [
 	'ngRoute'
+	'synappseTranslate'
 	'synappseControllers'
 	'synappseServices'
 	'synappseFilters'
