@@ -363,14 +363,14 @@ synappseApp.factory('Projects', function() {
       })()),
       folder: DB.folder + (slug(name)) + '/',
       slug: slug(name),
-      users: [],
+      users: [DB.user],
       alerts: [],
       tasks: [],
       deletedTasks: [],
       comments: [],
       deletedComments: []
     });
-    factory.cache();
+    console.log(DB.user);
     return slug(name);
   };
   factory.readProject = function(id) {

@@ -21,13 +21,13 @@ synappseApp.factory 'Projects', ->
 			id: generateID 2, ( p.id for p in Projects )
 			folder: DB.folder+( slug name )+'/'
 			slug: slug name
-			users: []
+			users: [DB.user]
 			alerts: []
 			tasks: []
 			deletedTasks: []
 			comments: []
 			deletedComments: []
-		do factory.cache
+		console.log DB.user
 		slug name
 
 	factory.readProject = ( id ) -> 
