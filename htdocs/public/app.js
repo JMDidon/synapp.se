@@ -79,6 +79,15 @@ synappseApp.config([
   '$translateProvider', function($translateProvider) {
     $translateProvider.translations('en', {
       SELECT: 'Select a project',
+      SHARE: 'share',
+      FAQ_SHARE_TITLE: 'How do I share a project?',
+      FAQ_SHARE_ANSWER_1: 'Click on the “share” button next to a project.',
+      FAQ_SHARE_ANSWER_2: 'Once in Dropbox website, click on the ”Share” button on the top right corner.',
+      FAQ_SHARE_ANSWER_3: 'Add your friend\'s email.',
+      FAQ_SHARE_ANSWER_4: 'Tell them to move the shared folder into Synappse/ folder once they accepted the invitation.',
+      FAQ_SHARE_ANSWER_5: 'It\'s done!',
+      FAQ_DELETE_TITLE: 'How do I delete a project?',
+      FAQ_DELETE_ANSWER: 'Just delete the matching folder. Your projects are located in your Dropbox/Synappse/ folder.',
       CREATE_PLACEHOLDER: 'New project name',
       CREATE: 'Create',
       SYNCED: 'synced',
@@ -104,10 +113,21 @@ synappseApp.config([
       THU: 'T',
       FRI: 'F',
       SAT: 'S',
-      SUN: 'S'
+      SUN: 'S',
+      TODAY: 'Today',
+      NO_DUE: 'No due'
     });
     $translateProvider.translations('fr', {
       SELECT: 'Choisir un projet',
+      SHARE: 'partager',
+      FAQ_SHARE_TITLE: 'Comment partager un projet ?',
+      FAQ_SHARE_ANSWER_1: 'Cliquer sur “partager” à côté d\'un projet.',
+      FAQ_SHARE_ANSWER_2: 'Une fois sur le site Dropbox, cliquez sur "Share" en haut à droite',
+      FAQ_SHARE_ANSWER_3: 'Ajoutez l\'email de votre ami(e).',
+      FAQ_SHARE_ANSWER_4: 'Dites-lui de déplacer le fichier partagé dans le dossier Synappse/ une fois l\'invitation acceptée.',
+      FAQ_SHARE_ANSWER_5: 'Et voilà !',
+      FAQ_DELETE_TITLE: 'Comment supprimer un projet ?',
+      FAQ_DELETE_ANSWER: 'Il suffit de supprimer le dossier correspondant. Vos projets sont situdés dans le dossier Dropbox/Synappse/.',
       CREATE_PLACEHOLDER: 'Nom du nouveau projet',
       CREATE: 'Créer',
       SYNCED: 'à jour',
@@ -158,7 +178,8 @@ synappseApp.config([
       Oct: 'Oct',
       Nov: 'Nov',
       Dec: 'Déc',
-      Today: 'Aujourd\'hui'
+      TODAY: 'Aujourd\'hui',
+      NO_DUE: 'Non datée'
     });
     return $translateProvider.preferredLanguage('en');
   }
@@ -218,10 +239,17 @@ synappseApp.controller('MainCtrl', [
 
 synappseApp.controller('HomeCtrl', [
   '$scope', '$location', 'Projects', function($scope, $location, Projects) {
-    return $scope.createProject = function() {
+    $scope.createProject = function() {
       slug = Projects.createProject($scope.projectName);
       $scope.projectName = "";
       return $location.path('/' + slug);
+    };
+    return $scope.share = function(id) {
+      var project;
+      project = Projects.readProject(id);
+      return DB.getShareUrl(project.folder, function(url) {
+        return window.open(url, '_blank');
+      });
     };
   }
 ]);
@@ -826,13 +854,13 @@ synappseApp.filter('miniDate', [
     return function(date, lang) {
       var diffDays, months;
       if (date === false) {
-        return 'No due';
+        return $filter('translate')('NO_DUE');
       }
       months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       date = getCleanDate(date);
       diffDays = Math.round((date - getCleanDate()) / (1000 * 60 * 60 * 24));
       if (diffDays === 0) {
-        return $filter('translate')('Today');
+        return $filter('translate')('TODAY');
       } else if (lang === 'fr') {
         return date.getDate() + ' ' + $filter('translate')(months[date.getMonth()]);
       } else {

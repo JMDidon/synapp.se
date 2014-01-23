@@ -377,6 +377,16 @@ DB = {
       }
     }
     return localItems;
+  },
+  getShareUrl: function(folder, callback) {
+    if (callback == null) {
+      callback = false;
+    }
+    return this.client.makeUrl(folder, function(error, stat) {
+      if (callback) {
+        return callback(stat.url);
+      }
+    });
   }
 };
 

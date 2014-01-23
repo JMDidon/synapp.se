@@ -191,6 +191,13 @@ DB =
 		localItems
 
 
+	# Get share link
+	# ---
+	getShareUrl: ( folder, callback = false ) ->
+		@client.makeUrl folder, ( error, stat ) ->
+			callback stat.url if callback
+
+
 
 # Check auth & bind button
 # ------------------------------

@@ -9,11 +9,24 @@
   </header>
   
   <ul>
-    <li class="list-item" ng-repeat="p in projects"><a href="#/{{ p.slug }}">{{ p.name }}</a></li>
+    <li class="list-item clearfix" ng-repeat="p in projects">
+      <a href="#/{{ p.slug }}" class="left">{{ p.name }}</a>
+      <a href="" class="right" ng-click="share(p.id)">{{ 'SHARE' | translate }}</a>
+    </li>
   </ul>
   
-  <form class="pt2 pb2" ng-submit="createProject()">
+  <form class="pt2 pb2 clearfix" ng-submit="createProject()">
     <input class="form-create-text left" ng-model="projectName" placeholder="{{ 'CREATE_PLACEHOLDER' | translate }}">
     <button class="form-submit right" type="submit">{{ 'CREATE' | translate }}</button>
   </form>
+  
+  <h2 class="bold uppercase medium color">{{ 'FAQ_SHARE_ANSWER' | translate }}</h2>
+  <ol class="o-list mb1">
+    <li>{{ 'FAQ_SHARE_ANSWER_1' | translate }}</li>
+    <li>{{ 'FAQ_SHARE_ANSWER_2' | translate }}</li>
+    <li>{{ 'FAQ_SHARE_ANSWER_3' | translate }}</li>
+    <li>{{ 'FAQ_SHARE_ANSWER_4' | translate }}</li>
+  </ol>
+  <h2 class="bold uppercase medium color">{{ 'FAQ_DELETE_TITLE' | translate }}</h2>
+  <p class="pb2">{{ 'FAQ_DELETE_ANSWER' | translate }}</p>
 </main>

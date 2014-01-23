@@ -42,11 +42,11 @@ synappseApp.filter 'tasksFilter', -> ( tasks, filter ) ->
 # ------------------------------
 synappseApp.filter 'miniDate', [ '$filter', ( $filter ) ->
 	( date, lang ) ->
-		return 'No due' if date is false
+		return $filter('translate')('NO_DUE') if date is false
 		months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 		date = getCleanDate date
 		diffDays = Math.round (date-getCleanDate())/(1000*60*60*24)
-		if diffDays is 0 then $filter('translate')('Today') 
+		if diffDays is 0 then $filter('translate')('TODAY') 
 		else if lang == 'fr' then date.getDate()+' '+$filter('translate')(months[date.getMonth()])
 		else $filter('translate')(months[date.getMonth()])+' '+date.getDate()
 ]
