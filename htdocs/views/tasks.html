@@ -5,9 +5,15 @@
 		</div>
 		<div task-form ng-if="editMode"></div>
 	</section>
-	<ul class="tabs">
+	<!--<ul class="tabs">
 		<li ng-repeat="tab in tabs" ng-class="{'tab-current': $index==currentTab}" ng-click="changeTab($index)">{{ tab | translate }}</li>
-	</ul>
+	</ul>-->
+	<nav class="tasks-options">
+		<!--<span class="tasks-sort icon-arrow-down">Due</span>
+		<span class="tasks-filter icon-arrow-down">All</span>
+		<span class="tasks-edit">Edit</span>-->
+		<span class="tasks-sort icon-arrow-down" ng-repeat="tab in tabs" ng-class="{'tab-current': $index==currentTab}" ng-click="changeTab($index)">{{ tab | translate }}</span>
+	</nav>
 	<div ng-repeat="tab in tabs" ng-if="currentTab == $index">
 		<article task class="task" ng-repeat="task in tasks = ( project.tasks | tasksFilter:$index | orderBy:['-priority', ($last?'-due':'due'), 'edit'] )"></article>
 		<p class="pt1 medium lighter">{{ tasks.length?'NO_MORE_TASKS':'NO_TASKS' | translate }}</p>

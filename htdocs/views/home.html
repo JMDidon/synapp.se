@@ -1,32 +1,36 @@
 <section class="insights"></section>
 
-<main class="app-wrapper">
-  <header class="nav">
-    <div class="nav-title">
-      <h1 class="left bold">{{ 'SELECT' | translate }}</h1>
-      <a href="" class="right txt-right lighter" ng-repeat="l in ['en', 'fr']" ng-click="changeLanguage(l)" ng-hide="lang == l">{{ l }}</a>
-    </div>
-  </header>
-  
-  <ul>
-    <li class="list-item clearfix" ng-repeat="p in projects">
-      <a href="#/{{ p.slug }}" class="left">{{ p.name }}</a>
-      <a href="" class="right" ng-click="share(p.id)">{{ 'SHARE' | translate }}</a>
-    </li>
-  </ul>
-  
-  <form class="pt2 pb2 clearfix" ng-submit="createProject()">
-    <input class="form-create-text left" ng-model="projectName" placeholder="{{ 'CREATE_PLACEHOLDER' | translate }}">
-    <button class="form-submit right" type="submit">{{ 'CREATE' | translate }}</button>
-  </form>
-  
-  <h2 class="bold uppercase medium color">{{ 'FAQ_SHARE_TITLE' | translate }}</h2>
-  <ol class="o-list mb1">
-    <li>{{ 'FAQ_SHARE_ANSWER_1' | translate }}</li>
-    <li>{{ 'FAQ_SHARE_ANSWER_2' | translate }}</li>
-    <li>{{ 'FAQ_SHARE_ANSWER_3' | translate }}</li>
-    <li>{{ 'FAQ_SHARE_ANSWER_4' | translate }}</li>
-  </ol>
-  <h2 class="bold uppercase medium color">{{ 'FAQ_DELETE_TITLE' | translate }}</h2>
-  <p class="pb2">{{ 'FAQ_DELETE_ANSWER' | translate }}</p>
+<main class="wrapper">
+	<!--<header class="nav">
+		<div class="nav-title">
+			<h1 class="left bold">{{ 'SELECT' | translate }}</h1>
+			<a href="" class="right txt-right lighter" ng-repeat="l in ['en', 'fr']" ng-click="changeLanguage(l)" ng-hide="lang == l">{{ l }}</a>
+		</div>
+	</header>-->
+	<header class="nav-title">
+		<h1 class="left bold">{{ 'SELECT' | translate }}</h1>
+		<a href="" class="right txt-right lighter" ng-repeat="l in ['en', 'fr']" ng-click="changeLanguage(l)" ng-hide="lang == l">{{ l }}</a>
+	</header>
+	
+	<ul>
+		<li class="task clearfix" ng-repeat="p in projects">
+			<a href="#/{{ p.slug }}" class="project-title left">{{ p.name }}</a>
+			<a href="" class="project-share right" ng-click="share(p.id)">{{ 'SHARE' | translate }}</a>
+		</li>
+	</ul>
+	
+	<form class="pt2 pb2 clearfix" ng-submit="createProject()">
+		<input class="form-create-text left" ng-model="projectName" placeholder="{{ 'CREATE_PLACEHOLDER' | translate }}">
+		<button class="form-submit right" type="submit">{{ 'CREATE' | translate }}</button>
+	</form>
+	
+	<h2 class="bold uppercase medium color">{{ 'FAQ_SHARE_TITLE' | translate }}</h2>
+	<ol class="o-list mb1">
+		<li>{{ 'FAQ_SHARE_ANSWER_1' | translate }}</li>
+		<li>{{ 'FAQ_SHARE_ANSWER_2' | translate }}</li>
+		<li>{{ 'FAQ_SHARE_ANSWER_3' | translate }}</li>
+		<li>{{ 'FAQ_SHARE_ANSWER_4' | translate }}</li>
+	</ol>
+	<h2 class="bold uppercase medium color">{{ 'FAQ_DELETE_TITLE' | translate }}</h2>
+	<p class="pb2">{{ 'FAQ_DELETE_ANSWER' | translate }}</p>
 </main>
