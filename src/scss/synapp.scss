@@ -16,7 +16,7 @@ $font-color: #494454;
 $footer-bckg: #453B58;
 $footer-font: #B4AAC7;
 
-$sans: app, "Helvetica Neue", Helvetica, "Segoe UI", Verdana, Arial, sans-serif;
+$sans: app, Lato, "Helvetica Neue", Helvetica, "Segoe UI", Verdana, Arial, sans-serif;
 $serif: "Merriweather" Georgia, Times, "Times New Roman", "Droid Serif", serif;
 $base: 14px;
 $unit: $base*1.4;
@@ -36,6 +36,7 @@ sup, sub { line-height: 0 }
 img { max-width: 100%; height: auto; }
 i { font-style: normal; }
 textarea, input, button { font-size: 1em; }
+select::-ms-expand { display: none; } // Remove arrow in IE
 
 .antialiased { -webkit-font-smoothing: antialiased; }
 .noselect { -webkit-touch-callout: none; -webkit-user-select: none; -moz-user-select: -moz-none; -ms-user-select: none; user-select: none; }
@@ -96,7 +97,7 @@ textarea, input, button { font-size: 1em; }
 .right { float: right; }
 .clearfix:after { content: ""; display: table; clear: both; }
 
-.absolute-center-content { display: table; position: absolute; top: 0; bottom: 0; left: 0; right: 0; margin: auto; width: 100%; height: auto; }
+.absolute-center-content { position: absolute; top: 0; bottom: 0; left: 0; right: 0; margin: auto; width: 50%; height: 50%; }
 .list-inline { font-size: 0; & > * { display: inline-block; font-size: $base; }}
 .o-list { list-style-type: decimal; }
 
@@ -363,7 +364,7 @@ footer { height: 3*$unit; line-height: 3*$unit; background: $footer-bckg; }
 
 // Media queries
 // ------------------------------
-@media (min-width: 650px) {
+@media screen and (min-width: 650px) {
 	.wrapper { max-width: 700px; }
 	.header {  margin-left: 0; margin-right: 0; }
 	.title { float: left; background: none; }
