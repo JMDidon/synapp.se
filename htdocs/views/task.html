@@ -1,23 +1,11 @@
 <div task-form ng-if="editMode"></div>
-<!--<p class="task-content" ng-hide="editMode" ng-class="{'task-late':late}">
-	<span class="task-status">
-		<select ng-model="task.status" ng-change="editTask()">
-			<option ng-repeat="status in statuses" value="{{ $index }}" ng-selected="{{ $index == task.status }}">{{ status | translate }}</option>
-		</select>
-	</span>
-	<a class="task-name" href="" ng-click="toggleForm()">{{ task.priority?'⚠ ':'' }}{{ task.name }}</a>
-	<span class="task-info">
-		<time class="task-date">{{ task.due | miniDate:lang }}</time><!--
- <span ng-if="task.users.length"><span ng-repeat="user in task.users">, {{ user | DropboxUIDToUsername: project.id }}</span></span>
-	</span>
-</p>-->
+
 <div class="task-content" ng-hide="editMode" ng-class="{'task-late':late}">
 	<label class="task-status-label"></label>
 	<select class="task-actions task-status icon-arrow-down">
 		<option ng-repeat="status in statuses" value="{{ $index }}" ng-selected="{{ $index == task.status }}">{{ status | translate }}</option>
 	</select>
 	<header class="task-header">
-		<!--<h1 class="task-title">This is a random task and let's see what happen</h1>-->
 		<a class="task-title" href="" ng-click="toggleForm()">{{ task.priority?'⚠ ':'' }}{{ task.name }}</a>
 		<p class="task-info">
 			<time class="task-time">{{ task.due | miniDate:lang }}</time><span ng-if="task.users.length"><span ng-repeat="user in task.users">, {{ user | DropboxUIDToUsername: project.id }}</span></span>
