@@ -234,7 +234,7 @@ footer { height: 3*$unit; line-height: 3*$unit; background: $footer-bckg; }
 
 // Global
 // ------------------------------
-.wrapper { margin: auto; padding: 0 $unit; }
+.wrapper { width: 100%; margin: auto; padding: 0 $unit; }
 
 .header { @extend .clearfix, .mbu2; position: relative; margin-left: -$unit; margin-right: -$unit; line-height: $base; }
 .title { @extend .clearfix, .bg-color; }
@@ -365,7 +365,7 @@ footer { height: 3*$unit; line-height: 3*$unit; background: $footer-bckg; }
 // Media queries
 // ------------------------------
 @media screen and (min-width: 650px) {
-	.wrapper { max-width: 700px; }
+	.wrapper { display: block; max-width: 700px; width: 100%; margin: 0 auto; }
 	.header {  margin-left: 0; margin-right: 0; }
 	.title { float: left; background: none; }
 	.title-nav, .title-name, .search, .nav a { padding-left: $unit; padding-right: $unit; }
