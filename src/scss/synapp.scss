@@ -232,9 +232,10 @@ footer { height: 3*$unit; line-height: 3*$unit; background: $footer-bckg; }
 .cal-current { background: $color; color: #fff; &:hover { background: $color; }}
 
 
+
 // Global
 // ------------------------------
-.wrapper { margin: auto; padding: 0 $unit; }
+.wrapper { width: 100%; margin: auto; padding: 0 $unit; }
 
 .header { @extend .clearfix, .mbu2; position: relative; margin-left: -$unit; margin-right: -$unit; line-height: $base; }
 .title { @extend .clearfix, .bg-color; }
@@ -266,7 +267,7 @@ footer { height: 3*$unit; line-height: 3*$unit; background: $footer-bckg; }
 		-ms-transition: width .3s .1s, background .3s .1s, color .3s .1s, font-size .1s .1s;
 		 -o-transition: width .3s .1s, background .3s .1s, color .3s .1s, font-size .1s .1s;
 			transition: width .3s .1s, background .3s .1s, color .3s .1s, font-size .1s .1s;
-	height: 100%;
+	height: auto;
 	&:focus {
 		@extend .bg-darker, .lightest, .big; width: 100%; outline: none;
 		& + .nav { opacity: .2; }
@@ -365,10 +366,10 @@ footer { height: 3*$unit; line-height: 3*$unit; background: $footer-bckg; }
 // Media queries
 // ------------------------------
 @media screen and (min-width: 650px) {
-	.wrapper { max-width: 700px; }
+	.wrapper { display: block; max-width: 700px; width: 100%; margin: 0 auto; }
 	.header {  margin-left: 0; margin-right: 0; }
 	.title { float: left; background: none; }
 	.title-nav, .title-name, .search, .nav a { padding-left: $unit; padding-right: $unit; }
-	.search { padding-left: $unit*3/2; }
+	.search { height: 100%; padding-left: $unit*3/2; }
 	.nav { float: right; margin-right: $unit*5; -webkit-transition: opacity .3s; }
 }
