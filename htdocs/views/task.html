@@ -2,7 +2,7 @@
 
 <div class="task-content" ng-hide="editMode" ng-class="{'task-late':late}">
 	<label class="task-status-label"></label>
-	<select class="task-actions task-status">
+	<select class="task-actions task-status icon-arrow-down">
 		<option ng-repeat="status in statuses" value="{{ $index }}" ng-selected="{{ $index == task.status }}">{{ status | translate }}</option>
 	</select>
 	<header class="task-header">
