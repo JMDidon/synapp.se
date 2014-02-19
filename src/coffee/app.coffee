@@ -1,3 +1,4 @@
+#@prepros-append translate.coffee
 #@prepros-append controllers.coffee
 #@prepros-append services.coffee
 #@prepros-append helpers.coffee
@@ -10,9 +11,9 @@
 2 in [1..3] # hack to fix Coffeescript compiler
 synappseApp = angular.module 'synappseApp', [
 	'ngRoute'
+	'synappseTranslate'
 	'synappseControllers'
 	'synappseServices'
-	'synappseHelpers'
 	'synappseFilters'
 	'synappseDirectives'
 ]
@@ -20,25 +21,10 @@ synappseApp = angular.module 'synappseApp', [
 
 # Routes
 # ------------------------------
-synappseApp.config ['$routeProvider',
-	( $routeProvider ) ->
-		$routeProvider.when( '/',
-			templateUrl: 'views/home.html'
-			controller: 'HomeCtrl'
-			
-		).when( '/home',
-			redirectTo: '/'
-		
-		).when( '/:project',
-      templateUrl: 'views/project.html'
-      controller : 'ProjectCtrl'
-			controller: 'HomeCtrl'
-		
-		).when( '/:project/:section',
-      templateUrl: 'views/project.html'
-      controller : 'ProjectCtrl'
-		
-		).otherwise
-			redirectTo: '/'
-		undefined
+synappseApp.config ['$routeProvider', ( $routeProvider ) ->
+	$routeProvider.when '/', { templateUrl: 'views/home.html', controller: 'HomeCtrl' }
+	$routeProvider.when '/home', redirectTo: '/'
+	$routeProvider.when '/:project', { templateUrl: 'views/project.html', controller: 'ProjectCtrl' }
+	$routeProvider.when '/:project/:section', { templateUrl: 'views/project.html', controller : 'ProjectCtrl' }
+	$routeProvider.otherwise redirectTo: '/'
 ]

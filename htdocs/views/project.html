@@ -1,24 +1,19 @@
-<aside class="insights">
-</aside>
+<section class="insights"></section>
 
 <main class="wrapper">
-	<header>
-		<div class="row">
-			<nav class="col-lg-8 col-lg-offset-2">
-				<div class="navbar-left">
-					<select ng-model="selectProject" ng-init="selectProject = project.slug">
-						<option ng-repeat="p in projects" value="{{ p.slug }}" ng-selected="p.slug == selectProject">{{ p.name }}</option>
-					</select>
-					<button type="button" class="btn btn-primary btn-xs" ng-click="sync()">Sync</button>
-				</div>
-				<ul class="nav navbar-nav navbar-right">
-					<li class="active"><a href="{{ project.slug }}">Tasks</a></li>
-					<li><a href="{{ project.slug }}/files">Files</a></li>
-					<li><a href="{{ project.slug }}/discussions">Discussions</a></li>
-				</ul>
-			</nav>
+	<header class="header">
+		<div class="title">
+			<a href="../htdocs" class="title-nav">&#9776;</a>
+			<h1 class="title-name">{{ project.name }}</h1>
+			<input type="text" class="search" placeholder="search">
 		</div>
+		<nav class="nav">
+			<a href="{{ project.slug }}" class="nav-current">{{ 'TASKS' | translate }}</a>
+			<a href="{{ project.slug }}">{{ 'FILES' | translate }}</a>
+			<a href="{{ project.slug }}">{{ 'DISCUSSIONS' | translate }}</a>
+		</nav>
 	</header>
 
-	<section ng-include src="'views/tasks.html'" class="container"></section>
+	<section ng-include src="'views/tasks.html'"></section>
+	<a href="mailto:hello@synapp.se" class="title-report">{{ 'REPORT' | translate }}</a>
 </main>

@@ -8,21 +8,22 @@ synappseApp = angular.module 'synappseDirectives', []
 synappseApp.directive 'task', ['Projects', ( Projects ) ->
   templateUrl: 'views/task.html'
   scope: true      
-  controller: ( $scope ) ->
+  controller: ['$scope', ( $scope ) ->
     # edit mode
     $scope.editMode = false
     $scope.$watch 'taskOpen', -> $scope.editMode = $scope.taskOpen is $scope.task.id
     $scope.toggleForm = -> $scope.setTaskOpen $scope.task.id
       
     # statuses
-    $scope.late = ( $scope.task.due <= $scope.now and $scope.task.status < 3 )
-    $scope.$watch 'task.status', ->
-      $scope.late = ( $scope.task.due <= $scope.now and $scope.task.status < 3 )
+    $scope.$watch 'task.due', -> 
+      $scope.late = ( $scope.task.due isnt false and $scope.task.due <= $scope.now and $scope.task.status < 3 )
+    $scope.editTask = ->
       Projects.editTask $scope.project.id, $scope.task.id, $scope.task	
     
     # delete
     $scope.deleteTask = ->
       Projects.deleteTask $scope.project.id, $scope.task.id
+  ]
 ]
 
 
@@ -31,7 +32,7 @@ synappseApp.directive 'task', ['Projects', ( Projects ) ->
 synappseApp.directive 'taskForm', ['Projects', ( Projects ) ->
   templateUrl: 'views/taskForm.html'
   scope: true      
-  controller: ( $scope, $element ) ->
+  controller: ['$scope', '$element', ( $scope, $element ) ->
     $element[0].querySelector( 'textarea' ).focus()
     $scope.tmpTask = if $scope.task.id then angular.copy $scope.task else $scope.task
     $scope.tmpTask.users = [] if not $scope.tmpTask.users?
@@ -50,12 +51,14 @@ synappseApp.directive 'taskForm', ['Projects', ( Projects ) ->
           priority: $scope.tmpTask.priority or false
           due: $scope.tmpTask.due
           users: $scope.tmpTask.users
+        $scope.changeTab ( if $scope.tmpTask.due is false then 1 else 0 )
         do $scope.emptyTask
         $scope.tmpTask = $scope.task
         $element[0].querySelector( 'textarea' ).focus()
     $scope.toggleUser = ( uid ) ->
       index = $scope.tmpTask.users.indexOf uid
       if index > -1 then $scope.tmpTask.users.splice index, 1 else $scope.tmpTask.users.push uid 
+  ]
 ]
 
 

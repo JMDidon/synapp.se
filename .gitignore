@@ -1,1 +1,3 @@
 .DS_Store
+htdocs/public/*.js
+htdocs/public/*.css

@@ -1,12 +1,14 @@
 <div task-form ng-if="editMode"></div>
-<p ng-hide="editMode" ng-class="{'task-priority':task.priority, 'task-late':late}">
-  <time class="task-date">{{ task.due | miniDate }}</time>
-  <span class="task-content">
-    <a class="task-name" href="" ng-click="toggleForm()">{{ task.name }}</a>
-    <span class="task-info">
-      <span ng-repeat="user in task.users">{{ user | DropboxUIDToUsername: project.id | assignee }}</span>
-      <select ng-model="task.status" ng-options="s.k as s.v for s in statuses"></select>
-    </span>
-  </span>
-  <span class="task-comments-nb"></span>
-</p>
+
+<div class="task-content" ng-hide="editMode" ng-class="{'task-late':late}">
+	<label class="task-status-label"></label>
+	<select class="task-actions task-status icon-arrow-down">
+		<option ng-repeat="status in statuses" value="{{ $index }}" ng-selected="{{ $index == task.status }}">{{ status | translate }}</option>
+	</select>
+	<header class="task-header">
+		<a class="task-title" href="" ng-click="toggleForm()">{{ task.priority?'⚠ ':'' }}{{ task.name }}</a>
+		<p class="task-info">
+			<time class="task-time">{{ task.due | miniDate:lang }}</time><span ng-if="task.users.length"><span ng-repeat="user in task.users">, {{ user | DropboxUIDToUsername: project.id }}</span></span>
+		</p>
+	</header>
+</div>

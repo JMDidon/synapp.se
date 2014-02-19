@@ -1,48 +1,49 @@
+# Load css/js
+# ------------------------------
+load = ( url, callback = false ) ->
+	if url instanceof Array then load url.shift(), ( if url.length then ( -> load url, callback ) else callback )
+	else if typeof url is 'string'
+		css = url.match /\.css(\?.*)?$/
+		url += '?t='+( new Date ).getTime() # avoid cache
+		item = document.createElement if css then 'link' else 'script'
+		if css then [ item.type, item.rel, item.href ] = [ 'text/css', 'stylesheet', url ] else item.src = url
+		item.addEventListener 'load', ( e ) -> callback null, e if callback
+		( if css then document.body else document.head ).appendChild item
+
+
+
 # Dropbox auth & sync
 # ------------------------------
-async = ( url, callback = false ) ->
-	css = url.match /\.css(\?.*)?$/
-	url += '?t='+( new Date ).getTime() # avoid cache
-	item = document.createElement if css then 'link' else 'script'
-	if css then [ item.type, item.rel, item.href ] = [ 'text/css', 'stylesheet', url ] else item.src = url
-	item.addEventListener 'load', ( e ) -> callback null, e if callback
-	( if css then document.body else document.head ).appendChild item
-
-
-DB = 
+DB =
 	folder: 'Synappse/'
 	file: '_project.json'
-	user: {}
-	client: new Dropbox.Client key: 'd1y1wxe9ow97xx0'
+	user: if localStorage['user'] then JSON.parse localStorage['user'] else {}
+	client: if Dropbox? then new Dropbox.Client key: 'd1y1wxe9ow97xx0' else {}
 
 
 	# Authenticate to Dropbox account
 	# ---
-	checkAuth: ->
+	auth: ( interactive = false ) ->
 		$this = @
-		@client.authenticate { interactive: false }, ( error, client ) -> 
-			console.log error if error
+		if localStorage['user'] and not interactive then do $this.init
+		else @client.authenticate { interactive: interactive }, ( error, client ) ->
 			do $this.init if client.isAuthenticated()
-			
-	auth: ->
-		$this = @
-		@client.authenticate ( error, client ) -> 
-			console.log error if error
-			do $this.init if client.isAuthenticated()
-		
-		
+
+
 	# Initialize app
 	# ---
-	init: ->
+	updateUser: ->
 		$this = @
 		@client.getAccountInfo ( error, info ) ->
 			$this.user = name: info.name, email: info.email, uid: info.uid
-		
-		async 'public/app.css', ->
-			async '//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.min.js', ->
-				async '//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular-route.min.js', ->
-					async 'public/app.js', ->
-						angular.element(document).ready -> angular.bootstrap document, ['synappseApp']
+			localStorage['user'] = JSON.stringify $this.user
+
+	init: ->
+		$this = @
+		load ['//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.js', '//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular-route.min.js', 'public/lib/angular-translate.min.js', 'public/app.js'], ->
+			angular.bootstrap document, ['synappseApp']
+			if $this.client.isAuthenticated() then do $this.updateUser else $this.client.authenticate { interactive: false }, ( error, client ) -> do $this.updateUser
+
 
 	# Check if Synappse folder exists, else create it
 	# ---
@@ -63,7 +64,7 @@ DB =
 		@client.readFile folder+@file, ( error, data, stat ) ->
 			if error and error.status is 404 # create project
 				name = ( folder.substring $this.folder.length+1 ).replace /\/$/, ''
-				project = 
+				project =
 					name: name
 					id: generateID 3, localIDs, $this.user.uid+'_'
 					folder: folder
@@ -107,8 +108,8 @@ DB =
 
 	# Synchronize
 	# ---
-	sync: ( local, callback ) ->
-		return do callback if not @client
+	sync: ( local, callback = false ) ->
+		return ( do callback if callback ) if not @client.isAuthenticated()
 		$this = @
 
 		@readFolder @folder, ( children ) ->
@@ -129,9 +130,8 @@ DB =
 
 					# when all DB folders are sync
 					if not waiting
-						$this.checkLocalProjects local, ( c.path+'/' for c in projects ), -> 
-							console.log "sync complete"
-							do callback
+						$this.checkLocalProjects local, ( c.path+'/' for c in projects ), ->
+							do callback if callback
 
 
 	# Update project
@@ -155,7 +155,7 @@ DB =
 		( comment.taskID = task.id for task in local.tasks when task.oldID is comment.taskID ) for comment in local.comments
 		delete task.oldID for task in local.tasks
 		# update replies parentIDs
-		# ( reply.parentID = comment.id for comment in local.comments when comment.oldID is reply.parentID ) for reply in local.comments 
+		# ( reply.parentID = comment.id for comment in local.comments when comment.oldID is reply.parentID ) for reply in local.comments
 		# delete comment.oldID for comment in local.comments
 
 		# update alerts
@@ -166,10 +166,9 @@ DB =
 		@saveProject local
 
 
-
 	# Solve conflicts (add, edit, delete)
 	# ---
-	solveConflicts: ( localItems, distantItems, deletedItems ) ->	
+	solveConflicts: ( localItems, distantItems, deletedItems ) ->
 		distantIDs = ( item.id for item in distantItems )
 
 		# delete local items missing in distant
@@ -192,9 +191,16 @@ DB =
 		localItems
 
 
+	# Get share link
+	# ---
+	getShareUrl: ( folder, callback = false ) ->
+		@client.makeUrl folder, ( error, stat ) ->
+			callback stat.url if callback
+
+
 
 # Check auth & bind button
 # ------------------------------
-do -> 
-	do DB.checkAuth
-	( document.getElementById 'dbauth' ).addEventListener 'click', -> do DB.auth
+do ->
+	do DB.auth
+	( document.getElementById 'auth' ).addEventListener 'click', -> DB.auth true

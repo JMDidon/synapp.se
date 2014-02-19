@@ -3,58 +3,84 @@
 synappseApp = angular.module 'synappseControllers', []
 
 
+
 # Main Controller
 # ------------------------------
-synappseApp.controller 'MainCtrl', ( $scope, Projects ) ->
+synappseApp.controller 'MainCtrl', ['$translate', '$scope', 'Projects', ( $translate, $scope, Projects ) ->
+	$scope.about = false
+	$scope.timeout = false
+	$scope.synced = false
 	$scope.projects = do Projects.getProjects
 	$scope.me = {}
+	
+	# translations
+	$scope.lang = do $translate.uses
+	$scope.changeLanguage = ( lang ) -> 
+		$translate.uses lang
+		$scope.lang = lang
+		localStorage['lang'] = lang
+	$scope.changeLanguage localStorage['lang'] if localStorage['lang']
 
+	# sync
 	$scope.login = -> 
 		$scope.me = DB.user
 		do $scope.$apply
 
-	$scope.sync = -> 
-		localStorage['projects'] = [] # Reinitialize cache
+	$scope.sync = ->
 		DB.sync $scope.projects, ->
 			do Projects.cache
-			do $scope.$apply
-
-	$scope.createProject = ->
-		Projects.createProject $scope.projectName
-		$scope.projectName = ""
-		$scope.projectFolder = ""
+			do $scope.$apply if not $scope.$$phase
+			clearTimeout $scope.timeout
+			$scope.synced = true
+			do $scope.$apply if not $scope.$$phase
+	do $scope.sync
+	
+	$scope.schedule = ->
+		$scope.synced = false
+		clearTimeout $scope.timeout if $scope.timeout
+		$scope.timeout = setTimeout $scope.sync, 20*1000
+]
 
 
 # Home Controller
 # ------------------------------
-synappseApp.controller 'HomeCtrl', ( $scope, $routeParams, Projects ) ->
+synappseApp.controller 'HomeCtrl', ['$scope', '$location', 'Projects', ( $scope, $location, Projects ) ->
 	$scope.createProject = ->
-		Projects.createProject $scope.name
+		slug = Projects.createProject $scope.projectName
+		$scope.projectName = ""
+		$location.path '/'+slug
+		
+	$scope.share = ( id ) ->
+		project = Projects.readProject id
+		DB.getShareUrl project.folder, ( url ) ->
+			window.open url, '_blank'
+]
 
 
 # Project Controller
 # ------------------------------	
-synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, $location, Projects ) ->
+synappseApp.controller 'ProjectCtrl', ['$scope', '$routeParams', '$filter', 'Projects', ( $scope, $routeParams, $filter, Projects ) ->
 	$scope.project = Projects.findProject $routeParams.project
-	$scope.now = getCleanDate()
-	
-	# $location.path '/home' if not $scope.project
 	$scope.project.alerts = [] if not $scope.project.alerts?
-	$scope.statuses = [
-		{ k:0, v:'Todo' },
-		{ k:1, v:'In progress' },
-		{ k:2, v:'Advanced' },
-		{ k:3, v:'Done' },
-		{ k:4, v:'Archived' }
-	]
-
-	$scope.$watch 'selectProject', ->
-		$location.path '/'+$scope.selectProject
+	$scope.now = getCleanDate()
+	$scope.statuses = ['TODO', 'IN_PROGRESS', 'ADVANCED', 'DONE', 'ARCHIVED']
+	
+	# tabs
+	$scope.tabs = ['TAB_DUES', 'TAB_OTHERS', 'TAB_ARCHIVED']
+	$scope.currentTab = 0
+	$scope.changeTab = ( tab ) -> $scope.currentTab = tab
+	
+	# autosync
+	$scope.$watch 'project', $scope.schedule, true
 		
 	# add task
 	$scope.task = {}
 	$scope.emptyTask = ->
 		$scope.task = {}
+		
+	# Delete task
+	$scope.deleteTask = ->
+		Projects.deleteTask $scope.project.id, $scope.task.id
 		
 	# edit mode
 	$scope.taskOpen = false
@@ -67,6 +93,9 @@ synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, $location, Project
 		if e.which is 27
 			$scope.setTaskOpen false
 			do $scope.$apply
+		else if e.which >= 65 and e.which <= 90 and $scope.taskOpen is false
+			$scope.setTaskOpen 0
+			do $scope.$apply
 
 	# alerts
 	# $scope.alert = ( text ) ->
@@ -75,11 +104,12 @@ synappseApp.controller 'ProjectCtrl', ( $scope, $routeParams, $location, Project
 	# 
 	# $scope.seen = ( alertID ) ->
 	# 	Projects.seen $scope.project.id, alertID, DB.user.uid
+]
 
 
 # Comment Controller
 # ------------------------------		
-synappseApp.controller 'CommentCtrl', ( $scope, $routeParams, Projects ) ->
+synappseApp.controller 'CommentCtrl', ['$scope', '$routeParams', 'Projects', ( $scope, $routeParams, Projects ) ->
 	$scope.createComment = ->
 		Projects.createComment $scope.project.id,
 			author: DB.user.uid
@@ -91,3 +121,4 @@ synappseApp.controller 'CommentCtrl', ( $scope, $routeParams, Projects ) ->
 
 	$scope.deleteComment = ->
 		Projects.deleteComment $scope.project.id, $scope.comment.id
+]
