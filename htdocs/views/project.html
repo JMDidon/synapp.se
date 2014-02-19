@@ -8,12 +8,12 @@
 			<input type="text" class="search" placeholder="search">
 		</div>
 		<nav class="nav">
-			<a href="{{ project.slug }}" class="nav-current">Tasks</a>
-			<a href="{{ project.slug }}/Files">Files</a>
-			<a href="{{ project.slug }}/Discussions">Discussions</a>
+			<a href="{{ project.slug }}" class="nav-current">{{ 'TASKS' | translate }}</a>
+			<a href="{{ project.slug }}">{{ 'FILES' | translate }}</a>
+			<a href="{{ project.slug }}">{{ 'DISCUSSIONS' | translate }}</a>
 		</nav>
 	</header>
 
 	<section ng-include src="'views/tasks.html'"></section>
-	<a href="mailto:contact@synapp.se" class="title-report">Signaler un problème</a>
+	<a href="mailto:hello@synapp.se" class="title-report">{{ 'REPORT' | translate }}</a>
 </main>

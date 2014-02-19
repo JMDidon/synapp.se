@@ -1,53 +1,63 @@
 synappseApp = angular.module 'synappseTranslate', [ 'pascalprecht.translate' ]
-synappseApp.config ['$translateProvider', ( $translateProvider ) -> 
-  
+synappseApp.config ['$translateProvider', ( $translateProvider ) ->
+
   $translateProvider.translations 'en',
-     SELECT: 'Select a project'
-     SHARE: 'share'
-     
-     FAQ_SHARE_TITLE: 'How do I share a project?'
-     FAQ_SHARE_ANSWER_1: 'Click on the “share” button next to a project.'
-     FAQ_SHARE_ANSWER_2: 'Once in Dropbox website, click on the ”Share” button on the top right corner.'
-     FAQ_SHARE_ANSWER_3: 'Add your friend\'s email.'
-     FAQ_SHARE_ANSWER_4: 'Tell them to move the shared folder into Synappse/ folder once they accepted the invitation.'
-     FAQ_SHARE_ANSWER_5: 'It\'s done!'
-     FAQ_DELETE_TITLE: 'How do I delete a project?'
-     FAQ_DELETE_ANSWER: 'Just delete the matching folder. Your projects are located in your Dropbox/Synappse/ folder.'
-     
-     CREATE_PLACEHOLDER: 'New project name'
-     CREATE: 'Create'
-     SYNCED: 'Synced'
-     TAB_DUES: 'Dues'
-     TAB_OTHERS: 'Others'
-     TAB_ARCHIVED: 'Archived'
-     FORM_TASK_PLACEHOLDER: 'What do you have to do?'
-     NO_MORE_TASKS: 'No more tasks'
-     NO_TASKS: 'No tasks'
-     TODO: 'To do'
-     IN_PROGRESS: 'In progress'
-     ADVANCED: 'Advanced'
-     DONE: 'Done'
-     ARCHIVED: 'Archived'
-     NEW_TASK: 'New task'
-     CANCEL: 'Cancel'
-     DELETE: 'Delete'
-     HIDE_CALENDAR: 'Hide calendar'
-     SET_DUE_DATE: 'Set due date'
-     UPDATE: 'Update'
-     MON: 'M'
-     TUE: 'T'
-     WED: 'W'
-     THU: 'T'
-     FRI: 'F'
-     SAT: 'S'
-     SUN: 'S'
-     TODAY: 'Today'
-     NO_DUE: 'No due'
-  
+    SELECT: 'Select a project'
+    SHARE: 'share'
+
+    FAQ_SHARE_TITLE: 'How do I share a project?'
+    FAQ_SHARE_ANSWER_1: 'Click on the “share” button next to a project.'
+    FAQ_SHARE_ANSWER_2: 'Once in Dropbox website, click on the ”Share” button on the top right corner.'
+    FAQ_SHARE_ANSWER_3: 'Add your friend\'s email.'
+    FAQ_SHARE_ANSWER_4: 'Tell them to move the shared folder into Synappse/ folder once they accepted the invitation.'
+    FAQ_SHARE_ANSWER_5: 'It\'s done!'
+    FAQ_DELETE_TITLE: 'How do I delete a project?'
+    FAQ_DELETE_ANSWER: 'Just delete the matching folder. Your projects are located in your Dropbox/Synappse/ folder.'
+
+    TASKS: 'Tasks'
+    FILES: 'Files'
+    DISCUSSIONS: 'Discussions'
+
+    CREATE_PLACEHOLDER: 'New project name'
+    CREATE: 'Create'
+    SYNCED: 'Synced'
+    TAB_DUES: 'Dues'
+    TAB_OTHERS: 'Others'
+    TAB_ARCHIVED: 'Archived'
+    FORM_TASK_PLACEHOLDER: 'What do you have to do?'
+    NO_MORE_TASKS: 'No more tasks'
+    NO_TASKS: 'No tasks'
+    TODO: 'To do'
+    IN_PROGRESS: 'In progress'
+    ADVANCED: 'Advanced'
+    DONE: 'Done'
+    ARCHIVED: 'Archived'
+    NEW_TASK: 'New task'
+    CANCEL: 'Cancel'
+    DELETE: 'Delete'
+    HIDE_CALENDAR: 'Hide calendar'
+    SET_DUE_DATE: 'Set due date'
+    UPDATE: 'Update'
+    MON: 'M'
+    TUE: 'T'
+    WED: 'W'
+    THU: 'T'
+    FRI: 'F'
+    SAT: 'S'
+    SUN: 'S'
+    TODAY: 'Today'
+    NO_DUE: 'No due'
+
+    REPORT: 'Report a bug'
+
   $translateProvider.translations 'fr',
     SELECT: 'Choisir un projet'
     SHARE: 'partager'
-    
+
+    TASKS: 'Tâches'
+    FILES: 'Fichiers'
+    DISCUSSIONS: 'Discussions'
+
     FAQ_SHARE_TITLE: 'Comment partager un projet ?'
     FAQ_SHARE_ANSWER_1: 'Cliquer sur “partager” à côté d\'un projet.'
     FAQ_SHARE_ANSWER_2: 'Une fois sur le site Dropbox, cliquez sur "Share" en haut à droite'
@@ -56,7 +66,7 @@ synappseApp.config ['$translateProvider', ( $translateProvider ) ->
     FAQ_SHARE_ANSWER_5: 'Et voilà !'
     FAQ_DELETE_TITLE: 'Comment supprimer un projet ?'
     FAQ_DELETE_ANSWER: 'Il suffit de supprimer le dossier correspondant. Vos projets sont situdés dans le dossier Dropbox/Synappse/.'
-    
+
     CREATE_PLACEHOLDER: 'Nom du nouveau projet'
     CREATE: 'Créer'
     SYNCED: 'à jour'
@@ -110,7 +120,9 @@ synappseApp.config ['$translateProvider', ( $translateProvider ) ->
     Dec: 'Déc'
     TODAY: 'Aujourd\'hui'
     NO_DUE: 'Non datée'
-    
+
+    REPORT: 'Signaler un problème'
+
   $translateProvider.preferredLanguage 'en'
-  
+
 ]
