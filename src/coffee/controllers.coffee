@@ -78,10 +78,9 @@ synappseApp.controller 'ProjectCtrl', ['$scope', '$routeParams', '$filter', 'Pro
 	$scope.emptyTask = ->
 		$scope.task = {}
 		
-	# add task
-	$scope.task = {}
-	$scope.emptyTask = ->
-		$scope.task = {}
+	# Delete task
+	$scope.deleteTask = ->
+		Projects.deleteTask $scope.project.id, $scope.task.id
 		
 	# edit mode
 	$scope.taskOpen = false

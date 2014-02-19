@@ -1,3 +1,4 @@
+#@prepros-append translate.coffee
 #@prepros-append controllers.coffee
 #@prepros-append services.coffee
 #@prepros-append helpers.coffee

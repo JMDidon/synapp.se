@@ -1,7 +1,8 @@
 <form class="form" ng-submit="submit()">
 	<div class="clearfix">
 		<span class="left medium bold dark">{{ task.id?task.name:'NEW_TASK' | translate }}</span>
-		<a href="" class="form-cancel" ng-click="toggleForm()">{{ 'CANCEL' | translate }}</a>
+		<a href="" class="form-cancel" ng-click="toggleForm()">{{ 'CANCEL' | translate }}</a><div class="clearfix"></div>
+		<a href="" class="form-cancel" ng-click="deleteTask()" ng-if="editMode">{{ 'DELETE' | translate }}</a>
 	</div>
 	<div class="form-fields">
 		<textarea class="form-text" ng-Model="tmpTask.name" placeholder="{{ 'FORM_TASK_PLACEHOLDER' | translate }}"></textarea>

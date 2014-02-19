@@ -246,6 +246,7 @@ footer { height: 3*$unit; line-height: 3*$unit; background: $footer-bckg; }
 	&:hover { @extend .bg-color-darkest; }
 }
 .title-name { @extend .bg-color, .shadow, .white, .left, .bold, .antialiased; padding: $base; }
+.title-report { @extend .title-nav, .base; background: red; &:hover { background: darken(#F00, 10%); } }
 
 .insights { border-bottom: 2px solid $color; }
 .nav {  }
