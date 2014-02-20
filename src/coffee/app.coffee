@@ -25,6 +25,6 @@ synappseApp.config ['$routeProvider', ( $routeProvider ) ->
 	$routeProvider.when '/', { templateUrl: 'views/home.html', controller: 'HomeCtrl' }
 	$routeProvider.when '/home', redirectTo: '/'
 	$routeProvider.when '/:project', { templateUrl: 'views/project.html', controller: 'ProjectCtrl' }
-	$routeProvider.when '/:project/:section', { templateUrl: 'views/project.html', controller : 'ProjectCtrl' } 
+	$routeProvider.when '/:project/:section', { templateUrl: 'views/project.html', controller : 'ProjectCtrl' }
 	$routeProvider.otherwise redirectTo: '/'
 ]
