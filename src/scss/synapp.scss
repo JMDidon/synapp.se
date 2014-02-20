@@ -343,7 +343,7 @@ footer { height: 3*$unit; line-height: 3*$unit; background: $footer-bckg; }
 .task-info { @extend .smaller, .lighter; }
 .task-time { @extend .lighter, .small; }
 .task-actions { @extend .right; margin-left: $unit/2;  }
-.task-status-label { @extend .icon-arrow-down; float: right; position: relative; margin-left: -$unit*2; height: $base; line-height: $base; padding: $base/1.5 0; color: white; }
+.task-status-label { float: right; position: relative; margin-left: -$unit*2; height: $base; line-height: $base; padding: $base/1.5 0; color: white; }
 .task-status {
 	@extend .bg-color, .shadow, .white, .bold, .antialiased;
 	display: inline-block; margin-right: -0.2*$base; padding: $base/1.5 $unit $base/1.5 $unit/2;
