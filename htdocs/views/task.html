@@ -1,6 +1,7 @@
 <div task-form ng-if="editMode"></div>
 
 <div class="task-content" ng-hide="editMode" ng-class="{'task-late':late}">
+	<input type="checkbox" class="task-check-edit" ng-click="toggleDelete(task.id)" ng-if="multipleDelete">
 	<label class="task-status-label icon-arrow-down"></label>
 	<select class="task-actions task-status icon-arrow-down">
 		<option ng-repeat="status in statuses" value="{{ $index }}" ng-selected="{{ $index == task.status }}">{{ status | translate }}</option>

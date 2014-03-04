@@ -13,7 +13,7 @@ synappseApp.controller 'MainCtrl', ['$translate', '$scope', 'Projects', ( $trans
 	$scope.projects = do Projects.getProjects
 	$scope.me = {}
 	
-	# translations
+	# Translations
 	$scope.lang = do $translate.uses
 	$scope.changeLanguage = ( lang ) -> 
 		$translate.uses lang
@@ -21,7 +21,7 @@ synappseApp.controller 'MainCtrl', ['$translate', '$scope', 'Projects', ( $trans
 		localStorage['lang'] = lang
 	$scope.changeLanguage localStorage['lang'] if localStorage['lang']
 
-	# sync
+	# Sync
 	$scope.login = -> 
 		$scope.me = DB.user
 		do $scope.$apply
@@ -65,29 +65,42 @@ synappseApp.controller 'ProjectCtrl', ['$scope', '$routeParams', '$filter', 'Pro
 	$scope.now = getCleanDate()
 	$scope.statuses = ['TODO', 'IN_PROGRESS', 'ADVANCED', 'DONE', 'ARCHIVED']
 	
-	# tabs
+	# Tabs
 	$scope.tabs = ['TAB_DUES', 'TAB_OTHERS', 'TAB_ARCHIVED']
 	$scope.currentTab = 0
 	$scope.changeTab = ( tab ) -> $scope.currentTab = tab
 	
-	# autosync
+	# Autosync
 	$scope.$watch 'project', $scope.schedule, true
 		
-	# add task
+	# Add task
 	$scope.task = {}
 	$scope.emptyTask = ->
 		$scope.task = {}
 		
-	# Delete task
+	# Delete ONE task (with button in Edit mode)
 	$scope.deleteTask = ->
 		Projects.deleteTask $scope.project.id, $scope.task.id
 		
-	# edit mode
+	# Edit mode
 	$scope.taskOpen = false
 	$scope.editMode = false
 	$scope.$watch 'taskOpen', -> $scope.editMode = $scope.taskOpen is 0
 	$scope.toggleForm = -> $scope.setTaskOpen 0
 	$scope.setTaskOpen = ( taskID ) -> $scope.taskOpen = if taskID is $scope.taskOpen then false else taskID
+
+	# Toggle delete
+	$scope.tempDelete = []
+	$scope.multipleDelete = false
+	$scope.toggleDelete = ( id ) ->
+		index = $scope.tempDelete.indexOf id
+		if index > -1 then $scope.tempDelete.splice index, 1 else $scope.tempDelete.push id
+	
+	$scope.toggleMultipleDelete = () ->
+		e = document.getElementById('multipleDelete')
+		$scope.multipleDelete = not $scope.multipleDelete
+		if $scope.multipleDelete is true then e.innerHTML = 'Delete selected' else e.innerHTML = 'Edit'
+		Projects.deleteTask $scope.project.id, id for id in $scope.tempDelete
 	
 	window.addEventListener 'keydown', ( e ) ->
 		if e.which is 27

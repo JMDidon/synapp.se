@@ -358,6 +358,7 @@ footer { height: 3*$unit; line-height: 3*$unit; background: $footer-bckg; }
 	text-indent: 0.01px;
 	text-overflow: '';
 }
+.task-check-edit { display: inline-block; margin-right: $base; float: left; height: 2*$base; }
 
 .project-title { @extend .task-title; padding: $base/2 $unit/2; }
 .project-share { @extend .task-status; margin: 0; padding: $base/1.5 $unit/2; }
