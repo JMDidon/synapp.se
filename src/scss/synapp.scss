@@ -268,7 +268,6 @@ footer { height: 3*$unit; line-height: 3*$unit; background: $footer-bckg; }
 		-ms-transition: width .3s .1s, background .3s .1s, color .3s .1s, font-size .1s .1s;
 		 -o-transition: width .3s .1s, background .3s .1s, color .3s .1s, font-size .1s .1s;
 			transition: width .3s .1s, background .3s .1s, color .3s .1s, font-size .1s .1s;
-	height: auto;
 	&:focus {
 		@extend .bg-darker, .lightest, .big; width: 100%; outline: none;
 		& + .nav { opacity: .2; }
@@ -372,6 +371,6 @@ footer { height: 3*$unit; line-height: 3*$unit; background: $footer-bckg; }
 	.header {  margin-left: 0; margin-right: 0; }
 	.title { float: left; background: none; }
 	.title-nav, .title-name, .search, .nav a { padding-left: $unit; padding-right: $unit; }
-	.search { height: 100%; padding-left: $unit*3/2; }
+	.search { padding-left: $unit*3/2; }
 	.nav { float: right; margin-right: $unit*5; -webkit-transition: opacity .3s; }
 }
