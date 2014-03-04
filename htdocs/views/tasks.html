@@ -8,7 +8,9 @@
 
 	<nav class="tasks-options">
 		<span class="tasks-sort icon-arrow-down" ng-repeat="tab in tabs" ng-class="{'tab-current': $index==currentTab}" ng-click="changeTab($index)">{{ tab | translate }}</span>
-		<span class="tasks-sort" id="multipleDelete" ng-click="toggleMultipleDelete()">Edit</span>
+		<span class="tasks-sort" id="multipleDelete" ng-click="toggleMultipleDelete(false)">Edit</span>
+		<span class="tasks-sort" id="multipleDelete" ng-click="toggleMultipleDelete(true)"  ng-if="multipleDelete">Delete multiple</span>
+		<span class="tasks-sort" id="multipleDelete" ng-click="toggleMultipleDelete(false)" ng-if="multipleDelete">Cancel</span>
 	</nav>
 	<div ng-repeat="tab in tabs" ng-if="currentTab == $index">
 		<article task class="task" ng-repeat="task in tasks = ( project.tasks | tasksFilter:$index | orderBy:['-priority', ($last?'-due':'due'), 'edit'] )"></article>

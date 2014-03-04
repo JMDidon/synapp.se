@@ -255,22 +255,20 @@
           return $scope.tempDelete.push(id);
         }
       };
-      $scope.toggleMultipleDelete = function() {
-        var e, id, _i, _len, _ref, _results;
-        e = document.getElementById('multipleDelete');
+      $scope.toggleMultipleDelete = function(action) {
+        var id, _i, _len, _ref, _results;
         $scope.multipleDelete = !$scope.multipleDelete;
-        if ($scope.multipleDelete === true) {
-          e.innerHTML = 'Delete selected';
+        if (action === true) {
+          _ref = $scope.tempDelete;
+          _results = [];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            id = _ref[_i];
+            _results.push(Projects.deleteTask($scope.project.id, id));
+          }
+          return _results;
         } else {
-          e.innerHTML = 'Edit';
+          return console.log('Action is false, button cancel clicked');
         }
-        _ref = $scope.tempDelete;
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          id = _ref[_i];
-          _results.push(Projects.deleteTask($scope.project.id, id));
-        }
-        return _results;
       };
       return window.addEventListener('keydown', function(e) {
         if (e.which === 27) {

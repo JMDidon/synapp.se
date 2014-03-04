@@ -96,11 +96,12 @@ synappseApp.controller 'ProjectCtrl', ['$scope', '$routeParams', '$filter', 'Pro
 		index = $scope.tempDelete.indexOf id
 		if index > -1 then $scope.tempDelete.splice index, 1 else $scope.tempDelete.push id
 	
-	$scope.toggleMultipleDelete = () ->
-		e = document.getElementById('multipleDelete')
+	$scope.toggleMultipleDelete = ( action ) ->
 		$scope.multipleDelete = not $scope.multipleDelete
-		if $scope.multipleDelete is true then e.innerHTML = 'Delete selected' else e.innerHTML = 'Edit'
-		Projects.deleteTask $scope.project.id, id for id in $scope.tempDelete
+		if action is true
+			Projects.deleteTask $scope.project.id, id for id in $scope.tempDelete
+		else
+			console.log 'Action is false, button cancel clicked'
 	
 	window.addEventListener 'keydown', ( e ) ->
 		if e.which is 27
