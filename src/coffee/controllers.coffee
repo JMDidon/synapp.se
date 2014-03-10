@@ -54,6 +54,10 @@ synappseApp.controller 'HomeCtrl', ['$scope', '$location', 'Projects', ( $scope,
 		project = Projects.readProject id
 		DB.getShareUrl project.folder, ( url ) ->
 			window.open url, '_blank'
+
+	$scope.editName = ( id ) ->
+		project = Projects.readProject id
+		console.log project.name
 ]
 
 

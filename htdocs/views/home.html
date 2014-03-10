@@ -10,6 +10,7 @@
 		<li class="task clearfix" ng-repeat="p in projects">
 			<a href="#/{{ p.slug }}" class="project-title left">{{ p.name }}</a>
 			<a href="" class="project-share right" ng-click="share(p.id)">{{ 'SHARE' | translate }}</a>
+			<a href="" class="project-share right" ng-click="editName(p.id)">{{ 'EDIT' | translate }}</a>
 		</li>
 	</ul>
 	

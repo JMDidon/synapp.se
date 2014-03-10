@@ -7,7 +7,7 @@
 		<option ng-repeat="status in statuses" value="{{ $index }}" ng-selected="{{ $index == task.status }}">{{ status | translate }}</option>
 	</select>
 	<header class="task-header">
-		<a class="task-title" href="" ng-click="toggleForm()">{{ task.priority?'⚠ ':'' }}{{ task.name }}</a>
+		<a class="task-title" href="" ng-click="toggleForm()"><span class="special-chars">{{ task.priority?'⚠ ':'' }}</span>{{ task.name }}</a>
 		<p class="task-info">
 			<time class="task-time">{{ task.due | miniDate:lang }}</time><span ng-if="task.users.length"><span ng-repeat="user in task.users">, {{ user | DropboxUIDToUsername: project.id }}</span></span>
 		</p>

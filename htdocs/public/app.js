@@ -37,6 +37,7 @@
       $translateProvider.translations('en', {
         SELECT: 'Select a project',
         SHARE: 'share',
+        EDIT: 'Edit name',
         FAQ_SHARE_TITLE: 'How do I share a project?',
         FAQ_SHARE_ANSWER_1: 'Click on the “share” button next to a project.',
         FAQ_SHARE_ANSWER_2: 'Once in Dropbox website, click on the ”Share” button on the top right corner.',
@@ -82,6 +83,7 @@
       $translateProvider.translations('fr', {
         SELECT: 'Choisir un projet',
         SHARE: 'partager',
+        EDIT: 'Éditer le nom',
         TASKS: 'Tâches',
         FILES: 'Fichiers',
         DISCUSSIONS: 'Discussions',
@@ -203,12 +205,17 @@
         $scope.projectName = "";
         return $location.path('/' + slug);
       };
-      return $scope.share = function(id) {
+      $scope.share = function(id) {
         var project;
         project = Projects.readProject(id);
         return DB.getShareUrl(project.folder, function(url) {
           return window.open(url, '_blank');
         });
+      };
+      return $scope.editName = function(id) {
+        var project;
+        project = Projects.readProject(id);
+        return console.log(project.name);
       };
     }
   ]);
