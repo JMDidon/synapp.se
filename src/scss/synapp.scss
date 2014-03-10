@@ -364,6 +364,8 @@ footer { height: 3*$unit; line-height: 3*$unit; background: $footer-bckg; }
 
 .project-title { @extend .task-title; padding: $base/2 $unit/2; }
 .project-share { @extend .task-status; margin: 0 $base 0 0; padding: $base/1.5 $unit/2; }
+.project-edit { @extend .form-create-text; width: auto; margin: 0; }
+.project-done { @extend .btn; margin: 0 0 0 $base; }
 
 
 

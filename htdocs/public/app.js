@@ -199,6 +199,7 @@
   ]);
   synappseApp.controller('HomeCtrl', [
     '$scope', '$location', 'Projects', function($scope, $location, Projects) {
+      $scope.editName = [];
       $scope.createProject = function() {
         var slug;
         slug = Projects.createProject($scope.projectName);
@@ -212,10 +213,24 @@
           return window.open(url, '_blank');
         });
       };
-      return $scope.editName = function(id) {
+      $scope.editProject = function(id, index) {
         var project;
-        project = Projects.readProject(id);
-        return console.log(project.name);
+        $scope.editName[index] = !$scope.editName[index];
+        if ($scope.editName[index] === true) {
+          return project = Projects.readProject(id);
+        }
+      };
+      return $scope.closeEdit = function() {
+        return $scope.editName = [];
+      };
+    }
+  ]);
+  synappseApp.controller('ProjectNameCtrl', [
+    '$scope', '$location', 'Projects', function($scope, $location, Projects) {
+      $scope.tmpName = angular.copy($scope.p);
+      return $scope.newName = function() {
+        $scope.closeEdit();
+        return console.log($scope.tmpName, $scope.editName);
       };
     }
   ]);
