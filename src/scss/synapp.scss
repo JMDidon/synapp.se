@@ -29,7 +29,7 @@ $unit: $base*1.4;
 *, *:before, *:after { -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; margin: 0; padding: 0; }
 body { font-size: $base; font-family: $sans; color: $font-color; -webkit-font-smooth: always; -moz-font-smooth: always; font-smooth: always; }
 h1, h2, h3, h4, h5, h6 { font-size: 1em; font-weight: normal; }
-ul, ol { list-style: none; }
+ul, ol { list-style: inside none; }
 a { color: $color; text-decoration: none; }
 a img { border: 0; }
 sup, sub { line-height: 0 }
@@ -42,6 +42,7 @@ select::-ms-expand { display: none; } // Remove arrow in IE
 .noselect { -webkit-touch-callout: none; -webkit-user-select: none; -moz-user-select: -moz-none; -ms-user-select: none; user-select: none; }
 .cursor { cursor: pointer; }
 .hide { display: none; }
+.special-chars { font-family: sans-serif; }
 
 
 .small { font-size: $base*.875; }
@@ -161,6 +162,8 @@ footer { height: 3*$unit; line-height: 3*$unit; background: $footer-bckg; }
 
 @media screen and (max-width: 1200px) {
 	.lp-wrapper { width: 85%; margin: 2*$unit auto; }
+	.db-button { padding: 0 $base/2; }
+	.db-icon { display: none; }
 	.article { float: none; width: 100%; margin-bottom: 2*$unit; }
 	.article:last-child { margin-bottom: 0; }
 	h3 { letter-spacing: 0.2em; }
@@ -360,7 +363,9 @@ footer { height: 3*$unit; line-height: 3*$unit; background: $footer-bckg; }
 .task-check-edit { display: inline-block; margin-right: $base; float: left; height: 2*$base; }
 
 .project-title { @extend .task-title; padding: $base/2 $unit/2; }
-.project-share { @extend .task-status; margin: 0; padding: $base/1.5 $unit/2; }
+.project-share { @extend .task-status; margin: 0 $base 0 0; padding: $base/1.5 $unit/2; }
+.project-edit { @extend .form-create-text; width: auto; margin: 0; }
+.project-done { @extend .btn; margin: 0 0 0 $base; }
 
 
 

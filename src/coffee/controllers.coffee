@@ -45,6 +45,7 @@ synappseApp.controller 'MainCtrl', ['$translate', '$scope', 'Projects', ( $trans
 # Home Controller
 # ------------------------------
 synappseApp.controller 'HomeCtrl', ['$scope', '$location', 'Projects', ( $scope, $location, Projects ) ->
+	$scope.editName = []
 	$scope.createProject = ->
 		slug = Projects.createProject $scope.projectName
 		$scope.projectName = ""
@@ -54,6 +55,23 @@ synappseApp.controller 'HomeCtrl', ['$scope', '$location', 'Projects', ( $scope,
 		project = Projects.readProject id
 		DB.getShareUrl project.folder, ( url ) ->
 			window.open url, '_blank'
+
+	$scope.editProject = ( id, index ) ->
+		$scope.editName[index] = not $scope.editName[index]
+		if $scope.editName[index] is true
+			project = Projects.readProject id
+
+	$scope.closeEdit = -> $scope.editName = []
+]
+
+
+# ProjectName Controller
+# ------------------------------
+synappseApp.controller 'ProjectNameCtrl', ['$scope', '$location', 'Projects', ( $scope, $location, Projects ) ->
+	$scope.tmpName = angular.copy $scope.p
+	$scope.newName = ->
+		do $scope.closeEdit
+		console.log $scope.tmpName, $scope.editName
 ]
 
 

@@ -7,9 +7,16 @@
 	</header>
 	
 	<ul>
-		<li class="task clearfix" ng-repeat="p in projects">
-			<a href="#/{{ p.slug }}" class="project-title left">{{ p.name }}</a>
+		<li class="task clearfix" ng-repeat="(index, p) in projects">
+			<a href="#/{{ p.slug }}" class="project-title left" ng-hide="editName[index]">{{ p.name }}</a>
+			<form ng-submit="newName()" ng-if="editName[index]" ng-controller="ProjectNameCtrl">
+				<input ng-Model="tmpName.name" class="project-edit left" type="text">
+				<input ng-Model="tmpName.id" type="hidden">
+				<input ng-Model="editName" type="hidden">
+				<button type="submit" class="project-done left">{{ 'DONE' | translate }}</button>
+			</form>
 			<a href="" class="project-share right" ng-click="share(p.id)">{{ 'SHARE' | translate }}</a>
+			<a href="" class="project-share right" ng-click="editProject(p.id, index)">{{ 'EDIT' | translate }}</a>
 		</li>
 	</ul>
 	
