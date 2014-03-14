@@ -129,6 +129,11 @@ synappseApp.controller 'ProjectCtrl', ['$scope', '$routeParams', '$filter', 'Pro
 			$scope.setTaskOpen 0
 			do $scope.$apply
 
+	#window.addEventListener 'keydown', ( e ) ->
+	#		if e.which is 13
+	#			do $scope.submit
+		
+
 	# alerts
 	# $scope.alert = ( text ) ->
 	# 	Projects.alert $scope.project.id, text, DB.user.uid

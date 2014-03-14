@@ -770,7 +770,6 @@
         scope: true,
         controller: [
           '$scope', '$element', function($scope, $element) {
-            $element[0].querySelector('textarea').focus();
             $scope.tmpTask = $scope.task.id ? angular.copy($scope.task) : $scope.task;
             if ($scope.tmpTask.users == null) {
               $scope.tmpTask.users = [];
@@ -784,6 +783,7 @@
               }
               if ($scope.task.id != null) {
                 $scope.toggleForm();
+                console.log($scope.project.id, $scope.task.id, $scope.tmpTask);
                 return Projects.editTask($scope.project.id, $scope.task.id, $scope.tmpTask);
               } else {
                 Projects.createTask($scope.project.id, {
@@ -797,7 +797,7 @@
                 $scope.changeTab(($scope.tmpTask.due === false ? 1 : 0));
                 $scope.emptyTask();
                 $scope.tmpTask = $scope.task;
-                return $element[0].querySelector('textarea').focus();
+                return $element[0].querySelector('input').focus();
               }
             };
             return $scope.toggleUser = function(uid) {

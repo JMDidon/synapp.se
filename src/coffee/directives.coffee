@@ -33,15 +33,21 @@ synappseApp.directive 'taskForm', ['Projects', ( Projects ) ->
 	templateUrl: 'views/taskForm.html'
 	scope: true      
 	controller: ['$scope', '$element', ( $scope, $element ) ->
-		$element[0].querySelector( 'textarea' ).focus()
+		#$element[0].querySelector( 'input' ).focus()
 		$scope.tmpTask = if $scope.task.id then angular.copy $scope.task else $scope.task
 		$scope.tmpTask.users = [] if not $scope.tmpTask.users?
+
+			#if e.which is 13
+			#	console.log 'Enter pressed', e
+			#	do $scope.submit
+			#	do $scope.apply
 
 		$scope.submit = ->
 			return false if $scope.tmpTask.name.match /^\s*$/
 			$scope.tmpTask.due = false if isNaN ( new Date $scope.tmpTask.due ).getTime()
 			if $scope.task.id?
 				do $scope.toggleForm
+				console.log $scope.project.id, $scope.task.id, $scope.tmpTask
 				Projects.editTask $scope.project.id, $scope.task.id, $scope.tmpTask
 			else
 				Projects.createTask $scope.project.id, 
@@ -54,7 +60,7 @@ synappseApp.directive 'taskForm', ['Projects', ( Projects ) ->
 				$scope.changeTab ( if $scope.tmpTask.due is false then 1 else 0 )
 				do $scope.emptyTask
 				$scope.tmpTask = $scope.task
-				$element[0].querySelector( 'textarea' ).focus()
+				$element[0].querySelector( 'input' ).focus()
 		$scope.toggleUser = ( uid ) ->
 			index = $scope.tmpTask.users.indexOf uid
 			if index > -1 then $scope.tmpTask.users.splice index, 1 else $scope.tmpTask.users.push uid 
