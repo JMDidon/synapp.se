@@ -40,7 +40,7 @@ DB =
 			
 	init: ->
 		$this = @
-		load ['//ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular.js', '//ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular-route.min.js', 'public/lib/angular-translate.min.js', 'public/app.js'], ->
+		load ['//ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular.js', '//ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular-route.min.js', '//ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular-touch.min.js', 'public/lib/angular-translate.min.js', 'public/app.js'], ->
 			angular.bootstrap document, ['synappseApp']
 			if $this.client.isAuthenticated() then do $this.updateUser else $this.client.authenticate { interactive: false }, ( error, client ) -> do $this.updateUser 
 
@@ -147,12 +147,12 @@ DB =
 
 		# tasks & comments
 		local.tasks = @solveConflicts local.tasks, distant.tasks, local.deletedTasks
-		local.comments = @solveConflicts local.comments, distant.comments, local.deletedComments
+		#local.comments = @solveConflicts local.comments, distant.comments, local.deletedComments
 		local.deletedTasks = []
-		local.deletedComments = []
+		#local.deletedComments = []
 
 		# update comments taskIDs
-		( comment.taskID = task.id for task in local.tasks when task.oldID is comment.taskID ) for comment in local.comments
+		#( comment.taskID = task.id for task in local.tasks when task.oldID is comment.taskID ) for comment in local.comments
 		delete task.oldID for task in local.tasks
 		# update replies parentIDs
 		# ( reply.parentID = comment.id for comment in local.comments when comment.oldID is reply.parentID ) for reply in local.comments 

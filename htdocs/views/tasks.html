@@ -1,4 +1,4 @@
-<section>
+<!--<section>
 	<section class="mb2">
 		<div ng-hide="editMode">
 			<input class="form-fake" value="{{ task.name }}" ng-click="toggleForm()" placeholder="{{ 'FORM_TASK_PLACEHOLDER' | translate }}">
@@ -16,4 +16,34 @@
 		<article task class="task" ng-repeat="task in tasks = ( project.tasks | tasksFilter:$index | orderBy:['-priority', ($last?'-due':'due'), 'edit'] )"></article>
 		<p class="pt1 medium lighter">{{ tasks.length?'NO_MORE_TASKS':'NO_TASKS' | translate }}</p>
 	</div>
+</section>-->
+
+<!--<form class="app-form" ng-submit="newTask()">
+	<input class="app-input" type="text" placeholder="What do you have to do ?">
+</form>-->
+<div task-form></div>
+<section class="app-tasks">
+	<article task ng-repeat="task in tasks = project.tasks" class="app-task"></article>
 </section>
+
+
+
+<!--<article class="app-task">
+		<p class="app-task-name">⚠ Complete task redesign !</p>
+		<p class="app-task-infos">Due Mar 31, Nicolas, Jean-Michel</p>
+	</article>
+	<article class="app-task">
+		<p class="app-task-name">Complete files management system</p>
+		<p class="app-task-infos">Due Avr 30, Nicolas, Jean-Michel</p>
+	</article>
+	<article class="app-task-options">
+		<a class="app-task-icon icon-assign" href="">A</a>
+		<a class="app-task-icon icon-cal" href="">D</a>
+		<a class="app-task-icon icon-status" href="">S</a>
+		<a class="app-task-icon icon-delete" href="">X</a>
+	</article>
+	<article class="app-task-rename">
+		<form class="app-form">
+			<input class="app-input" type="text" value="The tasks's name">
+		</form>
+	</article>-->

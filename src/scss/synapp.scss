@@ -44,6 +44,15 @@ $unit: $base*1.5;
 
 .absolute-center-content { position: absolute; top: 0; bottom: 0; left: 0; right: 0; margin: auto; width: 50%; height: 50%; }
 
+.btn {
+	@extend .txt-center, .cursor, .noselect;
+	display: inline-block;
+	padding: $unit/2 $unit/2;
+	border: 1px solid $shade; border-radius: 2px;
+	background: lighten($shade, 10%);
+	&:hover { color: $dark; background: lighten($shade, 2%); }
+}
+
 
 // Mixins
 // ------------------------------
@@ -107,18 +116,22 @@ footer { height: 3*$unit; line-height: 3*$unit; background: $footer-bckg; }
 // Application
 // ------------------------------
 
-.app-header 	{ display: block; height: 3*$base; line-height: 3*$base; background: $color; color: #FFF; }
-.app-nav 		{ @extend .clearfix; float: left; background: $dark; }
-.app-nav-link 	{ @extend .font-bold; @include transitions; display: block; padding: 0 $unit; font-size: $unit; color: #FFF; &:hover { background: lighten($dark, 10%); } }
-.app-header-name { text-align: center; }
+.app-header 		{ display: block; height: 3*$base; line-height: 3*$base; background: $color; color: #FFF; }
+.app-nav 			{ float: left; background: $dark; }
+.app-nav-link 		{ @extend .font-bold; @include transitions; display: block; padding: 0 $unit; font-size: $unit; color: #FFF; &:hover { background: lighten($dark, 10%); } }
+.app-header-name 	{ text-align: center; }
 
-.app-input { width: 100%; height: 3*$base; padding-left: $base/2; }
+.app-form 			{ max-width: 100%; white-space: nowrap; }
+.app-input 			{ display: inline-block; width: 100%; height: 3*$base; padding-left: $base/2; }
+.app-form-submit 	{ width: 20%; }
 
 .app-task 			{ padding: $base; border-bottom: solid 1px #DDD; }
 .app-task-infos 	{ font-size: $unit/2; color: $light; }
 .app-task-options 	{ @extend .app-task; height: 3*$base+$unit/2; line-height: $base+$unit/2; text-align: center; background: $color; }
-.app-task-icon 		{ padding: $base 2*$base; color: white; }
+.app-task-icon 		{ padding: $base $unit; color: white; }
 .app-task-rename 	{ @extend .app-task; .app-input { height: 2*$base; } }
+
+.app-aside 			{ padding: $base; text-align: center; }
 
 
 // Calendar
