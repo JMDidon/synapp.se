@@ -47,7 +47,7 @@ $unit: $base*1.5;
 .btn {
 	@extend .txt-center, .cursor, .noselect;
 	display: inline-block;
-	padding: $unit/2 $unit/2;
+	padding: $unit/2+1.5px;
 	border: 1px solid $shade; border-radius: 2px;
 	background: lighten($shade, 10%);
 	&:hover { color: $dark; background: lighten($shade, 2%); }
@@ -123,13 +123,14 @@ footer { height: 3*$unit; line-height: 3*$unit; background: $footer-bckg; }
 
 .app-form 			{ max-width: 100%; white-space: nowrap; }
 .app-input 			{ display: inline-block; width: 100%; height: 3*$base; padding-left: $base/2; }
-.app-form-submit 	{ width: 20%; }
+//.app-form-submit 	{ width: 20%; }
 
 .app-task 			{ padding: $base; border-bottom: solid 1px #DDD; }
 .app-task-infos 	{ font-size: $unit/2; color: $light; }
 .app-task-options 	{ @extend .app-task; height: 3*$base+$unit/2; line-height: $base+$unit/2; text-align: center; background: $color; }
 .app-task-icon 		{ padding: $base $unit; color: white; }
-.app-task-rename 	{ @extend .app-task; .app-input { height: 2*$base; } }
+//.app-task-rename 	{ @extend .app-task; .app-input { height: 2*$base; } }
+.app-task-rename 	{ margin-right: 3*$unit; }
 
 .app-aside 			{ padding: $base; text-align: center; }
 

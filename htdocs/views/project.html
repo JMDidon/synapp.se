@@ -1,28 +1,8 @@
-<!--<section class="insights"></section>
-
-<main class="wrapper">
-	<header class="header">
-		<div class="title">
-			<a href="#" class="title-nav special-chars">&#9776;</a>
-			<h1 class="title-name">{{ project.name }}</h1>
-			<input type="text" class="search" placeholder="search">
-		</div>
-		<nav class="nav">
-			<a href="#/{{ project.slug }}" class="nav-current">{{ 'TASKS' | translate }}</a>
-			<a href="">{{ 'FILES' | translate }}</a>
-			<a href="">{{ 'DISCUSSIONS' | translate }}</a		</nav>
-	</header>
-
-	<section ng-include src="'views/tasks.html'"></section>
-	<a href="mailto:hello@synapp.se" class="title-report">{{ 'REPORT' | translate }}</a>
-</main>>-->
-
-
 <header class="app-header">
 	<nav class="app-nav">
 		<a href="#" class="app-nav-link">&#8801;</a>
 	</nav>
-	<h1 class="app-header-name">Project name</h1>
+	<h1 class="app-header-name">{{ project.name }}</h1>
 </header>
 
 <section ng-include src="'views/tasks.html'"></section>
