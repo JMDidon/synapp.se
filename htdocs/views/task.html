@@ -1,3 +1,12 @@
-<p class="app-task-name" ng-hide="editMode" ng-click="toggleForm()">{{ task.priority?'⚠ ':'' }}{{ task.name }}</p>
-<div task-form ng-if="editMode" class="app-task-rename"></div>
-<p class="app-task-infos"><time class="task-time">{{ task.due | miniDate:lang }}</time><span ng-if="task.users.length"><span ng-repeat="user in task.users">, {{ user | DropboxUIDToUsername: project.id }}</span></span></p>
+<div class="app-task-wrap" ng-class="{'pull-left': options}" ng-hide="options">
+	<p class="app-task-name" ng-hide="editMode" ng-click="toggleForm()">{{ task.priority?'⚠ ':'' }}{{ task.name }}</p>
+	<div task-form ng-if="editMode" class="app-task-rename"></div>
+	<p class="app-task-infos"><time class="task-time">{{ task.due | miniDate:lang }}</time><span ng-if="task.users.length"><span ng-repeat="user in task.users">, {{ user | DropboxUIDToUsername: project.id }}</span></span></p>
+</div>
+
+<div class="app-task-options" ng-if="options">
+	<a class="app-task-icon icon-assign" href="">A</a>
+	<a class="app-task-icon icon-cal" href="">D</a>
+	<a class="app-task-icon icon-status" href="">S</a>
+	<a class="app-task-icon icon-delete" href="" ng-click="deleteTask()">X</a>
+</div>

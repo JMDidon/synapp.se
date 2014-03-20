@@ -41,6 +41,8 @@ $unit: $base*1.5;
 .left 			{ float: left;  }
 .right 			{ float: right; }
 .clearfix:after { content: ""; display: table; clear: both; }
+//.pull-left 		{ left: -100% !important; }
+//.reset-left 	{ left: 0 !important; }
 
 .absolute-center-content { position: absolute; top: 0; bottom: 0; left: 0; right: 0; margin: auto; width: 50%; height: 50%; }
 
@@ -115,7 +117,7 @@ footer { height: 3*$unit; line-height: 3*$unit; background: $footer-bckg; }
 
 // Application
 // ------------------------------
-
+html, body 			{ overflow-x: hidden; }
 .app-header 		{ display: block; height: 3*$base; line-height: 3*$base; background: $color; color: #FFF; }
 .app-nav 			{ float: left; background: $dark; }
 .app-nav-link 		{ @extend .font-bold; @include transitions; display: block; padding: 0 $unit; font-size: $unit; color: #FFF; &:hover { background: lighten($dark, 10%); } }
@@ -125,9 +127,10 @@ footer { height: 3*$unit; line-height: 3*$unit; background: $footer-bckg; }
 .app-input 			{ display: inline-block; width: 100%; height: 3*$base; padding-left: $base/2; }
 //.app-form-submit 	{ width: 20%; }
 
-.app-task 			{ padding: $base; border-bottom: solid 1px #DDD; }
+.app-task 			{ border-bottom: solid 1px #DDD; }
+.app-task-wrap 		{ @extend .noselect; position: relative; padding: $base; }
 .app-task-infos 	{ font-size: $unit/2; color: $light; }
-.app-task-options 	{ @extend .app-task; height: 3*$base+$unit/2; line-height: $base+$unit/2; text-align: center; background: $color; }
+.app-task-options 	{ @extend .app-task; /*float: right; position: absolute; left: 100%;*/ height: 3*$base+$unit/2; line-height: $base+$unit/2; padding: $base; text-align: center; background: $color; }
 .app-task-icon 		{ padding: $base $unit; color: white; }
 //.app-task-rename 	{ @extend .app-task; .app-input { height: 2*$base; } }
 .app-task-rename 	{ margin-right: 3*$unit; }

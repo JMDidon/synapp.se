@@ -1,4 +1,4 @@
 <div task-form></div>
 <section class="app-tasks">
-	<article task ng-repeat="task in tasks = project.tasks" class="app-task"></article>
+	<article task ng-repeat="task in tasks = project.tasks" class="app-task" ng-swipe-left="openOptions()" ng-swipe-right="closeOptions()"></article>
 </section>

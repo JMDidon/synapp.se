@@ -9,20 +9,31 @@ synappseApp.directive 'task', ['Projects', ( Projects ) ->
 	templateUrl: 'views/task.html'
 	scope: true      
 	controller: ['$scope', ( $scope ) ->
-		# edit mode
+		# Edit mode
 		$scope.editMode = false
 		$scope.$watch 'taskOpen', -> $scope.editMode = $scope.taskOpen is $scope.task.id
 		$scope.toggleForm = -> $scope.setTaskOpen $scope.task.id
 			
-		# statuses
+		# Statuses
 		$scope.$watch 'task.due', -> 
 			$scope.late = ( $scope.task.due isnt false and $scope.task.due <= $scope.now and $scope.task.status < 3 )
 		$scope.editTask = ->
 			Projects.editTask $scope.project.id, $scope.task.id, $scope.task	
 		
-		# delete
+		# Delete
 		$scope.deleteTask = ->
-			Projects.deleteTask $scope.project.id, $scope.task.id
+			confirmation = confirm 'Are you sure to delete this task ?'
+			Projects.deleteTask $scope.project.id, $scope.task.id if confirmation is true
+
+		# Options
+		$scope.options = false
+		$scope.openOptions = () ->
+			$scope.options = true
+			console.log 'Options opened !'
+
+		$scope.closeOptions = () ->
+			$scope.options  = false
+			console.log 'Options closed.'
 	]
 ]
 
@@ -36,11 +47,6 @@ synappseApp.directive 'taskForm', ['Projects', ( Projects ) ->
 		#$element[0].querySelector( 'input' ).focus()
 		$scope.tmpTask = if $scope.task.id then angular.copy $scope.task else $scope.task
 		$scope.tmpTask.users = [] if not $scope.tmpTask.users?
-
-			#if e.which is 13
-			#	console.log 'Enter pressed', e
-			#	do $scope.submit
-			#	do $scope.apply
 
 		$scope.submit = ->
 			return false if $scope.tmpTask.name.match /^\s*$/
