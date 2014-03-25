@@ -37,6 +37,7 @@ $unit: $base*1.5;
 .italic 		{ font-style: italic; }
 .txt-center 	{ text-align: center; }
 .txt-right 		{ text-align: right;  }
+.special-chars 	{ font-family: Verdana; font-size: 1em; }
 
 .left 			{ float: left;  }
 .right 			{ float: right; }
@@ -125,17 +126,43 @@ html, body 			{ overflow-x: hidden; }
 
 .app-form 			{ max-width: 100%; white-space: nowrap; }
 .app-input 			{ display: inline-block; width: 100%; height: 3*$base; padding-left: $base/2; }
-//.app-form-submit 	{ width: 20%; }
 
-.app-task 			{ border-bottom: solid 1px #DDD; }
-.app-task-wrap 		{ @extend .noselect; position: relative; padding: $base; }
-.app-task-infos 	{ font-size: $unit/2; color: $light; }
-.app-task-options 	{ @extend .app-task; /*float: right; position: absolute; left: 100%;*/ height: 3*$base+$unit/2; line-height: $base+$unit/2; padding: $base; text-align: center; background: $color; }
+.app-task 			{ height: 2*$base+($base+$base/4)+$unit/2; border-bottom: solid 1px #DDD; }
+.app-task-wrap 		{ @extend .noselect; display: inline-block; position: relative; padding: $base; }
+.app-task-name 		{ height: $base+$base/4; }
+.app-task-infos 	{ height: $unit/2; font-size: $unit/2; color: $light; }
+.app-task-options 	{ @extend .app-task; display: inline-block; position: relative; width: 100%; height: 2*$base+($base+$base/4)+$unit/2; line-height: 2*$base+($base+$base/4)+$unit/2; text-align: center; background: $color; }
 .app-task-icon 		{ padding: $base $unit; color: white; }
-//.app-task-rename 	{ @extend .app-task; .app-input { height: 2*$base; } }
-.app-task-rename 	{ margin-right: 3*$unit; }
+.app-task-rename 	{ position: relative; top: -$base/2; margin-right: 3*$unit; }
 
 .app-aside 			{ padding: $base; text-align: center; }
+
+
+// Options animations
+// ------------------------------
+
+// Ugly but functionnal
+.app-task-options.ng-enter, .app-task-options.ng-leave
+{ @include transitions(left, 0.3s, ease, 0s); left: 100%; top: -(2*$base+($base+$base/4)+$unit/2); /*margin-bottom: -(2*$base+($base+$base/4)+$unit/2);*/ }
+
+.app-task-options.ng-enter.app-task-options.ng-enter-active,
+.app-task-options.ng-leave 
+{ left: 0%; }
+
+.app-task-options.ng-leave.app-task-options.ng-leave-active,
+.app-task-options.ng-enter 
+{ left: 100%; }
+
+.app-task-wrap.ng-leave, .app-task-wrap.ng-enter
+{ @include transitions(left, 0.3s, ease, 0s); left: -100%; }
+
+.app-task-wrap.ng-leave.app-task-wrap.ng-leave-active,
+.app-task-wrap.ng-enter 
+{ left: -100%; }
+
+.app-task-wrap.ng-enter.app-task-wrap.ng-enter-active,
+.app-task-wrap.ng-leave 
+{ left: 0%; }
 
 
 // Calendar
@@ -151,3 +178,4 @@ html, body 			{ overflow-x: hidden; }
 .cal-disabled 	{ opacity: .2; }
 .cal-weekend 	{ background: lighten($shade, 5%); color: $light; }
 .cal-current 	{ background: $color; color: #fff; &:hover { background: $color; }}
+

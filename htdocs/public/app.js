@@ -4,7 +4,7 @@
 
   __indexOf.call([1, 2, 3], 2) >= 0;
 
-  synappseApp = angular.module('synappseApp', ['ngRoute', 'ngTouch', 'synappseTranslate', 'synappseControllers', 'synappseServices', 'synappseFilters', 'synappseDirectives']);
+  synappseApp = angular.module('synappseApp', ['ngRoute', 'ngTouch', 'ngAnimate', 'synappseTranslate', 'synappseControllers', 'synappseServices', 'synappseFilters', 'synappseDirectives']);
 
   synappseApp.config([
     '$routeProvider', function($routeProvider) {

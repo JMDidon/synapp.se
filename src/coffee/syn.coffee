@@ -40,7 +40,7 @@ DB =
 			
 	init: ->
 		$this = @
-		load ['//ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular.js', '//ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular-route.min.js', '//ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular-touch.min.js', 'public/lib/angular-translate.min.js', 'public/app.js'], ->
+		load ['//ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular.js', '//ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular-route.min.js', '//ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular-touch.min.js', '//ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular-animate.js', 'public/lib/angular-translate.min.js', 'public/app.js'], ->
 			angular.bootstrap document, ['synappseApp']
 			if $this.client.isAuthenticated() then do $this.updateUser else $this.client.authenticate { interactive: false }, ( error, client ) -> do $this.updateUser 
 

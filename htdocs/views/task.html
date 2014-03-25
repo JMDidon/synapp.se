@@ -1,7 +1,14 @@
-<div class="app-task-wrap" ng-class="{'pull-left': options}" ng-hide="options">
-	<p class="app-task-name" ng-hide="editMode" ng-click="toggleForm()">{{ task.priority?'⚠ ':'' }}{{ task.name }}</p>
+<div class="app-task-wrap" ng-if="!options">
+	<p class="app-task-name" ng-hide="editMode" ng-click="toggleForm()">
+		<span class="special-chars">{{ task.priority?'⚠ ':'' }}</span>{{ task.name }}
+	</p>
 	<div task-form ng-if="editMode" class="app-task-rename"></div>
-	<p class="app-task-infos"><time class="task-time">{{ task.due | miniDate:lang }}</time><span ng-if="task.users.length"><span ng-repeat="user in task.users">, {{ user | DropboxUIDToUsername: project.id }}</span></span></p>
+	<p class="app-task-infos" ng-hide="editMode">
+		<time class="task-time">{{ task.due | miniDate:lang }}</time>
+		<span ng-if="task.users.length">
+			<span ng-repeat="user in task.users">, {{ user | DropboxUIDToUsername: project.id }}</span>
+		</span>
+	</p>
 </div>
 
 <div class="app-task-options" ng-if="options">
