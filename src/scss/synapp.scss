@@ -25,6 +25,7 @@ $unit: $base*1.5;
 
 // Common
 // ------------------------------
+ol 				{ list-style-type: decimal; list-style-position: inside; }
 .antialiased 	{ -webkit-font-smoothing: antialiased; }
 .noselect 		{ -webkit-touch-callout: none; -webkit-user-select: none; -moz-user-select: -moz-none; -ms-user-select: none; user-select: none; }
 .cursor 		{ cursor: pointer; }
@@ -135,6 +136,12 @@ html, body 			{ overflow-x: hidden; }
 .app-task-icon 		{ padding: $base $unit; color: white; }
 .app-task-rename 	{ position: relative; top: -$base/2; margin-right: 3*$unit; }
 
+.app-project  		{ @extend .app-task; height: auto; line-height: auto; }
+.app-project-wrap 	{ @extend .app-task-wrap; display: block; height: auto; /*height: 2*$base+($base+$base/4)+$unit/2; */}
+.app-project-btn 	{ position: relative; top: -$base/2; padding: $base/2; }
+.app-project-input 	{ @extend .app-input; width: auto; }
+.app-project-text 	{ max-width: 960px; margin: 0 auto; padding: $base; }
+.app-project-text-title { @extend .font-light; padding: $base 0; font-size: $unit; }
 .app-aside 			{ padding: $base; text-align: center; }
 
 
@@ -143,7 +150,7 @@ html, body 			{ overflow-x: hidden; }
 
 // Ugly but functionnal
 .app-task-options.ng-enter, .app-task-options.ng-leave
-{ @include transitions(left, 0.3s, ease, 0s); left: 100%; top: -(2*$base+($base+$base/4)+$unit/2); /*margin-bottom: -(2*$base+($base+$base/4)+$unit/2);*/ }
+{ @include transitions(left, 0.3s, ease, 0s); left: 100%; top: -(2*$base+($base+$base/4)+$unit/2); }
 
 .app-task-options.ng-enter.app-task-options.ng-enter-active,
 .app-task-options.ng-leave 

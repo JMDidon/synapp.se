@@ -3,7 +3,7 @@ synappseApp.config ['$translateProvider', ( $translateProvider ) ->
 
   $translateProvider.translations 'en',
     SELECT: 'Select a project'
-    SHARE: 'share'
+    SHARE: 'Share'
     EDIT: 'Edit name'
 
     FAQ_SHARE_TITLE: 'How do I share a project?'
@@ -53,7 +53,7 @@ synappseApp.config ['$translateProvider', ( $translateProvider ) ->
 
   $translateProvider.translations 'fr',
     SELECT: 'Choisir un projet'
-    SHARE: 'partager'
+    SHARE: 'Partager'
     EDIT: 'Éditer le nom'
 
     TASKS: 'Tâches'

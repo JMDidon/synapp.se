@@ -1,4 +1,4 @@
-<section class="insights"></section>
+<!--<section class="insights"></section>
 
 <main class="wrapper">
 	<header class="nav-title">
@@ -34,4 +34,49 @@
 	</ol>
 	<h2 class="bold uppercase medium color">{{ 'FAQ_DELETE_TITLE' | translate }}</h2>
 	<p class="pb2">{{ 'FAQ_DELETE_ANSWER' | translate }}</p>
-</main>
+</main>-->
+
+<header class="app-header">
+	<nav class="app-nav">
+		<a href="" class="app-nav-link" ng-repeat="l in ['en', 'fr']" ng-click="changeLanguage(l)" ng-hide="lang == l">{{ l }}</a>
+	</nav>
+	<h1 class="app-header-name">{{ 'SELECT' | translate }}</h1>
+</header>
+
+<ul>
+	<li class="app-project" ng-repeat="(index, p) in projects">
+		<div class="app-project-wrap">
+			<a href="#/{{ p.slug }}" class="app-task-name" ng-hide="editName[index]">{{ p.name }}</a>
+			<form class="app-form" ng-submit="newName()" ng-if="editName[index]" ng-controller="ProjectNameCtrl">
+				<input ng-Model="tmpName.name" class="app-project-input" type="text">
+				<input ng-Model="tmpName.id" type="hidden">
+				<input ng-Model="editName" type="hidden">
+				<button type="submit" class="app-task-submit btn">{{ 'DONE' | translate }}</button>
+			</form>
+			<nav class="right clearfix" ng-if="!editName[index]">
+				<a href="" class="app-project-btn btn" ng-click="share(p.id)">{{ 'SHARE' | translate }}</a>
+				<a href="" class="app-project-btn btn" ng-click="editProject(p.id, index)">{{ 'EDIT' | translate }}</a>
+			</nav>
+		</div>
+	</li>
+</ul>
+
+<section class="app-project-text">
+	<form class="app-form" ng-submit="createProject()">
+		<input class="app-input" ng-model="projectName" placeholder="{{ 'CREATE_PLACEHOLDER' | translate }}">
+	</form>
+		
+	<h2 class="app-project-text-title">{{ 'FAQ_SHARE_TITLE' | translate }}</h2>
+	<ol class="">
+		<li>{{ 'FAQ_SHARE_ANSWER_1' | translate }}</li>
+		<li>{{ 'FAQ_SHARE_ANSWER_2' | translate }}</li>
+		<li>{{ 'FAQ_SHARE_ANSWER_3' | translate }}</li>
+		<li>{{ 'FAQ_SHARE_ANSWER_4' | translate }}</li>
+	</ol>
+	<h2 class="app-project-text-title">{{ 'FAQ_DELETE_TITLE' | translate }}</h2>
+	<p class="">{{ 'FAQ_DELETE_ANSWER' | translate }}</p>
+</section>
+
+<section class="app-aside">
+	<a href="mailto:hello@synapp.se">Report a bug !</a>
+</section>
