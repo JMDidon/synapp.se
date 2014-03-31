@@ -137,9 +137,10 @@ html, body 			{ overflow-x: hidden; }
 .app-task-rename 	{ position: relative; top: -$base/2; margin-right: 3*$unit; }
 
 .app-project  		{ @extend .app-task; height: auto; line-height: auto; }
-.app-project-wrap 	{ @extend .app-task-wrap; display: block; height: auto; /*height: 2*$base+($base+$base/4)+$unit/2; */}
+.app-project-wrap 	{ @extend .app-task-wrap; display: block; height: 2*$base+($base+$base/4)+$unit/2; line-height: 2*$base+($base+$base/4)+$unit/2; padding: 0 $base; }
 .app-project-btn 	{ position: relative; top: -$base/2; padding: $base/2; }
 .app-project-input 	{ @extend .app-input; width: auto; }
+.app-project-options{ @extend .app-task-options; height: auto; }
 .app-project-text 	{ max-width: 960px; margin: 0 auto; padding: $base; }
 .app-project-text-title { @extend .font-light; padding: $base 0; font-size: $unit; }
 .app-aside 			{ padding: $base; text-align: center; }
@@ -148,7 +149,7 @@ html, body 			{ overflow-x: hidden; }
 // Options animations
 // ------------------------------
 
-// Ugly but functionnal
+// Ugly but functionnal ... Task anims
 .app-task-options.ng-enter, .app-task-options.ng-leave
 { @include transitions(left, 0.3s, ease, 0s); left: 100%; top: -(2*$base+($base+$base/4)+$unit/2); }
 
@@ -170,6 +171,30 @@ html, body 			{ overflow-x: hidden; }
 .app-task-wrap.ng-enter.app-task-wrap.ng-enter-active,
 .app-task-wrap.ng-leave 
 { left: 0%; }
+
+
+// Project anims
+.app-project-wrap.ng-leave, .app-project-wrap.ng-enter
+{ @include transitions(left, 0.3s, ease, 0s); left: -100%; height: 0; }
+
+.app-project-wrap.ng-leave.app-project-wrap.ng-leave-active,
+.app-project-wrap.ng-enter 
+{ left: -100%; }
+
+.app-project-wrap.ng-enter.app-project-wrap.ng-enter-active,
+.app-project-wrap.ng-leave 
+{ left: 0%; }
+
+.app-project-options.ng-enter, .app-project-options.ng-leave
+{ @extend .app-task-options.ng-enter; top: 0; }
+
+.app-project-options.ng-enter.app-project-options.ng-enter-active,
+.app-project-options.ng-leave 
+{ left: 0%; }
+
+.app-project-options.ng-leave.app-project-options.ng-leave-active,
+.app-project-options.ng-enter 
+{ left: 100%; }
 
 
 // Calendar

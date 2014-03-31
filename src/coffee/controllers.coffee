@@ -45,7 +45,7 @@ synappseApp.controller 'MainCtrl', ['$translate', '$scope', 'Projects', ( $trans
 # Home Controller
 # ------------------------------
 synappseApp.controller 'HomeCtrl', ['$scope', '$location', 'Projects', ( $scope, $location, Projects ) ->
-	$scope.editName = []
+	$scope.options  = []
 	$scope.createProject = ->
 		slug = Projects.createProject $scope.projectName
 		$scope.projectName = ""
@@ -56,12 +56,15 @@ synappseApp.controller 'HomeCtrl', ['$scope', '$location', 'Projects', ( $scope,
 		DB.getShareUrl project.folder, ( url ) ->
 			window.open url, '_blank'
 
-	$scope.editProject = ( id, index ) ->
-		$scope.editName[index] = not $scope.editName[index]
-		if $scope.editName[index] is true
-			project = Projects.readProject id
+	$scope.rename = ( id, index ) ->
+		project = Projects.readProject id
+		renameTo = window.prompt 'Rename the project to : ', project.name
+		$scope.options[index] = not $scope.options[index]
+		console.log 'Renamed to : '+ renameTo
 
-	$scope.closeEdit = -> $scope.editName = []
+	$scope.options = ( index ) ->
+		$scope.options[index] = not $scope.options[index]
+		undefined
 ]
 
 
