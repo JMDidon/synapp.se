@@ -14,7 +14,7 @@ load = ( url, callback = false ) ->
 
 # Dropbox auth & sync
 # ------------------------------
-DB = 
+DB =
 	folder: 'Synappse/'
 	file: '_project.json'
 	user: if localStorage['user'] then JSON.parse localStorage['user'] else {}
@@ -25,11 +25,11 @@ DB =
 	# ---
 	auth: ( interactive = false ) ->
 		$this = @
-		if localStorage['user'] and not interactive then do $this.init 
-		else @client.authenticate { interactive: interactive }, ( error, client ) -> 
+		if localStorage['user'] and not interactive then do $this.init
+		else @client.authenticate { interactive: interactive }, ( error, client ) ->
 			do $this.init if client.isAuthenticated()
-		
-		
+
+
 	# Initialize app
 	# ---
 	updateUser: ->
@@ -37,12 +37,12 @@ DB =
 		@client.getAccountInfo ( error, info ) ->
 			$this.user = name: info.name, email: info.email, uid: info.uid
 			localStorage['user'] = JSON.stringify $this.user
-			
+
 	init: ->
 		$this = @
 		load ['//ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular.js', '//ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular-route.min.js', '//ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular-touch.min.js', '//ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular-animate.js', 'public/lib/angular-translate.min.js', 'public/app.js'], ->
 			angular.bootstrap document, ['synappseApp']
-			if $this.client.isAuthenticated() then do $this.updateUser else $this.client.authenticate { interactive: false }, ( error, client ) -> do $this.updateUser 
+			if $this.client.isAuthenticated() then do $this.updateUser else $this.client.authenticate { interactive: false }, ( error, client ) -> do $this.updateUser
 
 
 	# Check if Synappse folder exists, else create it
@@ -64,7 +64,7 @@ DB =
 		@client.readFile folder+@file, ( error, data, stat ) ->
 			if error and error.status is 404 # create project
 				name = ( folder.substring $this.folder.length+1 ).replace /\/$/, ''
-				project = 
+				project =
 					name: name
 					id: generateID 3, localIDs, $this.user.uid+'_'
 					folder: folder
@@ -77,14 +77,24 @@ DB =
 					deletedComments: []
 				$this.saveProject project, -> callback project
 			else # restore project
+				# rename folder if name changed
 				project = angular.fromJson decodeURIComponent escape data
 				project.folder = folder
 				callback project
 
 
+	# Rename project
+	# ---
+	renameProject: ( oldFolder, newFolder ) ->
+		$this = @
+		@client.move oldFolder, newFolder, ( error, stat ) ->
+			console.log error if error
+
+
 	# Save project file
 	# ---
 	saveProject: ( project, callback = false ) ->
+		console.log project
 		@client.writeFile project.folder+@file, ( unescape encodeURIComponent angular.toJson project ), ( error, stat ) ->
 			console.log error if error
 			do callback if callback
@@ -130,14 +140,16 @@ DB =
 
 					# when all DB folders are sync
 					if not waiting
-						$this.checkLocalProjects local, ( c.path+'/' for c in projects ), -> 
+						$this.checkLocalProjects local, ( c.path+'/' for c in projects ), ->
 							do callback if callback
 
 
 	# Update project
 	# ---
 	updateProject: ( local, distant ) ->
-		local.folder = distant.folder
+		supposedFolder = @folder+( slug local.name )+'/'
+		@renameProject distant.folder, supposedFolder if distant.folder isnt supposedFolder
+		local.folder = supposedFolder
 
 		# users
 		local.users = ( u for u in distant.users )
@@ -155,7 +167,7 @@ DB =
 		#( comment.taskID = task.id for task in local.tasks when task.oldID is comment.taskID ) for comment in local.comments
 		delete task.oldID for task in local.tasks
 		# update replies parentIDs
-		# ( reply.parentID = comment.id for comment in local.comments when comment.oldID is reply.parentID ) for reply in local.comments 
+		# ( reply.parentID = comment.id for comment in local.comments when comment.oldID is reply.parentID ) for reply in local.comments
 		# delete comment.oldID for comment in local.comments
 
 		# update alerts
@@ -168,7 +180,7 @@ DB =
 
 	# Solve conflicts (add, edit, delete)
 	# ---
-	solveConflicts: ( localItems, distantItems, deletedItems ) ->	
+	solveConflicts: ( localItems, distantItems, deletedItems ) ->
 		distantIDs = ( item.id for item in distantItems )
 
 		# delete local items missing in distant
@@ -201,6 +213,6 @@ DB =
 
 # Check auth & bind button
 # ------------------------------
-do -> 
+do ->
 	do DB.auth
 	( document.getElementById 'auth' ).addEventListener 'click', -> DB.auth true

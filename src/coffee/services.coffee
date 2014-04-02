@@ -30,10 +30,16 @@ synappseApp.factory 'Projects', ->
 		console.log DB.user
 		slug name
 
-	factory.readProject = ( id ) -> 
+	factory.renameProject = ( id, name ) ->
+		project = factory.readProject id
+		project.name = name
+		project.slug = slug name
+		do factory.cache
+
+	factory.readProject = ( id ) ->
 		( project for project in Projects when project.id is id )[0] or {}
-		
-	factory.findProject = ( slug ) -> 
+
+	factory.findProject = ( slug ) ->
 		( project for project in Projects when project.slug is slug )[0] or {}
 
 	# USERS
@@ -41,7 +47,7 @@ synappseApp.factory 'Projects', ->
 		for project in Projects when project.id is projectID
 			for user in project when user.uid is uid
 				return user
-		
+
 	# TASKS
 	factory.createTask = ( projectID, task ) ->
 		for project in Projects when project.id is projectID
@@ -60,13 +66,13 @@ synappseApp.factory 'Projects', ->
 				task[k] = v for k, v of values when k not in ['id', 'date']
 		# Save changes
 		do factory.cache
-		
+
 	factory.deleteTask = ( projectID, taskID ) ->
 		for project in Projects when project.id is projectID
 			project.deletedTasks.push taskID if taskID not in project.deletedTasks
 			project.tasks = angular.copy ( task for task in project.tasks when task.id not in project.deletedTasks )
 		do factory.cache
-	
+
 
 	# DISCUSSIONS
 	factory.createComment = ( projectID, comment ) ->
@@ -83,18 +89,18 @@ synappseApp.factory 'Projects', ->
 			project.deletedComments.push commentID if commentID not in project.deletedComments
 			project.comments = angular.copy ( comment for comment in project.comments when comment.id not in project.deletedComments )
 		do factory.cache
-		
-		
+
+
 	# ALERTS
 	factory.alert = ( projectID, text, userID ) ->
 		for project in Projects when project.id is projectID
 			project.alerts = [] if not project.alerts?
-			project.alerts.push 
+			project.alerts.push
 				id: generateID 2, ( a.id for a in project.alerts )
 				text: text
 				seen: [ userID ]
 		do factory.cache
-			
+
 	factory.seen = ( projectID, alertID, userID ) ->
 		for project in Projects when project.id is projectID
 			for alert in project.alerts when alert.id is alertID
