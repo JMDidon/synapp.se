@@ -27,14 +27,12 @@ synappseApp.controller 'MainCtrl', ['$translate', '$scope', 'Projects', ( $trans
 		do $scope.$apply
 
 	$scope.sync = ->
-		console.log 'Sync start'
 		DB.sync $scope.projects, ->
 			do Projects.cache
 			do $scope.$apply if not $scope.$$phase
 			clearTimeout $scope.timeout
 			$scope.synced = true
 			do $scope.$apply if not $scope.$$phase
-			console.log 'Sync end'
 	setTimeout $scope.sync, 10
 
 	$scope.schedule = ->
